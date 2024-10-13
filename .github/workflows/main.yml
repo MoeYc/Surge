@@ -16,7 +16,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
+    outputs:
+      platform: ${{ steps.enable_check.outputs.result }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,7 +102,7 @@ jobs:
     needs:
       - build
     name: Deploy to Cloudflare Pages
-    if: github.ref == 'refs/heads/master' && contains(steps.enable_check.outputs.result, 'cloudflare')
+    if: github.ref == 'refs/heads/master' && contains(needs.build.outputs.platform, 'cloudflare')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -126,7 +127,7 @@ jobs:
           name: build-artifact-${{ github.ref_name }}
           path: public
       - name: Upload Dist to GitLab
-        if: contains(steps.enable_check.outputs.result, 'gitlab')
+        if: contains(needs.build.outputs.platform, 'gitlab')
         run: |
           git clone --filter=blob:none https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
           cd ./deploy-git
