@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe",
+        "ip.cn",
+        "fonts.gstatic.cn",
+        "fonts.googleapis.cn"
+      ],
+      "domain_suffix": [
+        "ip.sb",
+        "ipwho.is",
+        "db-ip.com",
+        "ipdata.co",
+        "ip-api.com",
+        "nextdns.io",
+        "ipstack.com",
+        "services.googleapis.cn",
+        "ipregistry.co",
+        "ipgeolocation.io"
+      ],
+      "domain_keyword": [],
+      "domain_regex": [],
+      "ip_cidr": [],
+      "source_ip_cidr": [],
+      "source_port": [],
+      "port": [],
+      "process_name": [],
+      "process_path": []
+    }
+  ]
+}

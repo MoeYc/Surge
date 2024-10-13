@@ -1,0 +1,48 @@
+#########################################
+# Sukka's Ruleset - CDN Domains
+# Last Updated: 2024-09-26T09:50:09.887Z
+# Size: 37
+# License: AGPL 3.0
+# Homepage: https://ruleset.skk.moe
+# GitHub: https://github.com/SukkaW/Surge
+#
+# This file contains object storage and static assets CDN domains.
+#########################################
+DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
+DOMAIN,cdn-msp.jmcomic.me
+DOMAIN,cdn-msp.18comic.vip
+DOMAIN-KEYWORD,-files.gitbook.io
+DOMAIN-KEYWORD,vod-adaptive.akamaized.net
+DOMAIN-KEYWORD,web-assets.zendesk
+DOMAIN-KEYWORD,-res.cloudinary.com
+DOMAIN-KEYWORD,dsn.algolia.net
+DOMAIN-REGEX,^appcenter-filemanagement-[a-zA-Z0-9-_.]*?\.cloudapp\.net$
+DOMAIN-REGEX,^proxy-[a-zA-Z0-9-_.]*?\.dailymotion\.com$
+DOMAIN-REGEX,^static[a-zA-Z0-9-_.]*?\.tgstat\.ru$
+DOMAIN-REGEX,^ocsp\.[a-zA-Z0-9-_.]*?\.amazontrust\.com$
+DOMAIN-REGEX,^s3\.[a-zA-Z0-9-_.]*?\.wasabisys\.com$
+DOMAIN-REGEX,^i[a-zA-Z0-9-_.]\.nhentai\.net$
+DOMAIN-REGEX,^t[a-zA-Z0-9-_.]\.nhentai\.net$
+DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]-thumbs\.pornhost\.com$
+DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]-dl\.pornhost\.com$
+DOMAIN-REGEX,^cdn-msp[a-zA-Z0-9-_.]\.18comic\.vip$
+DOMAIN-REGEX,^cdn-msp[a-zA-Z0-9-_.]\.jmcomic\.me$
+DOMAIN-REGEX,^static-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]-cdn\.eporner\.com$
+DOMAIN-REGEX,^file[a-zA-Z0-9-_.]\.mikuclub\.fun$
+DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]\.mikuclub\.fun$
+DOMAIN-REGEX,^cdns\.[a-zA-Z0-9-_.]*?\.gigya\.com$
+DOMAIN-REGEX,^video-thumbnail2\.fc2\.com$
+DOMAIN-REGEX,^video[a-zA-Z0-9-_.]-thumbnail[a-zA-Z0-9-_.]\.fc2\.com$
+DOMAIN-REGEX,^video-thumbnail2\.liaoningmovie\.net$
+DOMAIN-REGEX,^video[a-zA-Z0-9-_.]-thumbnail[a-zA-Z0-9-_.]\.liaoningmovie\.net$
+DOMAIN-REGEX,^vip-videoprem[a-zA-Z0-9-_.]*?-thumbnail[a-zA-Z0-9-_.]\.fc2\.com$
+DOMAIN-REGEX,^blog-imgs-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.2nt\.com$
+DOMAIN-REGEX,^blog-imgs-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.fc2\.com$
+DOMAIN-REGEX,^rr[a-zA-Z0-9-_.]---[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.ouo\.si$
+DOMAIN-REGEX,^ffzy-online[a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^ffzy-play[a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^kuaikan-cdn[a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^lz-cdn[a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^lz-cdn[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^fsvod[a-zA-Z0-9-_.]\.com$
+################## EOF ##################

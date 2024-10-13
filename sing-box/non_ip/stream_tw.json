@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe",
+        "gamer-cds.cdn.hinet.net",
+        "gamer2-cds.cdn.hinet.net",
+        "4gtvfreepcvod-cds.cdn.hinet.net",
+        "litvfreemobile-hichannel.cdn.hinet.net",
+        "manifest.prod.boltdns.net",
+        "cf-images.ap-southeast-1.prod.boltdns.net",
+        "hboasia1-i.akamaihd.net",
+        "hboasia2-i.akamaihd.net",
+        "hboasia3-i.akamaihd.net",
+        "hboasia4-i.akamaihd.net",
+        "hboasia5-i.akamaihd.net",
+        "bcbolthboa-a.akamaihd.net",
+        "hbounify-prod.evergent.com",
+        "hboasialive.akamaized.net",
+        "hbogoprod-vod.akamaized.net",
+        "s3-ap-southeast-1.amazonaws.com",
+        "44wilhpljf.execute-api.ap-southeast-1.amazonaws.com",
+        "hbolb.onwardsmg.com",
+        "players.brightcove.net",
+        "dai3fd1oh325y.cloudfront.net",
+        "d3c7rimkq79yfu.cloudfront.net"
+      ],
+      "domain_suffix": [
+        "4gtv.tv",
+        "kktv.me",
+        "litv.tv",
+        "kk.stream",
+        "linetv.tw",
+        "hboasia.com",
+        "kktv.com.tw",
+        "viblast.com",
+        "gamer.com.tw",
+        "bahamut.com.tw"
+      ],
+      "domain_keyword": [".hbogoasia."],
+      "domain_regex": [],
+      "ip_cidr": [],
+      "source_ip_cidr": [],
+      "source_port": [],
+      "port": [],
+      "process_name": ["com.linecorp.linetv"],
+      "process_path": []
+    }
+  ]
+}

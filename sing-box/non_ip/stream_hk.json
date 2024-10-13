@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe",
+        "apm-misaka.biliapi.net",
+        "manifest.prod.boltdns.net",
+        "cf-images.ap-southeast-1.prod.boltdns.net",
+        "hboasia1-i.akamaihd.net",
+        "hboasia2-i.akamaihd.net",
+        "hboasia3-i.akamaihd.net",
+        "hboasia4-i.akamaihd.net",
+        "hboasia5-i.akamaihd.net",
+        "bcbolthboa-a.akamaihd.net",
+        "hbounify-prod.evergent.com",
+        "hboasialive.akamaized.net",
+        "hbogoprod-vod.akamaized.net",
+        "upos-bstar-mirrorakam.akamaized.net",
+        "upos-bstar1-mirrorakam.akamaized.net",
+        "s3-ap-southeast-1.amazonaws.com",
+        "44wilhpljf.execute-api.ap-southeast-1.amazonaws.com",
+        "hbolb.onwardsmg.com",
+        "players.brightcove.net",
+        "dai3fd1oh325y.cloudfront.net",
+        "dfp6rglgjqszk.cloudfront.net",
+        "d1k2us671qcoau.cloudfront.net",
+        "d2anahhhmp1ffz.cloudfront.net"
+      ],
+      "domain_suffix": [
+        "viu.tv",
+        "viu.now.com",
+        "tvb.com",
+        "viu.com",
+        "nowe.com",
+        "psg.cdn.hgc.com.hk",
+        "bilibili.tv",
+        "hboasia.com",
+        "biliintl.com",
+        "mytvsuper.com"
+      ],
+      "domain_keyword": ["nowtv100", "rthklive", ".hbogoasia."],
+      "domain_regex": [],
+      "ip_cidr": [],
+      "source_ip_cidr": [],
+      "source_port": [],
+      "port": [],
+      "process_name": [
+        "com.viu.pad",
+        "com.viu.phone",
+        "com.vuclip.viu",
+        "com.hktve.viutv",
+        "com.bstar.intl"
+      ],
+      "process_path": []
+    }
+  ]
+}
