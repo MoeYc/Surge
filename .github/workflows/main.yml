@@ -1,10 +1,12 @@
 name: Build
 on:
-  push:
-    branches:
-      - master
-  schedule:
-    - cron: "0 12 * * *"
+  # push:
+  #   branches:
+  #     - master
+  workflow_dispatch:
+
+  # schedule:
+  #   - cron: "0 12 * * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -27,8 +29,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".node-version"
-          cache: "pnpm"
+          node-version-file: '.node-version'
+          cache: 'pnpm'
       - name: Get current date
         id: date
         run: |
@@ -88,7 +90,7 @@ jobs:
     needs:
       - build
     name: Deploy to Cloudflare Pages
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && secrets.CLOUDFLARE_API_TOKEN && secrets.CLOUDFLARE_ACCOUNT_ID
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -113,6 +115,7 @@ jobs:
           name: build-artifact-${{ github.ref_name }}
           path: public
       - name: Upload Dist to GitLab
+        if: secrets.GITLAB_EMAIL
         run: |
           git clone --filter=blob:none https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
           cd ./deploy-git
@@ -135,10 +138,11 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         continue-on-error: true
         with:
-          personal_token: ${{ secrets.GIT_TOKEN }}
-          user_name: ${{ secrets.GIT_USER }}
-          user_email: ${{ secrets.GIT_EMAIL }}
-          external_repository: SukkaLab/ruleset.skk.moe
-          publish_branch: master
-          publish_dir: public
-          cname: ruleset.skk.moe
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: ruleset.hsre.top
+          # external_repository: SukkaLab/ruleset.skk.moe
+          # publish_branch: master
+          # personal_token: ${{ secrets.GIT_TOKEN }}
+          # user_name: ${{ secrets.GIT_USER }}
+          # user_email: ${{ secrets.GIT_EMAIL }}
