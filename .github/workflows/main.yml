@@ -94,7 +94,7 @@ jobs:
           GITLAB_EMAIL: ${{ secrets.GITLAB_EMAIL }}
         with:
           result-encoding: string
-          scripts: |
+          script: |
             const cf = process.env.CLOUDFLARE_API_TOKEN ? 'cloudflare' : '';
             const ghpage = process.env.GITLAB_EMAIL ? 'gitlab' : '';
             return [cf, ghpage].join(',');
