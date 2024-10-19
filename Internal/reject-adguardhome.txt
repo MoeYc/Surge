@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Blocklist for AdGuardHome
-# Last Updated: 2024-10-19T16:50:41.017Z
+# Last Updated: 2024-10-19T17:04:43.193Z
 # Size: 112324
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
