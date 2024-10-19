@@ -1,11 +1,10 @@
 import type { DNSMapping } from './direct';
 
-export const DOMESTICS = {
+export const DOMESTICS: Record<string, DNSMapping> = {
   ALIBABA: {
-    hosts: {
-      'dns.alidns.com': ['223.5.5.5', '223.6.6.6', '2400:3200:baba::1', '2400:3200::1']
-    },
+    hosts: {},
     dns: 'quic://dns.alidns.com:853',
+    realip: false,
     domains: [
       'uc.cn',
       // 'ucweb.com', // UC International
@@ -83,16 +82,13 @@ export const DOMESTICS = {
     ]
   },
   TENCENT: {
-    hosts: {
-      'dot.pub': ['120.53.53.53', '1.12.12.12', '1.12.34.56'],
-      'doh.pub': ['120.53.53.53', '1.12.12.12', '1.12.34.56'],
-      'dns.pub': ['120.53.53.53', '1.12.12.12', '1.12.34.56']
-    },
+    hosts: {},
     dns: 'https://doh.pub/dns-query',
+    realip: false,
     domains: [
-      'dns.pub',
-      'doh.pub',
-      'dot.pub',
+      // 'dns.pub',
+      // 'doh.pub',
+      // 'dot.pub',
       '+qcloud.com',
       '+gtimg.cn',
       '+gtimg.com',
@@ -142,6 +138,7 @@ export const DOMESTICS = {
   BILIBILI_ALI: {
     dns: 'quic://dns.alidns.com:853',
     hosts: {},
+    realip: false,
     domains: [
       '$upos-sz-mirrorali.bilivideo.com',
       '$upos-sz-estgoss.bilivideo.com'
@@ -150,6 +147,7 @@ export const DOMESTICS = {
   BILIBILI_BD: {
     dns: '180.76.76.76',
     hosts: {},
+    realip: false,
     domains: [
       '$upos-sz-mirrorbd.bilivideo.com',
       '$upos-sz-mirrorbos.bilivideo.com'
@@ -158,8 +156,9 @@ export const DOMESTICS = {
   BILIBILI: {
     dns: 'https://doh.pub/dns-query',
     hosts: {},
+    realip: false,
     domains: [
-      '$upos-sz-mirrorcoso1.bilivideo.com',
+      // '$upos-sz-mirrorcoso1.bilivideo.com', // already included in bilivideo.com
       '$upos-sz-mirrorcosbstar1.bilivideo.com', // Bilibili Intl with Tencent Cloud CDN
       '$acg.tv',
       '$b23.tv',
@@ -187,10 +186,12 @@ export const DOMESTICS = {
   XIAOMI: {
     dns: 'https://doh.pub/dns-query',
     hosts: {},
+    realip: false,
     domains: [
       'mi.com',
       'duokan.com',
       '+mi-img.com',
+      '+mi-idc.com',
       'mi-fds.com',
       '+mifile.cn',
       'miui.com',
@@ -204,6 +205,7 @@ export const DOMESTICS = {
   BYTEDANCE: {
     dns: '180.184.2.2',
     hosts: {},
+    realip: false,
     domains: [
       '+bytecdn.cn',
       '+toutiaoimg.com',
@@ -243,12 +245,14 @@ export const DOMESTICS = {
       'feelgood.cn',
       '+bytetcc.com', // Use hichina.com as NS
       '+bytednsdoc.com', // Uses alidns.com as NS
-      '+byteimg.com' // Uses alidns.com as NS
+      '+byteimg.com', // Uses alidns.com as NS
+      '+byteacctimg.com' // Uses alidns.com as NS
     ]
   },
   BAIDU: {
     dns: '180.76.76.76',
     hosts: {},
+    realip: false,
     domains: [
       '91.com',
       'hao123.com',
@@ -277,15 +281,9 @@ export const DOMESTICS = {
     ]
   },
   QIHOO360: {
-    hosts: {
-      'doh.360.cn': ['101.198.198.198', '101.198.199.200'],
-      'dot.360.cn': ['101.198.198.198', '101.198.199.200'],
-      'dns.360.cn': ['101.198.198.198', '101.198.199.200'],
-      'doh.360.net': ['101.198.198.198', '101.198.199.200'],
-      'dot.360.net': ['101.198.198.198', '101.198.199.200'],
-      'dns.360.net': ['101.198.198.198', '101.198.199.200']
-    },
-    dns: 'https://dns.360.net/dns-query',
+    hosts: {},
+    dns: 'https://doh.360.cn/dns-query',
+    realip: false,
     domains: [
       '+qhimg.com',
       '+qhimgs.com',
@@ -317,7 +315,62 @@ export const DOMESTICS = {
       'yunpan.com',
       'yunpan.com.cn',
       '+qh-cdn.com',
-      'baomitu.com'
+      'baomitu.com',
+      'qiku.com'
     ]
   }
-} satisfies Record<string, DNSMapping>;
+};
+
+/** This should only be used to build AfGu */
+export const DOH_BOOTSTRAP: Record<string, DNSMapping> = {
+  ALIBABA: {
+    hosts: {
+      'dns.alidns.com': ['223.5.5.5', '223.6.6.6', '2400:3200:baba::1', '2400:3200::1']
+    },
+    realip: false,
+    dns: 'quic://223.5.5.5:853',
+    domains: [
+      '$dns.alidns.com'
+    ]
+  },
+  DNSPOD: {
+    hosts: {
+      'dot.pub': ['120.53.53.53', '1.12.12.12'],
+      'doh.pub': ['120.53.53.53', '1.12.12.12'],
+      'dns.pub': ['120.53.53.53', '1.12.12.12']
+    },
+    realip: false,
+    dns: 'https://1.12.12.12/dns-query',
+    domains: [
+      '$dot.pub',
+      '$doh.pub',
+      '$dns.pub'
+    ]
+  },
+  QIHOO360: {
+    hosts: {
+      // dot.360.cn
+      // doh.360.cn
+
+      // sdns.360.net
+      // dns.360.cn CNAME sdns.360.net
+
+      // dns.360.net
+      // doh.360.net CNAME dns.360.net
+      // dot.360.net CNAME dns.360.net
+    },
+    realip: false,
+    dns: 'https://101.198.198.198/dns-query', // https://101.198.199.200/dns-query
+    domains: [
+      '$dns.360.cn',
+      '$dot.360.cn',
+      '$doh.360.cn',
+
+      '$sdns.360.net',
+
+      '$dns.360.net',
+      '$dot.360.net',
+      '$doh.360.net'
+    ]
+  }
+};
