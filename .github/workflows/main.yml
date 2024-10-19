@@ -158,3 +158,12 @@ jobs:
           # personal_token: ${{ secrets.GIT_TOKEN }}
           # user_name: ${{ secrets.GIT_USER }}
           # user_email: ${{ secrets.GIT_EMAIL }}
+      - uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const path = require('path');
+            const cnamePath = path.join(process.cwd(), 'public', 'CNAME');
+            const fs = require('fs');
+            fs.writeFileSync(cnamePath, 'ruleset.hsre.top', 'utf-8');
+            console.log('CNAME file created');
