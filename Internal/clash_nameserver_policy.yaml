@@ -1,5 +1,16 @@
 dns:
   nameserver-policy:
+    dns.alidns.com: quic://223.5.5.5:853
+    dot.pub: https://1.12.12.12/dns-query
+    doh.pub: https://1.12.12.12/dns-query
+    dns.pub: https://1.12.12.12/dns-query
+    dns.360.cn: https://101.198.198.198/dns-query
+    dot.360.cn: https://101.198.198.198/dns-query
+    doh.360.cn: https://101.198.198.198/dns-query
+    sdns.360.net: https://101.198.198.198/dns-query
+    dns.360.net: https://101.198.198.198/dns-query
+    dot.360.net: https://101.198.198.198/dns-query
+    doh.360.net: https://101.198.198.198/dns-query
     +.uc.cn: quic://dns.alidns.com:853
     +.alibaba.com: quic://dns.alidns.com:853
     "*.alicdn.com": quic://dns.alidns.com:853
@@ -71,9 +82,6 @@ dns:
     +.hellobike.com: quic://dns.alidns.com:853
     "*.hichina.com": quic://dns.alidns.com:853
     "*.yunos.com": quic://dns.alidns.com:853
-    +.dns.pub: https://doh.pub/dns-query
-    +.doh.pub: https://doh.pub/dns-query
-    +.dot.pub: https://doh.pub/dns-query
     "*.qcloud.com": https://doh.pub/dns-query
     "*.gtimg.cn": https://doh.pub/dns-query
     "*.gtimg.com": https://doh.pub/dns-query
@@ -121,7 +129,6 @@ dns:
     upos-sz-estgoss.bilivideo.com: quic://dns.alidns.com:853
     upos-sz-mirrorbd.bilivideo.com: 180.76.76.76
     upos-sz-mirrorbos.bilivideo.com: 180.76.76.76
-    upos-sz-mirrorcoso1.bilivideo.com: https://doh.pub/dns-query
     upos-sz-mirrorcosbstar1.bilivideo.com: https://doh.pub/dns-query
     acg.tv: https://doh.pub/dns-query
     b23.tv: https://doh.pub/dns-query
@@ -146,6 +153,7 @@ dns:
     +.mi.com: https://doh.pub/dns-query
     +.duokan.com: https://doh.pub/dns-query
     "*.mi-img.com": https://doh.pub/dns-query
+    "*.mi-idc.com": https://doh.pub/dns-query
     +.mi-fds.com: https://doh.pub/dns-query
     "*.mifile.cn": https://doh.pub/dns-query
     +.miui.com: https://doh.pub/dns-query
@@ -193,6 +201,7 @@ dns:
     "*.bytetcc.com": 180.184.2.2
     "*.bytednsdoc.com": 180.184.2.2
     "*.byteimg.com": 180.184.2.2
+    "*.byteacctimg.com": 180.184.2.2
     +.91.com: 180.76.76.76
     +.hao123.com: 180.76.76.76
     +.baidu.cn: 180.76.76.76
@@ -217,30 +226,31 @@ dns:
     "*.jomoxc.com": 180.76.76.76
     "*.duapp.com": 180.76.76.76
     "*.antpcdn.com": 180.76.76.76
-    "*.qhimg.com": https://dns.360.net/dns-query
-    "*.qhimgs.com": https://dns.360.net/dns-query
-    "*.qhimgs?.com": https://dns.360.net/dns-query
-    "*.qhres.com": https://dns.360.net/dns-query
-    "*.qhres2.com": https://dns.360.net/dns-query
-    "*.qhmsg.com": https://dns.360.net/dns-query
-    "*.qhstatic.com": https://dns.360.net/dns-query
-    "*.qhupdate.com": https://dns.360.net/dns-query
-    "*.qihucdn.com": https://dns.360.net/dns-query
-    +.360.com: https://dns.360.net/dns-query
-    +.360.cn: https://dns.360.net/dns-query
-    +.360.net: https://dns.360.net/dns-query
-    +.360safe.com: https://dns.360.net/dns-query
-    "*.360tpcdn.com": https://dns.360.net/dns-query
-    +.360os.com: https://dns.360.net/dns-query
-    "*.360webcache.com": https://dns.360.net/dns-query
-    +.360kuai.com: https://dns.360.net/dns-query
-    +.so.com: https://dns.360.net/dns-query
-    +.haosou.com: https://dns.360.net/dns-query
-    +.yunpan.cn: https://dns.360.net/dns-query
-    +.yunpan.com: https://dns.360.net/dns-query
-    +.yunpan.com.cn: https://dns.360.net/dns-query
-    "*.qh-cdn.com": https://dns.360.net/dns-query
-    +.baomitu.com: https://dns.360.net/dns-query
+    "*.qhimg.com": https://doh.360.cn/dns-query
+    "*.qhimgs.com": https://doh.360.cn/dns-query
+    "*.qhimgs?.com": https://doh.360.cn/dns-query
+    "*.qhres.com": https://doh.360.cn/dns-query
+    "*.qhres2.com": https://doh.360.cn/dns-query
+    "*.qhmsg.com": https://doh.360.cn/dns-query
+    "*.qhstatic.com": https://doh.360.cn/dns-query
+    "*.qhupdate.com": https://doh.360.cn/dns-query
+    "*.qihucdn.com": https://doh.360.cn/dns-query
+    +.360.com: https://doh.360.cn/dns-query
+    +.360.cn: https://doh.360.cn/dns-query
+    +.360.net: https://doh.360.cn/dns-query
+    +.360safe.com: https://doh.360.cn/dns-query
+    "*.360tpcdn.com": https://doh.360.cn/dns-query
+    +.360os.com: https://doh.360.cn/dns-query
+    "*.360webcache.com": https://doh.360.cn/dns-query
+    +.360kuai.com: https://doh.360.cn/dns-query
+    +.so.com: https://doh.360.cn/dns-query
+    +.haosou.com: https://doh.360.cn/dns-query
+    +.yunpan.cn: https://doh.360.cn/dns-query
+    +.yunpan.com: https://doh.360.cn/dns-query
+    +.yunpan.com.cn: https://doh.360.cn/dns-query
+    "*.qh-cdn.com": https://doh.360.cn/dns-query
+    +.baomitu.com: https://doh.360.cn/dns-query
+    +.qiku.com: https://doh.360.cn/dns-query
     +.securelogin.com.cn:
       - system://
       - system
@@ -285,10 +295,6 @@ dns:
       - system://
       - system
       - dhcp://system
-    +.tendawifi.com:
-      - system://
-      - system
-      - dhcp://system
     +.tplinkwifi.net:
       - system://
       - system
@@ -318,10 +324,6 @@ dns:
       - system
       - dhcp://system
     unifi:
-      - system://
-      - system
-      - dhcp://system
-    router.com:
       - system://
       - system
       - dhcp://system
@@ -365,10 +367,6 @@ dns:
       - system://
       - system
       - dhcp://system
-    "*.ts.net":
-      - system://
-      - system
-      - dhcp://system
     injections.adguard.org:
       - system://
       - system
@@ -393,11 +391,7 @@ dns:
       - system://
       - system
       - dhcp://system
-    localhost:
-      - system://
-      - system
-      - dhcp://system
-    +.localdomain:
+    "*.localdomain":
       - system://
       - system
       - dhcp://system
@@ -425,7 +419,43 @@ dns:
       - system://
       - system
       - dhcp://system
-    +.2?.172.in-addr.arpa:
+    +.20.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.21.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.22.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.23.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.24.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.25.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.26.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.27.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.28.172.in-addr.arpa:
+      - system://
+      - system
+      - dhcp://system
+    +.29.172.in-addr.arpa:
       - system://
       - system
       - dhcp://system
@@ -454,31 +484,12 @@ hosts:
   dot.pub:
     - 120.53.53.53
     - 1.12.12.12
-    - 1.12.34.56
   doh.pub:
     - 120.53.53.53
     - 1.12.12.12
-    - 1.12.34.56
   dns.pub:
     - 120.53.53.53
     - 1.12.12.12
-    - 1.12.34.56
-  doh.360.cn:
-    - 101.198.198.198
-    - 101.198.199.200
-  dot.360.cn:
-    - 101.198.198.198
-    - 101.198.199.200
-  dns.360.cn:
-    - 101.198.198.198
-    - 101.198.199.200
-  doh.360.net:
-    - 101.198.198.198
-    - 101.198.199.200
-  dot.360.net:
-    - 101.198.198.198
-    - 101.198.199.200
-  dns.360.net:
-    - 101.198.198.198
-    - 101.198.199.200
+  localhost:
+    - 127.0.0.1
 

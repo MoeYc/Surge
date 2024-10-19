@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Stream Services: Taiwan
-# Last Updated: 2024-10-07T19:20:32.633Z
+# Last Updated: 2024-10-15T10:37:05.760Z
 # Size: 34
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
@@ -14,37 +14,37 @@
 # - Bahamut
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
-DOMAIN-SUFFIX,4gtv.tv
 DOMAIN-SUFFIX,kktv.me
+DOMAIN-SUFFIX,4gtv.tv
 DOMAIN-SUFFIX,litv.tv
-DOMAIN,gamer-cds.cdn.hinet.net
-DOMAIN,gamer2-cds.cdn.hinet.net
-DOMAIN,4gtvfreepcvod-cds.cdn.hinet.net
-DOMAIN,litvfreemobile-hichannel.cdn.hinet.net
-DOMAIN-SUFFIX,kk.stream
 DOMAIN-SUFFIX,linetv.tw
-DOMAIN,manifest.prod.boltdns.net
-DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net
 DOMAIN-SUFFIX,hboasia.com
-DOMAIN-SUFFIX,kktv.com.tw
 DOMAIN-SUFFIX,viblast.com
+DOMAIN-SUFFIX,kk.stream
+DOMAIN-SUFFIX,kktv.com.tw
+DOMAIN-SUFFIX,gamer.com.tw
+DOMAIN-SUFFIX,bahamut.com.tw
+DOMAIN,hbounify-prod.evergent.com
+DOMAIN,s3-ap-southeast-1.amazonaws.com
+DOMAIN,hbolb.onwardsmg.com
 DOMAIN,hboasia1-i.akamaihd.net
 DOMAIN,hboasia2-i.akamaihd.net
 DOMAIN,hboasia3-i.akamaihd.net
 DOMAIN,hboasia4-i.akamaihd.net
 DOMAIN,hboasia5-i.akamaihd.net
 DOMAIN,bcbolthboa-a.akamaihd.net
-DOMAIN,hbounify-prod.evergent.com
-DOMAIN-SUFFIX,gamer.com.tw
 DOMAIN,hboasialive.akamaized.net
 DOMAIN,hbogoprod-vod.akamaized.net
-DOMAIN,s3-ap-southeast-1.amazonaws.com
-DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
-DOMAIN,hbolb.onwardsmg.com
-DOMAIN-SUFFIX,bahamut.com.tw
 DOMAIN,players.brightcove.net
 DOMAIN,dai3fd1oh325y.cloudfront.net
 DOMAIN,d3c7rimkq79yfu.cloudfront.net
+DOMAIN,gamer-cds.cdn.hinet.net
+DOMAIN,gamer2-cds.cdn.hinet.net
+DOMAIN,4gtvfreepcvod-cds.cdn.hinet.net
+DOMAIN,litvfreemobile-hichannel.cdn.hinet.net
+DOMAIN,manifest.prod.boltdns.net
+DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com
+DOMAIN,cf-images.ap-southeast-1.prod.boltdns.net
 DOMAIN-KEYWORD,.hbogoasia.
 PROCESS-NAME,com.linecorp.linetv
 ################## EOF ##################

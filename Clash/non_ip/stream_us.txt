@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Stream Services: North America
-# Last Updated: 2024-09-29T23:24:25.768Z
+# Last Updated: 2024-10-15T10:37:05.760Z
 # Size: 36
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
@@ -17,39 +17,39 @@
 # - Peacock
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
-DOMAIN-SUFFIX,fox.com
+DOMAIN-SUFFIX,discoveryplus.in
 DOMAIN-SUFFIX,hulu.jp
+DOMAIN-SUFFIX,happyon.jp
+DOMAIN-SUFFIX,hjholdings.jp
 DOMAIN-SUFFIX,hulu.tv
+DOMAIN-SUFFIX,pluto.tv
 DOMAIN-SUFFIX,hulu.us
+DOMAIN-SUFFIX,fox.com
 DOMAIN-SUFFIX,sho.com
 DOMAIN-SUFFIX,cbsi.com
 DOMAIN-SUFFIX,hulu.com
-DOMAIN-SUFFIX,pluto.tv
 DOMAIN-SUFFIX,dnitv.com
 DOMAIN-SUFFIX,foxdcg.com
-DOMAIN-SUFFIX,happyon.jp
 DOMAIN-SUFFIX,huluim.com
-DOMAIN,cbsi.live.ott.irdeto.com
 DOMAIN-SUFFIX,uplynk.com
 DOMAIN-SUFFIX,foxplus.com
-DOMAIN,cbsservice.aws.syncbak.com
-DOMAIN,cbsplaylistserver.aws.syncbak.com
-DOMAIN,bcbolt446c5271-a.akamaihd.net
 DOMAIN-SUFFIX,showtime.com
-DOMAIN,staticasiafox.akamaized.net
 DOMAIN-SUFFIX,cbsivideo.com
 DOMAIN-SUFFIX,disco-api.com
 DOMAIN-SUFFIX,encoretvb.com
-DOMAIN-SUFFIX,hjholdings.jp
 DOMAIN-SUFFIX,peacocktv.com
-DOMAIN,edge.api.brightcove.com
 DOMAIN-SUFFIX,cbsaavideo.com
 DOMAIN-SUFFIX,hulustream.com
 DOMAIN-SUFFIX,theplatform.com
-DOMAIN-SUFFIX,discoveryplus.in
-DOMAIN,dashasiafox.akamaized.netflix
 DOMAIN-SUFFIX,discoveryplus.com
 DOMAIN-SUFFIX,paramountplus.com
 DOMAIN-SUFFIX,discoveryplus.co.uk
+DOMAIN,bcbolt446c5271-a.akamaihd.net
+DOMAIN,staticasiafox.akamaized.net
+DOMAIN,dashasiafox.akamaized.netflix
+DOMAIN,cbsservice.aws.syncbak.com
+DOMAIN,cbsplaylistserver.aws.syncbak.com
+DOMAIN,edge.api.brightcove.com
+DOMAIN,cbsi.live.ott.irdeto.com
 PROCESS-NAME,com.hulu.plus
 ################## EOF ##################
