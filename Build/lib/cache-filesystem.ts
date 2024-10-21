@@ -278,10 +278,6 @@ export class Cache<S = string> {
       return fn(await fetchAssetsWithout304(primaryUrl, mirrorUrls));
     }
 
-    if (mirrorUrls.length === 0) {
-      return this.applyWithHttp304(primaryUrl, extraCacheKey, async (resp) => fn(await resp.body.text()), opt);
-    }
-
     const baseKey = primaryUrl + '$' + extraCacheKey;
     const getETagKey = (url: string) => baseKey + '$' + url + '$etag';
     const cachedKey = baseKey + '$cached';
@@ -346,10 +342,12 @@ export class Cache<S = string> {
     };
 
     try {
-      const text = await Promise.any([
-        createFetchFallbackPromise(primaryUrl, -1),
-        ...mirrorUrls.map(createFetchFallbackPromise)
-      ]);
+      const text = mirrorUrls.length === 0
+        ? await createFetchFallbackPromise(primaryUrl, -1)
+        : await Promise.any([
+          createFetchFallbackPromise(primaryUrl, -1),
+          ...mirrorUrls.map(createFetchFallbackPromise)
+        ]);
 
       console.log(picocolors.yellow('[cache] miss'), primaryUrl);
       const serializer = 'serializer' in opt ? opt.serializer : identity as any;
@@ -360,31 +358,68 @@ export class Cache<S = string> {
 
       return value;
     } catch (e) {
-      if (e && typeof e === 'object' && 'errors' in e && Array.isArray(e.errors)) {
-        const deserializer = 'deserializer' in opt ? opt.deserializer : identity as any;
+      const deserializer = 'deserializer' in opt ? opt.deserializer : identity as any;
 
-        for (let i = 0, len = e.errors.length; i < len; i++) {
-          const error = e.errors[i];
-          if ('name' in error && (error.name === 'CustomAbortError' || error.name === 'AbortError')) {
-            continue;
-          }
-          if ('digest' in error) {
-            if (error.digest === 'Custom304NotModifiedError') {
-              console.log(picocolors.green('[cache] http 304'), picocolors.gray(primaryUrl));
-              this.updateTtl(cachedKey, TTL.ONE_WEEK_STATIC);
-              return deserializer(error.data);
+      const on304 = (error: Custom304NotModifiedError) => {
+        console.log(picocolors.green('[cache] http 304'), picocolors.gray(primaryUrl));
+        this.updateTtl(cachedKey, TTL.ONE_WEEK_STATIC);
+        return deserializer(error.data);
+      };
+
+      const onNoETagFallback = (error: CustomNoETagFallbackError) => {
+        console.log(picocolors.green('[cache] hit'), picocolors.gray(primaryUrl));
+        return deserializer(error.data);
+      };
+
+      if (e && typeof e === 'object') {
+        if ('errors' in e && Array.isArray(e.errors)) {
+          for (let i = 0, len = e.errors.length; i < len; i++) {
+            const error = e.errors[i];
+            if ('name' in error) {
+              if (error.name === 'CustomAbortError' || error.name === 'AbortError') {
+                continue;
+              }
+              if (error.name === 'Custom304NotModifiedError') {
+                return on304(error);
+              }
+              if (error.name === 'CustomNoETagFallbackError') {
+                return onNoETagFallback(error);
+              }
             }
-            if (error.digest === 'CustomNoETagFallbackError') {
-              console.log(picocolors.green('[cache] hit'), picocolors.gray(primaryUrl));
-              return deserializer(error.data);
+            if ('digest' in error) {
+              if (error.digest === 'Custom304NotModifiedError') {
+                return on304(error);
+              }
+              if (error.digest === 'CustomNoETagFallbackError') {
+                return onNoETagFallback(error);
+              }
+            }
+
+            console.log(picocolors.red('[fetch error]'), picocolors.gray(error.url), error);
+          }
+        } else {
+          if ('name' in e) {
+            if (e.name === 'Custom304NotModifiedError') {
+              return on304(e as Custom304NotModifiedError);
+            }
+            if (e.name === 'CustomNoETagFallbackError') {
+              return onNoETagFallback(e as CustomNoETagFallbackError);
+            }
+          }
+          if ('digest' in e) {
+            if (e.digest === 'Custom304NotModifiedError') {
+              return on304(e as Custom304NotModifiedError);
+            }
+            if (e.digest === 'CustomNoETagFallbackError') {
+              return onNoETagFallback(e as CustomNoETagFallbackError);
             }
           }
 
-          console.log(picocolors.red('[fetch error]'), picocolors.gray(error.url), error);
+          console.log(picocolors.red('[fetch error]'), picocolors.gray(primaryUrl), e);
         }
       }
 
-      console.log({ e });
+      console.log({ e, name: (e as any).name });
 
       console.log(`Download Rule for [${primaryUrl}] failed`);
       throw e;
