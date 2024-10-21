@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2024-10-19T07:59:37.000Z
-# Size: 2500
+# Last Updated: 2024-10-21T14:26:17.798Z
+# Size: 2501
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -29,6 +29,7 @@ nodei.co
 waitlisted.co
 utteranc.es
 versionbadg.es
+cravatar.eu
 +.zohostatic.eu
 +.1passwordusercontent.eu
 +.i-dont-care-about-cookies.eu
@@ -2436,7 +2437,7 @@ ton.local.twitter.com
 widgets.media.weather.com
 widgets-red.media.weather.com
 image.p-c2-x.abema-tv.com
-widget.cluster.groovehq.com
++.widget.cluster.groovehq.com
 +.cdn.survey.medallia.com
 cdn.accounts.nintendo.com
 epic-social-social-modules-prod.ol.epicgames.com

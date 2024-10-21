@@ -1,8 +1,8 @@
 #!name=[Sukka] URL Redirect
-#!desc=Last Updated: 2024-10-19T07:59:36.805Z
+#!desc=Last Updated: 2024-10-20T17:49:49.642Z Size: 123
 
 [MITM]
-hostname = %APPEND% gravatar.neworld.org, cdn.v2ex.com, cdnjs.loli.net, fonts.loli.net, gstatic.loli.net, themes.loli.net, ajax.loli.net, gravatar.loli.net, gapis.geekzu.org, fonts.geekzu.org, sdn.geekzu.org, cravatar.cn, seccdn.libravatar.org, ghproxy.com, ghps.cc, github.moeyy.xyz, use.sevencdn.com, raw.gitmirror.com, gist.gitmirror.com, raw.githubusercontents.com, gist.githubusercontents.com, cdn.gitmirror.com, raw.fastgit.org, assets.fastgit.org, fastly.jsdelivr.net, gcore.jsdelivr.net, cdn.jsdmirror.com, cdn.jsdmirror.cn, jsdelivr.ops.ci, fonts.ops.ci, jsd.onmicrosoft.cn, npm.onmicrosoft.cn, cdnjs.onmicrosoft.cn, raw.kgithub.com, raw.kkgithub.com, polyfill.io, polyfill.top, polyfill-js.cn, cdn.polyfill.io, fastly-polyfill.io, fastly-polyfill.net, cdn.bootcss.com, cdn.bootcdn.net, cdn.bootcdn.com, cdn.staticfile.net, cdn.staticfile.org, pics.javbus.com, googlefonts.wp-china-yes.net, googleajax.wp-china-yes.net, ign.xn--fiqs8s, www.ign.xn--fiqs8s, abbyychina.com, www.abbyychina.com, bartender.cc, www.bartender.cc, betterzip.net, www.betterzip.net, beyondcompare.cc, www.beyondcompare.cc, bingdianhuanyuan.cn, www.bingdianhuanyuan.cn, chemdraw.com.cn, www.chemdraw.com.cn, codesoftchina.com, www.codesoftchina.com, coreldrawchina.com, www.coreldrawchina.com, crossoverchina.com, www.crossoverchina.com, easyrecoverychina.com, www.easyrecoverychina.com, ediuschina.com, www.ediuschina.com, flstudiochina.com, www.flstudiochina.com, formysql.com, www.formysql.com, guitarpro.cc, www.guitarpro.cc, huishenghuiying.com.cn, www.huishenghuiying.com.cn, iconworkshop.cn, www.iconworkshop.cn, imindmap.cc, www.imindmap.cc, jihehuaban.com.cn, www.jihehuaban.com.cn, keyshot.cc, www.keyshot.cc, mathtype.cn, www.mathtype.cn, mindmanager.cc, www.mindmanager.cc, mindmapper.cc, www.mindmapper.cc, mycleanmymac.com, www.mycleanmymac.com, nicelabel.cc, www.nicelabel.cc, ntfsformac.cc, www.ntfsformac.cc, ntfsformac.cn, www.ntfsformac.cn, overturechina.com, www.overturechina.com, passwordrecovery.cn, www.passwordrecovery.cn, pdfexpert.cc, www.pdfexpert.cc, ultraiso.net, www.ultraiso.net, vegaschina.cn, www.vegaschina.cn, xmindchina.net, www.xmindchina.net, xshellcn.com, www.xshellcn.com, yuanchengxiezuo.com, www.yuanchengxiezuo.com, zbrushcn.com, www.zbrushcn.com, google.cn, www.google.cn, g.cn, www.g.cn, acg.tv, minecraft.fandom.com
+hostname = %APPEND% gravatar.neworld.org, cdn.v2ex.com, cdnjs.loli.net, fonts.loli.net, gstatic.loli.net, themes.loli.net, ajax.loli.net, gravatar.loli.net, gapis.geekzu.org, fonts.geekzu.org, sdn.geekzu.org, seccdn.libravatar.org, github.moeyy.xyz, use.sevencdn.com, raw.gitmirror.com, gist.gitmirror.com, raw.githubusercontents.com, gist.githubusercontents.com, cdn.gitmirror.com, raw.fastgit.org, fastly.jsdelivr.net, gcore.jsdelivr.net, testingcf.jsdelivr.net, cdn.jsdmirror.com, cdn.jsdmirror.cn, jsd.onmicrosoft.cn, npm.onmicrosoft.cn, cdnjs.onmicrosoft.cn, raw.kgithub.com, raw.kkgithub.com, cdn.iocdn.cc, googlefonts.admincdn.com, googleajax.admincdn.com, cdnjs.admincdn.com, polyfill.io, polyfill.top, polyfill-js.cn, cdn.polyfill.io, fastly-polyfill.io, fastly-polyfill.net, cdn.bootcss.com, cdn.bootcdn.net, cdn.staticfile.net, cdn.staticfile.org, pics.javbus.com, ign.xn--fiqs8s, *.ign.xn--fiqs8s, abbyychina.com, *.abbyychina.com, bartender.cc, *.bartender.cc, betterzip.net, *.betterzip.net, beyondcompare.cc, *.beyondcompare.cc, bingdianhuanyuan.cn, *.bingdianhuanyuan.cn, chemdraw.com.cn, *.chemdraw.com.cn, codesoftchina.com, *.codesoftchina.com, coreldrawchina.com, *.coreldrawchina.com, crossoverchina.com, *.crossoverchina.com, easyrecoverychina.com, *.easyrecoverychina.com, ediuschina.com, *.ediuschina.com, flstudiochina.com, *.flstudiochina.com, formysql.com, *.formysql.com, guitarpro.cc, *.guitarpro.cc, huishenghuiying.com.cn, *.huishenghuiying.com.cn, iconworkshop.cn, *.iconworkshop.cn, imindmap.cc, *.imindmap.cc, jihehuaban.com.cn, *.jihehuaban.com.cn, keyshot.cc, *.keyshot.cc, mathtype.cn, *.mathtype.cn, mindmanager.cc, *.mindmanager.cc, mindmapper.cc, *.mindmapper.cc, mycleanmymac.com, *.mycleanmymac.com, nicelabel.cc, *.nicelabel.cc, ntfsformac.cc, *.ntfsformac.cc, ntfsformac.cn, *.ntfsformac.cn, overturechina.com, *.overturechina.com, passwordrecovery.cn, *.passwordrecovery.cn, pdfexpert.cc, *.pdfexpert.cc, ultraiso.net, *.ultraiso.net, vegaschina.cn, *.vegaschina.cn, xmindchina.net, *.xmindchina.net, xshellcn.com, *.xshellcn.com, yuanchengxiezuo.com, *.yuanchengxiezuo.com, zbrushcn.com, *.zbrushcn.com, google.cn, www.google.cn, g.cn, www.g.cn, acg.tv, minecraft.fandom.com
 
 [URL Rewrite]
 ^https?://gravatar\.neworld\.org/(.*) https://secure.gravatar.com/$1 header
@@ -18,10 +18,7 @@ hostname = %APPEND% gravatar.neworld.org, cdn.v2ex.com, cdnjs.loli.net, fonts.lo
 ^https?://gapis\.geekzu\.org/g-fonts/(.*) https://fonts.gstatic.com/$1 header
 ^https?://gapis\.geekzu\.org/g-themes/(.*) https://themes.googleusercontent.com/$1 header
 ^https?://sdn\.geekzu\.org/(.*) https://secure.gravatar.com/$1 header
-^https?://cravatar\.cn/(.*) https://secure.gravatar.com/$1 header
 ^https?://seccdn\.libravatar\.org/gravatarproxy/(.*) https://secure.gravatar.com/$1 header
-^https?://ghproxy\.com/(.*) https://$1 header
-^https?://ghps\.cc/(.*) https://$1 header
 ^https?://github\.moeyy\.xyz/(.*) https://$1 header
 ^https?://use\.sevencdn\.com/css(.*) https://fonts.googleapis.com/css$1 header
 ^https?://use\.sevencdn\.com/ajax/libs/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
@@ -34,18 +31,27 @@ hostname = %APPEND% gravatar.neworld.org, cdn.v2ex.com, cdnjs.loli.net, fonts.lo
 ^https?://gist\.githubusercontents\.com/(.*) https://gist.githubusercontent.com/$1 header
 ^https?://cdn\.gitmirror\.com/(.*) https://cdn.statically.io/$1 header
 ^https?://raw\.fastgit\.org/(.*) https://raw.githubusercontent.com/$1 header
-^https?://assets\.fastgit\.org/(.*) https://github.githubassets.com/$1 header
 ^https?://fastly\.jsdelivr\.net/(.*) https://cdn.jsdelivr.net/$1 header
 ^https?://gcore\.jsdelivr\.net/(.*) https://cdn.jsdelivr.net/$1 header
+^https?://testingcf\.jsdelivr\.net/(.*) https://cdn.jsdelivr.net/$1 header
 ^https?://cdn\.jsdmirror\.com/(.*) https://cdn.jsdelivr.net/$1 header
 ^https?://cdn\.jsdmirror\.cn/(.*) https://cdn.jsdelivr.net/$1 header
-^https?://jsdelivr\.ops\.ci/(.*) https://cdn.jsdelivr.net/$1 header
-^https?://fonts\.ops\.ci/(.*) https://fonts.googleapis.com/$1 header
 ^https?://jsd\.onmicrosoft\.cn/(.*) https://cdn.jsdelivr.net/$1 header
 ^https?://npm\.onmicrosoft\.cn/(.*) https://unpkg.com/$1 header
 ^https?://cdnjs\.onmicrosoft\.cn/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://raw\.kgithub\.com/(.*) https://raw.githubusercontent.com/$1 header
 ^https?://raw\.kkgithub\.com/(.*) https://raw.githubusercontent.com/$1 header
+^https?://cdn\.iocdn\.cc/avatar/(.*) https://secure.gravatar.com/avatar/$1 header
+^https?://cdn\.iocdn\.cc/css(.*) https://fonts.googleapis.com/css$1 header
+^https?://cdn\.iocdn\.cc/icon(.*) https://fonts.googleapis.com/icon$1 header
+^https?://cdn\.iocdn\.cc/earlyaccess(.*) https://fonts.googleapis.com/earlyaccess$1 header
+^https?://cdn\.iocdn\.cc/s(.*) fonts.gstatic.com/s$1 header
+^https?://cdn\.iocdn\.cc/static(.*) themes.googleusercontent.com/static$1 header
+^https?://cdn\.iocdn\.cc/ajax(.*) ajax.googleapis.com/ajax$1 header
+^https?://cdn\.iocdn\.cc/(.*) https://cdn.jsdelivr.net/$1 header
+^https?://googlefonts\.admincdn\.com/(.*) https://fonts.googleapis.com/$1 header
+^https?://googleajax\.admincdn\.com/(.*) https://ajax.googleapis.com/$1 header
+^https?://cdnjs\.admincdn\.com/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://polyfill\.io/(.*) https://cdnjs.cloudflare.com/polyfill/$1 header
 ^https?://polyfill\.top/(.*) https://cdnjs.cloudflare.com/polyfill/$1 header
 ^https?://polyfill-js\.cn/(.*) https://cdnjs.cloudflare.com/polyfill/$1 header
@@ -54,12 +60,9 @@ hostname = %APPEND% gravatar.neworld.org, cdn.v2ex.com, cdnjs.loli.net, fonts.lo
 ^https?://fastly-polyfill\.net/(.*) https://cdnjs.cloudflare.com/polyfill/$1 header
 ^https?://cdn\.bootcss\.com/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://cdn\.bootcdn\.net/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
-^https?://cdn\.bootcdn\.com/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://cdn\.staticfile\.net/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://cdn\.staticfile\.org/(.*) https://cdnjs.cloudflare.com/ajax/libs/$1 header
 ^https?://pics\.javbus\.com/(.*) https://i0.wp.com/pics.javbus.com/$1 header
-^https?://googlefonts\.wp-china-yes\.net/(.*) https://fonts.googleapis.com/$1 header
-^https?://googleajax\.wp-china-yes\.net/(.*) https://ajax.googleapis.com/$1 header
 ^https?://(www.)?ign\.xn--fiqs8s https://cn.ign.com/ccpref/us 307
 ^https?://(www.)?abbyychina\.com https://www.abbyy.cn 307
 ^https?://(www.)?bartender\.cc https://cn.seagullscientific.com 307
