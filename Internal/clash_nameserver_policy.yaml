@@ -1,16 +1,8 @@
 dns:
   nameserver-policy:
     dns.alidns.com: quic://223.5.5.5:853
-    dot.pub: https://1.12.12.12/dns-query
     doh.pub: https://1.12.12.12/dns-query
-    dns.pub: https://1.12.12.12/dns-query
-    dns.360.cn: https://101.198.198.198/dns-query
-    dot.360.cn: https://101.198.198.198/dns-query
-    doh.360.cn: https://101.198.198.198/dns-query
-    sdns.360.net: https://101.198.198.198/dns-query
-    dns.360.net: https://101.198.198.198/dns-query
-    dot.360.net: https://101.198.198.198/dns-query
-    doh.360.net: https://101.198.198.198/dns-query
+    doh.360.cn: 101.198.198.198
     +.uc.cn: quic://dns.alidns.com:853
     +.alibaba.com: quic://dns.alidns.com:853
     "*.alicdn.com": quic://dns.alidns.com:853
@@ -203,6 +195,8 @@ dns:
     "*.bytednsdoc.com": 180.184.2.2
     "*.byteimg.com": 180.184.2.2
     "*.byteacctimg.com": 180.184.2.2
+    "*.ibytedapm.com": 180.184.2.2
+    +.oceanengine.com: 180.184.2.2
     +.91.com: 180.76.76.76
     +.hao123.com: 180.76.76.76
     +.baidu.cn: 180.76.76.76
@@ -482,13 +476,7 @@ hosts:
     - 223.6.6.6
     - 2400:3200:baba::1
     - 2400:3200::1
-  dot.pub:
-    - 120.53.53.53
-    - 1.12.12.12
   doh.pub:
-    - 120.53.53.53
-    - 1.12.12.12
-  dns.pub:
     - 120.53.53.53
     - 1.12.12.12
   localhost:

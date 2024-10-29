@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Speedtest Domains
-# Last Updated: 2024-10-21T21:23:57.679Z
-# Size: 442
+# Last Updated: 2024-10-29T16:42:29.945Z
+# Size: 460
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -31,13 +31,15 @@
 +.speedtest.execulink.ca
 +.speedtest01.fibernetics.ca
 +.west-speedtest.frontiernetworks.ca
-speed.data.cr
 +.speedtest.tigo.cr
 +.speedtest-net.mk.de
 +.speedtest.ropa.de
 +.speedtest.ip-projects.de
 +.speedtest.creolineserver.de
+ookla3.1und1-mobilfunk.de
+speedtest1-qupra-ams-nl.ebgp.fi
 +.speedtest.sewan.fr
+speedperf.axione.fr
 +.speedtest.orange.fr
 +.speed.pfm.gg
 +.speedtest.serveur.gg
@@ -45,6 +47,7 @@ speed.data.cr
 +.hiztesti.ondiso.io
 +.speedtest.ondiso.io
 +.speedtest.rt.ru
+speedtest-msk.yota.ru
 +.speedtest.cittel.ru
 +.speedtest.rascom.ru
 +.speedtest.reconn.ru
@@ -136,6 +139,7 @@ speed.data.cr
 +.speedtest.highnet.com
 +.speedtest-ifx-mia.ifxcorp.com
 +.speedtest-c.netgear.com
+speedtest.sercomm.com
 +.speedtest.starhub.com
 +.speedtest01.wowrack.com
 +.ookla.ddnsgeek.com
@@ -153,18 +157,22 @@ speed.data.cr
 +.mensura.cdn-apple.com
 +.mns.i-systems.com
 speedtest.jsqiuying.com
+kadoshspeed.kadoshnet.com
 speedtest.linknetbv.com
 +.speedtest.surfshark.com
 +.speed-test.westelcom.com
+speedtest-ank1.atasunucum.com
 +.speed.cloudflare.com
 +.sp1.hcetelecom.com
 +.speedlon.hyperoptic.com
 +.speedsin.phoenixnap.com
 +.speedtest.gslnetworks.com
+ooklaspeedtest-cdb.quebeccloud.com
 +.speedtest-obd.redeconecta.com
 +.speedtest-stm.redeconecta.com
 +.speedtest.springfibre.com
 +.speedtestnyc.telebermuda.com
+sp1.campanaworks.com
 +.speedtestldn.grainconnect.com
 +.moscow-speedtest-1.hostingswift.com
 +.speedtest.lightsource1.com
@@ -205,6 +213,7 @@ speedtest.linknetbv.com
 +.speedtest.telerys.net
 +.speedtest.telstra.net
 +.speedtest.wolfpaw.net
+sp7.atcc-gns.net
 +.open.cachefly.net
 +.speedtest5.fybercom.net
 +.speedtest-ams.melbicom.net
@@ -310,6 +319,7 @@ lg-tok.fdcservers.net
 +.speedtest.japanettelecom.com.br
 +.st.jnettelecom-am.com.br
 +.teste.newsolutionnet.com.br
+velocidade.phinfortelecom.com.br
 +.speedtest.albatroznetwork.com.br
 +.velocidade.amazoniatelecom.com.br
 +.velocidade-pvh.amazoniatelecom.com.br
@@ -350,6 +360,7 @@ ookla.siditelecom-isp.com.br
 +.speedtest.bmcc.com.cn
 +.speedtest.three.com.hk
 +.speedtest-sg.napinfo.co.id
+speedtest-sg.cni.net.id
 +.speedtest.smapasundan8bdg.sch.id
 +.speed.udx.icscoe.jp
 +.sin-speedtest.zedware-neoftt.us.kg
@@ -361,6 +372,7 @@ st.mow.gin.ru
 ookla.sh.com.tr
 +.speedtest.comnet.com.tr
 +.speedtest.fixnet.com.tr
+adanaspeedtest.fixnet.com.tr
 +.afyonspeedtest.fixnet.com.tr
 +.bursaspeedtest.fixnet.com.tr
 +.antalyaspeedtest.fixnet.com.tr
@@ -378,10 +390,12 @@ hizistanbul1.durunet.com.tr
 speedtest.lodosnet.com.tr
 +.speedtest.rekornet.com.tr
 +.speedtest.teknosos.com.tr
+adn1speedtest.turktelekom.com.tr
 +.aks1speedtest.turktelekom.com.tr
 +.ank1speedtest.turktelekom.com.tr
 +.ant1speedtest.turktelekom.com.tr
 +.bur1speedtest.turktelekom.com.tr
+cnk1speedtest.turktelekom.com.tr
 +.erz1speedtest.turktelekom.com.tr
 +.esk1speedtest.turktelekom.com.tr
 +.gay1speedtest.turktelekom.com.tr
@@ -391,6 +405,7 @@ speedtest.lodosnet.com.tr
 +.svs1speedtest.turktelekom.com.tr
 +.tra1speedtest.turktelekom.com.tr
 +.umr1speedtest.turktelekom.com.tr
+speed.radius2online.com.tr
 +.hiztesti.mehmetakif.edu.tr
 +.speed.flix.net.tr
 +.speedtest.gibir.net.tr
@@ -418,6 +433,7 @@ speedtest.lodosnet.com.tr
 +.syrny-speedtest-02.nyroc.rr.com
 +.lsanca-speedtest-02.socal.rr.com
 speedtest.ty7.macarne.com
+speedtest.eu.kamatera.com
 +.speedtest.hk.chinamobile.com
 +.speedtestbb.hk.chinamobile.com
 +.speedtest.fra.ewgmedianet.com
@@ -430,6 +446,7 @@ speedtest.ty7.macarne.com
 +.ty1.chtm.hinet.net
 +.ntp1.chtm.hinet.net
 +.speedtest.sjc.sonic.net
+stosat-rvlt-01.sys.comcast.net
 +.speedtest.ams.sharktech.net
 +.speedtest.cg.shawcable.net
 +.speedtest.ed.shawcable.net
@@ -444,6 +461,7 @@ speedtest.ty7.macarne.com
 +.ams-speedtest.isp.htb.systems
 +.ookla-speedtest-central.hgconair.hgc.com.hk
 +.sosimhk.datapath.three.com.hk
+speedtest-1.london.network.youfibre.com
 +.speedtest.seattle.wa.limewave.net
 +.speedtest.mirror.mel1.digitalpacific.com.au
 +.speedtest.hk212.hkg.cn.nerocloud.io

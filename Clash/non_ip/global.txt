@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - General Global Services
-# Last Updated: 2024-10-21T16:28:54.223Z
-# Size: 642
+# Last Updated: 2024-10-27T15:24:09.331Z
+# Size: 652
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -9,6 +9,7 @@
 # This file contains rules for services that are not available inside the Mainland China.
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
+DOMAIN-SUFFIX,gov
 DOMAIN-SUFFIX,character.ai
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-SUFFIX,linkedin.at
@@ -69,6 +70,7 @@ DOMAIN-SUFFIX,libgen.is
 DOMAIN-SUFFIX,archive.is
 DOMAIN-SUFFIX,pin.it
 DOMAIN-SUFFIX,redd.it
+DOMAIN-SUFFIX,buyee.jp
 DOMAIN-SUFFIX,blogimg.jp
 DOMAIN-SUFFIX,nhncorp.jp
 DOMAIN-SUFFIX,twitter.jp
@@ -105,6 +107,7 @@ DOMAIN-SUFFIX,nyaa.si
 DOMAIN-SUFFIX,notion.so
 DOMAIN-SUFFIX,libgen.st
 DOMAIN-SUFFIX,ping.sx
+DOMAIN-SUFFIX,7mmtv.sx
 DOMAIN-SUFFIX,dev.to
 DOMAIN-SUFFIX,bgm.tv
 DOMAIN-SUFFIX,muku.tv
@@ -122,6 +125,7 @@ DOMAIN-SUFFIX,binance.us
 DOMAIN-SUFFIX,missav.ws
 DOMAIN-SUFFIX,run.app
 DOMAIN-SUFFIX,ajay.app
+DOMAIN-SUFFIX,grep.app
 DOMAIN-SUFFIX,vercel.app
 DOMAIN-SUFFIX,cyberghost.app
 DOMAIN-SUFFIX,istatmenus.app
@@ -164,6 +168,7 @@ DOMAIN-SUFFIX,gvt7.com
 DOMAIN-SUFFIX,gvt9.com
 DOMAIN-SUFFIX,imdb.com
 DOMAIN-SUFFIX,ixxx.com
+DOMAIN-SUFFIX,java.com
 DOMAIN-SUFFIX,kagi.com
 DOMAIN-SUFFIX,kobo.com
 DOMAIN-SUFFIX,kwai.com
@@ -255,11 +260,13 @@ DOMAIN-SUFFIX,replit.com
 DOMAIN-SUFFIX,scribd.com
 DOMAIN-SUFFIX,setapp.com
 DOMAIN-SUFFIX,sketch.com
+DOMAIN-SUFFIX,supjav.com
 DOMAIN-SUFFIX,thisav.com
 DOMAIN-SUFFIX,tineye.com
 DOMAIN-SUFFIX,tumblr.com
 DOMAIN-SUFFIX,ubuntu.com
 DOMAIN-SUFFIX,vercel.com
+DOMAIN-SUFFIX,vikacg.com
 DOMAIN-SUFFIX,yandex.com
 DOMAIN-SUFFIX,4shared.com
 DOMAIN-SUFFIX,adguard.com
@@ -313,6 +320,7 @@ DOMAIN-SUFFIX,blogblog.com
 DOMAIN-SUFFIX,capitalg.com
 DOMAIN-SUFFIX,cbslocal.com
 DOMAIN-SUFFIX,coinbase.com
+DOMAIN-SUFFIX,coindesk.com
 DOMAIN-SUFFIX,dashlane.com
 DOMAIN-SUFFIX,deepmind.com
 DOMAIN-SUFFIX,dribbble.com
@@ -489,6 +497,7 @@ DOMAIN-SUFFIX,wsj.net
 DOMAIN-SUFFIX,bwh1.net
 DOMAIN-SUFFIX,daum.net
 DOMAIN-SUFFIX,dynu.net
+DOMAIN-SUFFIX,sony.net
 DOMAIN-SUFFIX,whrq.net
 DOMAIN-SUFFIX,cdnst.net
 DOMAIN-SUFFIX,fbcdn.net
@@ -538,6 +547,7 @@ DOMAIN-SUFFIX,cloudfunctions.net
 DOMAIN-SUFFIX,eu.org
 DOMAIN-SUFFIX,npr.org
 DOMAIN-SUFFIX,rfa.org
+DOMAIN-SUFFIX,4chan.org
 DOMAIN-SUFFIX,godoc.org
 DOMAIN-SUFFIX,pixiv.org
 DOMAIN-SUFFIX,scpdb.org
@@ -553,6 +563,7 @@ DOMAIN-SUFFIX,signal.org
 DOMAIN-SUFFIX,webrtc.org
 DOMAIN-SUFFIX,archive.org
 DOMAIN-SUFFIX,astrill.org
+DOMAIN-SUFFIX,f-droid.org
 DOMAIN-SUFFIX,mozilla.org
 DOMAIN-SUFFIX,solidot.org
 DOMAIN-SUFFIX,chromium.org
@@ -647,7 +658,6 @@ DOMAIN-KEYWORD,whatsapp
 DOMAIN-KEYWORD,discord
 DOMAIN-KEYWORD,sci-hub
 DOMAIN-KEYWORD,dropbox
-DOMAIN-KEYWORD,jav
 DOMAIN-KEYWORD,pinterest
 DOMAIN-KEYWORD,porn
 ################## EOF ##################
