@@ -22,12 +22,7 @@ export const HOSTS_EXTRA: HostsSource[] = [
   // Dan Pollock's hosts file, 0.0.0.0 version is 30 KiB smaller
   ['https://someonewhocares.org/hosts/zero/hosts', null, true, TTL.THREE_HOURS()],
   // ad-wars is not actively maintained, so we set a 7 days cache ttl
-  ['https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts', null, false, TTL.TWO_WEEKS()],
-  [
-    'https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/hosts.txt',
-    [],
-    true, TTL.TWLVE_HOURS()
-  ]
+  ['https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts', null, false, TTL.TWO_WEEKS()]
 ];
 
 export const DOMAIN_LISTS: HostsSource[] = [
@@ -82,6 +77,10 @@ export const DOMAIN_LISTS_EXTRA: HostsSource[] = [
   // Spam404
   // Not actively maintained, let's use a 10 days cache ttl
   ['https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt', [], true, TTL.TEN_DAYS()]
+];
+
+export const PHISHING_HOSTS_EXTRA: HostsSource[] = [
+  ['https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/hosts.txt', [], true, TTL.THREE_DAYS()]
 ];
 
 export const PHISHING_DOMAIN_LISTS_EXTRA: HostsSource[] = [
@@ -387,6 +386,7 @@ export const PREDEFINED_WHITELIST = [
   'email.accounts.bitly.com', // Fuck Peter Lowe Hosts
   'adsense.google.com', // Fuck Peter Lowe Hosts
   'api.vip.miui.com', // Fuck Goodbye Xiaomi Ads
+  'api.comm.miui.com', // Xiaomi MIUI phone number database update URL
   '.ai.api.xiaomi.com', // Fuck Goodbye Xiaomi Ads
   'm.stripe.com', // EasyPrivacy only blocks m.stripe.com wwith $third-party,
   // yet stupid AdGuardDNSFilter blocks all of it. Stupid AdGuard
@@ -396,5 +396,12 @@ export const PREDEFINED_WHITELIST = [
   'ab.chatgpt.com', // EasyPrivacy blocks this
   'jnn-pa.googleapis.com', // ad-wars
   'imasdk.googleapis.com', // ad-wars
-  '.l.qq.com' // ad-wars
+  '.l.qq.com', // ad-wars
+  '.in-addr.arpa', // rDNS
+  '.ip6.arpa', // rDNS
+  '.clients.your-server.de', // rDNS .static.183.213.201.138.clients.your-server.de
+  '.bc.googleusercontent.com', // rDNS 218.178.172.34.bc.googleusercontent.com
+  '.host.secureserver.net', // rDNS .64.149.167.72.host.secureserver.net,
+  '.ip.linodeusercontent.com', // rDNS 45-79-169-153.ip.linodeusercontent.com
+  '.shoppy.gg' // Spam404
 ];

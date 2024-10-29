@@ -35,7 +35,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   protected otherRules: string[] = [];
   protected abstract type: 'domainset' | 'non_ip' | 'ip';
 
-  protected pendingPromise = Promise.resolve();
+  private pendingPromise: Promise<void> | null = null;
 
   static readonly jsonToLines = (json: unknown): string[] => stringify(json).split('\n');
 
@@ -90,9 +90,13 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     return this;
   }
 
-  bulkAddDomain(domains: string[]) {
+  bulkAddDomain(domains: Array<string | null>) {
+    let d: string | null;
     for (let i = 0, len = domains.length; i < len; i++) {
-      this.addDomain(domains[i]);
+      d = domains[i];
+      if (d !== null) {
+        this.addDomain(d);
+      }
     }
     return this;
   }
@@ -125,7 +129,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   }
 
   addFromDomainset(source: AsyncIterable<string> | Iterable<string> | string[]) {
-    this.pendingPromise = this.pendingPromise.then(() => this.addFromDomainsetPromise(source));
+    this.pendingPromise = (this.pendingPromise ||= Promise.resolve()).then(() => this.addFromDomainsetPromise(source));
     return this;
   }
 
@@ -193,7 +197,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   }
 
   addFromRuleset(source: AsyncIterable<string> | Iterable<string>) {
-    this.pendingPromise = this.pendingPromise.then(() => this.addFromRulesetPromise(source));
+    this.pendingPromise = (this.pendingPromise ||= Promise.resolve()).then(() => this.addFromRulesetPromise(source));
     return this;
   }
 
@@ -235,13 +239,24 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
 
   protected abstract preprocess(): NonNullable<TPreprocessed>;
 
-  done() {
-    return this.pendingPromise;
+  async done() {
+    await this.pendingPromise;
+    this.pendingPromise = null;
+  }
+
+  private guardPendingPromise() {
+    // reverse invariant
+    if (this.pendingPromise !== null) {
+      console.trace('Pending promise:', this.pendingPromise);
+      throw new Error('You should call done() before calling this method');
+    }
   }
 
   private $$preprocessed: TPreprocessed | null = null;
   get $preprocessed() {
     if (this.$$preprocessed === null) {
+      this.guardPendingPromise();
+
       this.$$preprocessed = this.span.traceChildSync('RuleOutput#preprocess: ' + this.id, () => this.preprocess());
     }
     return this.$$preprocessed;

@@ -1,8 +1,11 @@
 import { invariant } from 'foxact/invariant';
 import createKeywordFilter from '../aho-corasick';
-import { buildParseDomainMap, sortDomains } from '../stable-sort-domain';
+import { sortDomains } from '../stable-sort-domain';
 import { RuleOutput } from './base';
 import type { SingboxSourceFormat } from '../singbox';
+
+import * as tldts from 'tldts-experimental';
+import { looseTldtsOpt } from '../../constants/loose-tldts-opt';
 
 type Preprocessed = string[];
 
@@ -58,18 +61,19 @@ export class DomainsetOutput extends RuleOutput<Preprocessed> {
   }
 
   protected apexDomainMap: Map<string, string> | null = null;
-  protected subDomainMap: Map<string, string> | null = null;
-  withDomainMap(apexDomainMap: Map<string, string>, subDomainMap: Map<string, string>) {
-    this.apexDomainMap = apexDomainMap;
-    this.subDomainMap = subDomainMap;
-    return this;
-  }
-
   getStatMap() {
     invariant(this.$preprocessed, 'Non dumped yet');
 
-    if (!this.apexDomainMap || !this.subDomainMap) {
-      const { domainMap } = buildParseDomainMap(this.$preprocessed);
+    if (!this.apexDomainMap) {
+      const domainMap = new Map<string, string>();
+
+      for (let i = 0, len = this.$preprocessed.length; i < len; i++) {
+        const cur = this.$preprocessed[i];
+        if (!domainMap.has(cur)) {
+          const domain = tldts.getDomain(cur, looseTldtsOpt);
+          domainMap.set(cur, domain ?? cur);
+        }
+      }
       this.apexDomainMap = domainMap;
     }
 
@@ -99,7 +103,7 @@ export class DomainsetOutput extends RuleOutput<Preprocessed> {
     for (let i = 0, len = whitelistArray.length; i < len; i++) {
       const domain = whitelistArray[i];
       if (domain[0] === '.') {
-        results.push(`@@||${domain.slice(1)}^`);
+        results.push(`@@||${domain.slice(1)}&`);
       } else {
         results.push(`@@|${domain}^`);
       }
@@ -111,6 +115,41 @@ export class DomainsetOutput extends RuleOutput<Preprocessed> {
         results.push(`||${domain.slice(1)}^`);
       } else {
         results.push(`|${domain}^`);
+      }
+    }
+
+    for (const wildcard of this.domainWildcard) {
+      const processed = wildcard.replaceAll('?', '*');
+      if (processed.startsWith('*.')) {
+        results.push(`||${processed.slice(2)}^`);
+      } else {
+        results.push(`|${processed}^`);
+      }
+    }
+
+    for (const keyword of this.domainKeywords) {
+      // Use regex to match keyword
+      results.push(`/${keyword}/`);
+    }
+
+    for (const ipGroup of [this.ipcidr, this.ipcidrNoResolve]) {
+      for (const ipcidr of ipGroup) {
+        if (ipcidr.endsWith('/32')) {
+          results.push(`||${ipcidr.slice(0, -3)}`);
+        } else if (ipcidr.endsWith('.0/24')) {
+          results.push(`||${ipcidr.slice(0, -6)}.*`);
+        } else {
+          results.push(`||${ipcidr}^`);
+        }
+      }
+    }
+    for (const ipGroup of [this.ipcidr6, this.ipcidr6NoResolve]) {
+      for (const ipcidr of ipGroup) {
+        if (ipcidr.endsWith('/128')) {
+          results.push(`||${ipcidr.slice(0, -4)}`);
+        } else {
+          results.push(`||${ipcidr}`);
+        }
       }
     }
 
