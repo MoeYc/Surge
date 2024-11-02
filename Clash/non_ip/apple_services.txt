@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Apple Domains
-# Last Updated: 2024-10-15T10:37:07.452Z
-# Size: 28
+# Last Updated: 2024-11-01T19:54:19.060Z
+# Size: 27
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -18,7 +18,6 @@ DOMAIN-SUFFIX,itunes.com
 DOMAIN-SUFFIX,aaplimg.com
 DOMAIN-SUFFIX,appstore.com
 DOMAIN-SUFFIX,cdn-apple.com
-DOMAIN-SUFFIX,crashlytics.com
 DOMAIN-SUFFIX,apple-mapkit.com
 DOMAIN-SUFFIX,apple-cloudkit.com
 DOMAIN-SUFFIX,icloud-content.com

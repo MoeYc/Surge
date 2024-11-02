@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2024-10-18T09:10:14.055Z
-# Size: 37
+# Last Updated: 2024-11-01T19:54:19.060Z
+# Size: 39
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -45,4 +45,6 @@ DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.kuaikan-cdn[a-zA-Z0-9-_.]\.com$
 DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.lz-cdn[a-zA-Z0-9-_.]\.com$
 DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.lz-cdn[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.com$
 DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.fsvod[a-zA-Z0-9-_.]\.com$
+DOMAIN-REGEX,^image[a-zA-Z0-9-_.]*?\.cloudokyo\.cloud$
+DOMAIN-REGEX,^video[a-zA-Z0-9-_.]*?\.cloudokyo\.cloud$
 ################## EOF ##################

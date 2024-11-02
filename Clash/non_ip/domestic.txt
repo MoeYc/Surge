@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Domestic Domains
-# Last Updated: 2024-10-29T13:36:16.411Z
-# Size: 741
+# Last Updated: 2024-11-01T19:54:18.557Z
+# Size: 743
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -28,6 +28,7 @@ DOMAIN-SUFFIX,dxy.cn
 DOMAIN-SUFFIX,edu.cn
 DOMAIN-SUFFIX,gov.cn
 DOMAIN-SUFFIX,itc.cn
+DOMAIN-SUFFIX,mcd.cn
 DOMAIN-SUFFIX,nmc.cn
 DOMAIN-SUFFIX,org.cn
 DOMAIN-SUFFIX,php.cn
@@ -40,6 +41,7 @@ DOMAIN-SUFFIX,didi.cn
 DOMAIN-SUFFIX,kuwo.cn
 DOMAIN-SUFFIX,migu.cn
 DOMAIN-SUFFIX,neea.cn
+DOMAIN-SUFFIX,news.cn
 DOMAIN-SUFFIX,oppo.cn
 DOMAIN-SUFFIX,qpic.cn
 DOMAIN-SUFFIX,sina.cn
@@ -374,7 +376,6 @@ DOMAIN-SUFFIX,taobao.com
 DOMAIN-SUFFIX,udache.com
 DOMAIN-SUFFIX,volces.com
 DOMAIN-SUFFIX,wangsu.com
-DOMAIN-SUFFIX,wechat.com
 DOMAIN-SUFFIX,wegame.com
 DOMAIN-SUFFIX,weixin.com
 DOMAIN-SUFFIX,weiyun.com
@@ -747,6 +748,7 @@ DOMAIN-SUFFIX,dl.pinyuncloud.com
 DOMAIN-SUFFIX,dl.bscstorage.net
 DOMAIN,cn.download.nvidia.com
 DOMAIN,gstore.val.manlaxy.com
+DOMAIN,media.cdn.queniuqe.com
 DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com
 DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.qhimgs[a-zA-Z0-9-_.]\.com$
 ################## EOF ##################
