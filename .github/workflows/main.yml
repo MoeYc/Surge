@@ -19,16 +19,16 @@ jobs:
     outputs:
       platform: ${{ steps.enable_check.outputs.result }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # - name: Tune GitHub-hosted runner network
+      #   # https://github.com/actions/runner-images/issues/1187
+      #   uses: smorimoto/tune-github-hosted-runner-network@v1
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - uses: pnpm/action-setup@v4
-        name: Install pnpm
         with:
           run_install: false
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: 'pnpm'
@@ -57,8 +57,7 @@ jobs:
             ${{ runner.os }}-v3-${{ steps.date.outputs.year }}-${{ steps.date.outputs.month }}-
             ${{ runner.os }}-v3-${{ steps.date.outputs.year }}-
             ${{ runner.os }}-v3-
-      - name: Install dependencies
-        run: pnpm install
+      - run: pnpm install
       - run: pnpm run build
       - name: Pre-deploy check
         # If the public directory doesn't exist, the build should fail.

@@ -26,6 +26,7 @@ export const DOMESTICS: Record<string, DNSMapping> = {
       'alibaba-inc.com',
       '+alibabausercontent.com',
       '+alibabadns.com',
+      'alibabachengdun.com',
       'alicloudccp.com',
       'alipan.com',
       'aliyundrive.com',
@@ -49,6 +50,7 @@ export const DOMESTICS: Record<string, DNSMapping> = {
       '+tbcache.com',
       'tmall.com',
       // 'tmall.hk',
+      'goofish.com',
       'xiami.com',
       'xiami.net',
       '+ykimg.com',
@@ -74,6 +76,8 @@ export const DOMESTICS: Record<string, DNSMapping> = {
       'npmmirror.com',
       'alios.cn',
       'wandoujia.com',
+      'aligames.com',
+      '25pp.com',
       '+aliapp.org',
       'tanx.com',
       'hellobike.com',
@@ -161,7 +165,7 @@ export const DOMESTICS: Record<string, DNSMapping> = {
     realip: false,
     domains: [
       // '$upos-sz-mirrorcoso1.bilivideo.com', // already included in bilivideo.com
-      '$upos-sz-mirrorcosbstar1.bilivideo.com', // Bilibili Intl with Tencent Cloud CDN
+      // '$upos-sz-estgcos.bilivideo.com', // already included in bilivideo.com, tencent cloud cdn
       '$acg.tv',
       '$b23.tv',
       'bilibili.cn',
@@ -212,7 +216,9 @@ export const DOMESTICS: Record<string, DNSMapping> = {
     hosts: {},
     realip: false,
     domains: [
+      'bytedance.com.com',
       '+bytecdn.cn',
+      '+volccdn.com',
       '+toutiaoimg.com',
       '+toutiaoimg.cn',
       '+toutiaostatic.com',

@@ -60,6 +60,17 @@ export const buildPublic = task(require.main === module, __filename)(async (span
     path.join(PUBLIC_DIR, '_headers')
   );
 
+  await compareAndWriteFile(
+    span,
+    [
+      '# <pre>',
+      '#########################################',
+      '# Sukka\'s Ruleset - 404 Not Found',
+      '################## EOF ##################</pre>'
+    ],
+    path.join(PUBLIC_DIR, '404.html')
+  );
+
   return writeFile(path.join(PUBLIC_DIR, 'index.html'), html);
 });
 

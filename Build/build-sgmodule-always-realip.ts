@@ -1,13 +1,13 @@
 import path from 'node:path';
 import { task } from './trace';
 import { compareAndWriteFile, DomainsetOutput } from './lib/create-file';
-import { DIRECTS } from '../Source/non_ip/direct';
+import { DIRECTS, LAN } from '../Source/non_ip/direct';
 import type { DNSMapping } from '../Source/non_ip/direct';
 import { DOMESTICS, DOH_BOOTSTRAP } from '../Source/non_ip/domestic';
 import * as yaml from 'yaml';
 import { OUTPUT_INTERNAL_DIR, OUTPUT_MODULES_DIR } from './constants/dir';
 import { appendArrayInPlace } from './lib/append-array-in-place';
-import { SHARED_DESCRIPTION } from './lib/constants';
+import { SHARED_DESCRIPTION } from './constants/description';
 import { createGetDnsMappingRule } from './build-domestic-direct-lan-ruleset-dns-mapping-module';
 
 const HOSTNAMES = [
@@ -47,7 +47,7 @@ export const buildAlwaysRealIPModule = task(require.main === module, __filename)
     ]);
 
   // Intranet, Router Setup, and mant more
-  const dataset = [DIRECTS, DOMESTICS, DOH_BOOTSTRAP].reduce<DNSMapping[]>((acc, item) => {
+  const dataset = [DIRECTS, LAN, DOMESTICS, DOH_BOOTSTRAP].reduce<DNSMapping[]>((acc, item) => {
     Object.values(item).forEach((i: DNSMapping) => {
       if (i.realip) {
         acc.push(i);
