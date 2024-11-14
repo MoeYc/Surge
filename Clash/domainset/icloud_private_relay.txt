@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - iCloud Private Relay
-# Last Updated: 2024-10-15T10:37:07.421Z
-# Size: 9
+# Last Updated: 2024-11-05T17:20:45.510Z
+# Size: 7
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -13,8 +13,6 @@ mask-h2.icloud.com
 mask-api.icloud.com
 mask-canary.icloud.com
 mask.apple-dns.net
-mask-t.apple-dns.net
-mask-api.fe.apple-dns.net
 canary.mask.apple-dns.net
 this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 ################## EOF ##################

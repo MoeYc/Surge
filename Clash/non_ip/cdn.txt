@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2024-11-01T19:54:19.060Z
+# Last Updated: 2024-11-10T11:17:12.448Z
 # Size: 39
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
@@ -16,35 +16,35 @@ DOMAIN-KEYWORD,vod-adaptive.akamaized.net
 DOMAIN-KEYWORD,web-assets.zendesk
 DOMAIN-KEYWORD,-res.cloudinary.com
 DOMAIN-KEYWORD,dsn.algolia.net
-DOMAIN-REGEX,^appcenter-filemanagement-[a-zA-Z0-9-_.]*?\.cloudapp\.net$
-DOMAIN-REGEX,^proxy-[a-zA-Z0-9-_.]*?\.dailymotion\.com$
-DOMAIN-REGEX,^static[a-zA-Z0-9-_.]*?\.tgstat\.ru$
-DOMAIN-REGEX,^ocsp\.[a-zA-Z0-9-_.]*?\.amazontrust\.com$
-DOMAIN-REGEX,^s3\.[a-zA-Z0-9-_.]*?\.wasabisys\.com$
-DOMAIN-REGEX,^i[a-zA-Z0-9-_.]\.nhentai\.net$
-DOMAIN-REGEX,^t[a-zA-Z0-9-_.]\.nhentai\.net$
-DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]-thumbs\.pornhost\.com$
-DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]-dl\.pornhost\.com$
-DOMAIN-REGEX,^cdn-msp[a-zA-Z0-9-_.]\.18comic\.vip$
-DOMAIN-REGEX,^cdn-msp[a-zA-Z0-9-_.]\.jmcomic\.me$
-DOMAIN-REGEX,^static-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]-cdn\.eporner\.com$
-DOMAIN-REGEX,^file[a-zA-Z0-9-_.]\.mikuclub\.fun$
-DOMAIN-REGEX,^cdn[a-zA-Z0-9-_.]\.mikuclub\.fun$
-DOMAIN-REGEX,^cdns\.[a-zA-Z0-9-_.]*?\.gigya\.com$
+DOMAIN-REGEX,^appcenter-filemanagement-[\w.-]*?\.cloudapp\.net$
+DOMAIN-REGEX,^proxy-[\w.-]*?\.dailymotion\.com$
+DOMAIN-REGEX,^static[\w.-]*?\.tgstat\.ru$
+DOMAIN-REGEX,^ocsp\.[\w.-]*?\.amazontrust\.com$
+DOMAIN-REGEX,^s3\.[\w.-]*?\.wasabisys\.com$
+DOMAIN-REGEX,^i[\w.-]\.nhentai\.net$
+DOMAIN-REGEX,^t[\w.-]\.nhentai\.net$
+DOMAIN-REGEX,^cdn[\w.-]-thumbs\.pornhost\.com$
+DOMAIN-REGEX,^cdn[\w.-]-dl\.pornhost\.com$
+DOMAIN-REGEX,^cdn-msp[\w.-]\.18comic\.vip$
+DOMAIN-REGEX,^cdn-msp[\w.-]\.jmcomic\.me$
+DOMAIN-REGEX,^static-[\w.-][\w.-]-cdn\.eporner\.com$
+DOMAIN-REGEX,^file[\w.-]\.mikuclub\.fun$
+DOMAIN-REGEX,^cdn[\w.-]\.mikuclub\.fun$
+DOMAIN-REGEX,^cdns\.[\w.-]*?\.gigya\.com$
 DOMAIN-REGEX,^video-thumbnail2\.fc2\.com$
-DOMAIN-REGEX,^video[a-zA-Z0-9-_.]-thumbnail[a-zA-Z0-9-_.]\.fc2\.com$
+DOMAIN-REGEX,^video[\w.-]-thumbnail[\w.-]\.fc2\.com$
 DOMAIN-REGEX,^video-thumbnail2\.liaoningmovie\.net$
-DOMAIN-REGEX,^video[a-zA-Z0-9-_.]-thumbnail[a-zA-Z0-9-_.]\.liaoningmovie\.net$
-DOMAIN-REGEX,^vip-videoprem[a-zA-Z0-9-_.]*?-thumbnail[a-zA-Z0-9-_.]\.fc2\.com$
-DOMAIN-REGEX,^blog-imgs-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.2nt\.com$
-DOMAIN-REGEX,^blog-imgs-[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.fc2\.com$
-DOMAIN-REGEX,^rr[a-zA-Z0-9-_.]---[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.ouo\.si$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.ffzy-online[a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.ffzy-play[a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.kuaikan-cdn[a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.lz-cdn[a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.lz-cdn[a-zA-Z0-9-_.][a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^[a-zA-Z0-9-_.]*?\.fsvod[a-zA-Z0-9-_.]\.com$
-DOMAIN-REGEX,^image[a-zA-Z0-9-_.]*?\.cloudokyo\.cloud$
-DOMAIN-REGEX,^video[a-zA-Z0-9-_.]*?\.cloudokyo\.cloud$
+DOMAIN-REGEX,^video[\w.-]-thumbnail[\w.-]\.liaoningmovie\.net$
+DOMAIN-REGEX,^vip-videoprem[\w.-]*?-thumbnail[\w.-]\.fc2\.com$
+DOMAIN-REGEX,^blog-imgs-[\w.-][\w.-]\.2nt\.com$
+DOMAIN-REGEX,^blog-imgs-[\w.-][\w.-]\.fc2\.com$
+DOMAIN-REGEX,^rr[\w.-]---[\w.-][\w.-]\.ouo\.si$
+DOMAIN-REGEX,^[\w.-]*?\.ffzy-online[\w.-]\.com$
+DOMAIN-REGEX,^[\w.-]*?\.ffzy-play[\w.-]\.com$
+DOMAIN-REGEX,^[\w.-]*?\.kuaikan-cdn[\w.-]\.com$
+DOMAIN-REGEX,^[\w.-]*?\.lz-cdn[\w.-]\.com$
+DOMAIN-REGEX,^[\w.-]*?\.lz-cdn[\w.-][\w.-]\.com$
+DOMAIN-REGEX,^[\w.-]*?\.fsvod[\w.-]\.com$
+DOMAIN-REGEX,^image[\w.-]*?\.cloudokyo\.cloud$
+DOMAIN-REGEX,^video[\w.-]*?\.cloudokyo\.cloud$
 ################## EOF ##################

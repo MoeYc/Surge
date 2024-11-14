@@ -22,6 +22,7 @@ dns:
     +.alibaba-inc.com: quic://dns.alidns.com:853
     "*.alibabausercontent.com": quic://dns.alidns.com:853
     "*.alibabadns.com": quic://dns.alidns.com:853
+    +.alibabachengdun.com: quic://dns.alidns.com:853
     +.alicloudccp.com: quic://dns.alidns.com:853
     +.alipan.com: quic://dns.alidns.com:853
     +.aliyundrive.com: quic://dns.alidns.com:853
@@ -44,6 +45,7 @@ dns:
     "*.taobaocdn.com": quic://dns.alidns.com:853
     "*.tbcache.com": quic://dns.alidns.com:853
     +.tmall.com: quic://dns.alidns.com:853
+    +.goofish.com: quic://dns.alidns.com:853
     +.xiami.com: quic://dns.alidns.com:853
     +.xiami.net: quic://dns.alidns.com:853
     "*.ykimg.com": quic://dns.alidns.com:853
@@ -69,6 +71,8 @@ dns:
     +.npmmirror.com: quic://dns.alidns.com:853
     +.alios.cn: quic://dns.alidns.com:853
     +.wandoujia.com: quic://dns.alidns.com:853
+    +.aligames.com: quic://dns.alidns.com:853
+    +.25pp.com: quic://dns.alidns.com:853
     "*.aliapp.org": quic://dns.alidns.com:853
     +.tanx.com: quic://dns.alidns.com:853
     +.hellobike.com: quic://dns.alidns.com:853
@@ -121,7 +125,6 @@ dns:
     upos-sz-estgoss.bilivideo.com: quic://dns.alidns.com:853
     upos-sz-mirrorbd.bilivideo.com: 180.76.76.76
     upos-sz-mirrorbos.bilivideo.com: 180.76.76.76
-    upos-sz-mirrorcosbstar1.bilivideo.com: https://doh.pub/dns-query
     acg.tv: https://doh.pub/dns-query
     b23.tv: https://doh.pub/dns-query
     +.bilibili.cn: https://doh.pub/dns-query
@@ -154,7 +157,9 @@ dns:
     +.xiaomi.net: https://doh.pub/dns-query
     +.xiaomiev.com: https://doh.pub/dns-query
     +.xiaomiyoupin.com: https://doh.pub/dns-query
+    +.bytedance.com.com: 180.184.2.2
     "*.bytecdn.cn": 180.184.2.2
+    "*.volccdn.com": 180.184.2.2
     "*.toutiaoimg.com": 180.184.2.2
     "*.toutiaoimg.cn": 180.184.2.2
     "*.toutiaostatic.com": 180.184.2.2
@@ -183,7 +188,6 @@ dns:
     +.ixigua.com: 180.184.2.2
     "*.ixiguavideo.com": 180.184.2.2
     "*.ixgvideo.com": 180.184.2.2
-    "*.volccdn.com": 180.184.2.2
     "*.byted-static.com": 180.184.2.2
     +.volces.com: 180.184.2.2
     +.baike.com: 180.184.2.2
@@ -257,106 +261,6 @@ dns:
       - system://
       - system
       - dhcp://system
-    "*.home":
-      - system://
-      - system
-      - dhcp://system
-    instant.arubanetworks.com:
-      - system://
-      - system
-      - dhcp://system
-    setmeup.arubanetworks.com:
-      - system://
-      - system
-      - dhcp://system
-    router.asus.com:
-      - system://
-      - system
-      - dhcp://system
-    repeater.asus.com:
-      - system://
-      - system
-      - dhcp://system
-    +.asusrouter.com:
-      - system://
-      - system
-      - dhcp://system
-    +.routerlogin.net:
-      - system://
-      - system
-      - dhcp://system
-    +.routerlogin.com:
-      - system://
-      - system
-      - dhcp://system
-    +.tplinkwifi.net:
-      - system://
-      - system
-      - dhcp://system
-    +.tplogin.cn:
-      - system://
-      - system
-      - dhcp://system
-    +.tplinkap.net:
-      - system://
-      - system
-      - dhcp://system
-    +.tplinkmodem.net:
-      - system://
-      - system
-      - dhcp://system
-    +.tplinkplclogin.net:
-      - system://
-      - system
-      - dhcp://system
-    +.tplinkrepeater.net:
-      - system://
-      - system
-      - dhcp://system
-    "*.ui.direct":
-      - system://
-      - system
-      - dhcp://system
-    unifi:
-      - system://
-      - system
-      - dhcp://system
-    "*.huaweimobilewifi.com":
-      - system://
-      - system
-      - dhcp://system
-    "*.router":
-      - system://
-      - system
-      - dhcp://system
-    aterm.me:
-      - system://
-      - system
-      - dhcp://system
-    console.gl-inet.com:
-      - system://
-      - system
-      - dhcp://system
-    homerouter.cpe:
-      - system://
-      - system
-      - dhcp://system
-    mobile.hotspot:
-      - system://
-      - system
-      - dhcp://system
-    ntt.setup:
-      - system://
-      - system
-      - dhcp://system
-    pi.hole:
-      - system://
-      - system
-      - dhcp://system
-    "*.plex.direct":
-      - system://
-      - system
-      - dhcp://system
     "*.m2m":
       - system://
       - system
@@ -381,94 +285,6 @@ dns:
       - system://
       - system
       - dhcp://system
-    "*.lan":
-      - system://
-      - system
-      - dhcp://system
-    "*.localdomain":
-      - system://
-      - system
-      - dhcp://system
-    +.home.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.10.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.16.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.17.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.18.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.19.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.20.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.21.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.22.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.23.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.24.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.25.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.26.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.27.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.28.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.29.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.30.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.31.172.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.168.192.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
-    +.254.169.in-addr.arpa:
-      - system://
-      - system
-      - dhcp://system
 hosts:
   dns.alidns.com:
     - 223.5.5.5
@@ -478,6 +294,4 @@ hosts:
   doh.pub:
     - 120.53.53.53
     - 1.12.12.12
-  localhost:
-    - 127.0.0.1
 
