@@ -114,6 +114,17 @@ jobs:
     if: github.ref == 'refs/heads/master' && contains(needs.build.outputs.platform, 'cloudflare')
     runs-on: ubuntu-latest
     steps:
+      - name: Get NPM cache directory path
+        id: npm_cache_path
+        shell: sh
+        run: echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
+      - name: Cache NPM cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.npm_cache_path.outputs.dir }}
+            node_modules
+          key: ${{ runner.os }}-deploy-to-cloudflare-npm
       - uses: actions/download-artifact@v4
         with:
           name: build-artifact-${{ github.ref_name }}
@@ -124,6 +135,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy public --project-name=sukkaw-ruleset --commit-dirty=true --branch=main
+          wranglerVersion: '3.81.0'
   deploy_to_github_gitlab:
     needs:
       - build
@@ -138,7 +150,7 @@ jobs:
       - name: Upload Dist to GitLab
         if: contains(needs.build.outputs.platform, 'gitlab')
         run: |
-          git clone --filter=blob:none https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
+          git clone --filter=tree:0 https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
           cd ./deploy-git
           git config --global push.default matching
           git config --global user.email "${GITLAB_EMAIL}"
