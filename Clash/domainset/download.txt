@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Large Files Hosting Domains
-# Last Updated: 2024-11-09T17:31:05.623Z
-# Size: 611
+# Last Updated: 2024-11-23T09:42:48.135Z
+# Size: 618
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -11,6 +11,7 @@
 +.file.io
 +.ghcr.io
 +.mega.io
+packagecloud.io
 +.mega.nz
 +.temp.sh
 iterm2.com
@@ -20,6 +21,7 @@ pixeldrain.com
 +.epicgamescdn.com
 +.steamcontent.com
 +.vultrobjects.com
++.cdn77-storage.com
 +.linodeobjects.com
 +.androidfilehost.com
 +.cloudflaremirrors.com
@@ -38,6 +40,7 @@ fedorapeople.org
 +.fnbuilds.services
 mirror.xtom.au
 mirrors.xtom.au
+download.mersenne.ca
 file.chobit.cc
 builds.paranoidandroid.co
 mirror.xtom.de
@@ -51,6 +54,7 @@ dl.iina.io
 dl-portal.iina.io
 down.filen.io
 dl.pstmn.io
+disks.webvm.io
 store1.gofile.io
 download.typora.io
 cdn.cypress.io
@@ -107,6 +111,7 @@ store.setapp.com
 download.sketch.com
 +.archive.ubuntu.com
 security.ubuntu.com
+softwareupdate.vmware.com
 static.adguard.com
 download.anydesk.com
 dl.devmate.com
@@ -222,6 +227,7 @@ download.todesktop.com
 +.swupdate.chaosgroup.com
 update.googleapis.com
 deb.nodesource.com
+dl.cleverfiles.com
 +.egdownload.fastly-edge.com
 downloads.raspberrypi.com
 +.content.steampowered.com
@@ -298,6 +304,7 @@ releases.whatpulse.org
 downloads.wordpress.org
 artifacts.electronjs.org
 releases.grapheneos.org
+update.greasyfork.org
 update.sleazyfork.org
 dl-cdn.alpinelinux.org
 mirrors.fedoraproject.org
