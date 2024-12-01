@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - General Global Services
-# Last Updated: 2024-11-22T17:46:27.807Z
-# Size: 657
+# Last Updated: 2024-11-29T10:54:54.109Z
+# Size: 666
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -10,6 +10,7 @@
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 DOMAIN-SUFFIX,ai
+DOMAIN-SUFFIX,at
 DOMAIN-SUFFIX,au
 DOMAIN-SUFFIX,be
 DOMAIN-SUFFIX,ca
@@ -17,7 +18,10 @@ DOMAIN-SUFFIX,ee
 DOMAIN-SUFFIX,eu
 DOMAIN-SUFFIX,fm
 DOMAIN-SUFFIX,fo
+DOMAIN-SUFFIX,fr
+DOMAIN-SUFFIX,gd
 DOMAIN-SUFFIX,gl
+DOMAIN-SUFFIX,gs
 DOMAIN-SUFFIX,in
 DOMAIN-SUFFIX,io
 DOMAIN-SUFFIX,is
@@ -51,13 +55,19 @@ DOMAIN-SUFFIX,app
 DOMAIN-SUFFIX,dev
 DOMAIN-SUFFIX,gle
 DOMAIN-SUFFIX,gov
+DOMAIN-SUFFIX,lol
 DOMAIN-SUFFIX,mil
 DOMAIN-SUFFIX,moe
 DOMAIN-SUFFIX,rip
 DOMAIN-SUFFIX,xxx
 DOMAIN-SUFFIX,blog
+DOMAIN-SUFFIX,cafe
 DOMAIN-SUFFIX,goog
-DOMAIN-SUFFIX,linkedin.at
+DOMAIN-SUFFIX,party
+DOMAIN-SUFFIX,tools
+DOMAIN-SUFFIX,watch
+DOMAIN-SUFFIX,network
+DOMAIN-SUFFIX,community
 DOMAIN-SUFFIX,520cc.cc
 DOMAIN-SUFFIX,ping0.cc
 DOMAIN-SUFFIX,whoer.cc
@@ -71,8 +81,6 @@ DOMAIN-SUFFIX,twimg.co
 DOMAIN-SUFFIX,xchina.co
 DOMAIN-SUFFIX,snapkit.co
 DOMAIN-SUFFIX,huggingface.co
-DOMAIN-SUFFIX,dis.gd
-DOMAIN-SUFFIX,annas-archive.gs
 DOMAIN-SUFFIX,imo.im
 DOMAIN-SUFFIX,npm.im
 DOMAIN-SUFFIX,m.me
@@ -167,6 +175,7 @@ DOMAIN-SUFFIX,cpuid.com
 DOMAIN-SUFFIX,debug.com
 DOMAIN-SUFFIX,deepl.com
 DOMAIN-SUFFIX,fbsbx.com
+DOMAIN-SUFFIX,figma.com
 DOMAIN-SUFFIX,ggpht.com
 DOMAIN-SUFFIX,globo.com
 DOMAIN-SUFFIX,gmail.com
@@ -176,6 +185,7 @@ DOMAIN-SUFFIX,imgur.com
 DOMAIN-SUFFIX,intel.com
 DOMAIN-SUFFIX,issuu.com
 DOMAIN-SUFFIX,javhd.com
+DOMAIN-SUFFIX,jsbin.com
 DOMAIN-SUFFIX,kakao.com
 DOMAIN-SUFFIX,naver.com
 DOMAIN-SUFFIX,npmjs.com
@@ -223,6 +233,7 @@ DOMAIN-SUFFIX,grindr.com
 DOMAIN-SUFFIX,idrive.com
 DOMAIN-SUFFIX,ifixit.com
 DOMAIN-SUFFIX,iheart.com
+DOMAIN-SUFFIX,javbus.com
 DOMAIN-SUFFIX,kraken.com
 DOMAIN-SUFFIX,kucoin.com
 DOMAIN-SUFFIX,ledger.com
@@ -312,6 +323,7 @@ DOMAIN-SUFFIX,bandcamp.com
 DOMAIN-SUFFIX,bitfinex.com
 DOMAIN-SUFFIX,blizzard.com
 DOMAIN-SUFFIX,blogblog.com
+DOMAIN-SUFFIX,broadcom.com
 DOMAIN-SUFFIX,capitalg.com
 DOMAIN-SUFFIX,cbslocal.com
 DOMAIN-SUFFIX,coinbase.com
@@ -364,6 +376,7 @@ DOMAIN-SUFFIX,clubhouse.com
 DOMAIN-SUFFIX,coingecko.com
 DOMAIN-SUFFIX,flipboard.com
 DOMAIN-SUFFIX,gcld-line.com
+DOMAIN-SUFFIX,geekbench.com
 DOMAIN-SUFFIX,githubapp.com
 DOMAIN-SUFFIX,gitkraken.com
 DOMAIN-SUFFIX,goodreads.com
@@ -383,6 +396,7 @@ DOMAIN-SUFFIX,picacomic.com
 DOMAIN-SUFFIX,spankbang.com
 DOMAIN-SUFFIX,startpage.com
 DOMAIN-SUFFIX,stripchat.com
+DOMAIN-SUFFIX,superuser.com
 DOMAIN-SUFFIX,surfshark.com
 DOMAIN-SUFFIX,synergyse.com
 DOMAIN-SUFFIX,tiltbrush.com
@@ -430,6 +444,7 @@ DOMAIN-SUFFIX,linefriends.com
 DOMAIN-SUFFIX,raspberrypi.com
 DOMAIN-SUFFIX,redditmedia.com
 DOMAIN-SUFFIX,redditspace.com
+DOMAIN-SUFFIX,serverfault.com
 DOMAIN-SUFFIX,theguardian.com
 DOMAIN-SUFFIX,tradingview.com
 DOMAIN-SUFFIX,updownradar.com
@@ -491,7 +506,6 @@ DOMAIN-SUFFIX,returnyoutubedislike.com
 DOMAIN-SUFFIX,privateinternetaccess.com
 DOMAIN-SUFFIX,returnyoutubedislikeapi.com
 DOMAIN-SUFFIX,libgen.fun
-DOMAIN-SUFFIX,libgen.lol
 DOMAIN-SUFFIX,he.net
 DOMAIN-SUFFIX,sf.net
 DOMAIN-SUFFIX,arc.net
@@ -633,19 +647,14 @@ DOMAIN-SUFFIX,privacytest.info
 DOMAIN-SUFFIX,dweb.link
 DOMAIN-SUFFIX,page.link
 DOMAIN-SUFFIX,vercel.live
+DOMAIN-SUFFIX,notion.site
 DOMAIN-SUFFIX,sketch.cloud
 DOMAIN-SUFFIX,discourse.group
-DOMAIN-SUFFIX,spankbang.party
 DOMAIN-SUFFIX,javhd.today
 DOMAIN-SUFFIX,archive.today
-DOMAIN-SUFFIX,bgp.tools
-DOMAIN-SUFFIX,dnscheck.tools
-DOMAIN-SUFFIX,fb.watch
 DOMAIN-SUFFIX,ant.design
 DOMAIN-SUFFIX,mastodon.social
 DOMAIN-SUFFIX,x.company
-DOMAIN-SUFFIX,bsky.network
-DOMAIN-SUFFIX,github.community
 DOMAIN-SUFFIX,c.mi.com
 DOMAIN,wego.here.com
 DOMAIN,ccmdl.adobe.com
