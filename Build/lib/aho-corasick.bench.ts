@@ -1,13 +1,14 @@
 import { fetchRemoteTextByLine } from './fetch-text-by-line';
-import { processLineFromReadline } from './process-line';
 
 import createKeywordFilter from './aho-corasick';
 
+// eslint-disable import-x/no-unresolved -- benchmark
 import ModernAhoCorasick from 'modern-ahocorasick';
 import { AhoCorasick as MonyoneAhoCorasick } from '@monyone/aho-corasick';
 // @ts-expect-error -- no types
 import FastScanner from 'fastscan';
 import { AhoCorasick as RustAhoCorasick } from '@blackglory/aho-corasick';
+// eslint-enable import-x/no-unresolved
 
 function runKeywordFilter(data: string[], testFn: (line: string) => boolean) {
   for (let i = 0, len = data.length; i < len; i++) {
@@ -34,7 +35,7 @@ if (require.main === module) {
   (async () => {
     const { bench, group, run } = await import('mitata');
 
-    const data = await processLineFromReadline(await fetchRemoteTextByLine('https://easylist.to/easylist/easylist.txt'));
+    const data = await Array.fromAsync(await fetchRemoteTextByLine('https://easylist.to/easylist/easylist.txt', true));
     console.log({ dataLen: data.length });
     const keywordsSet = [
       '!',
