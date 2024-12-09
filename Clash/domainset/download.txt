@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Large Files Hosting Domains
-# Last Updated: 2024-11-29T09:26:52.849Z
-# Size: 621
+# Last Updated: 2024-12-09T10:19:27.947Z
+# Size: 628
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -44,6 +44,7 @@ mirrors.xtom.au
 download.mersenne.ca
 file.chobit.cc
 builds.paranoidandroid.co
+ftp.gwdg.de
 mirror.xtom.de
 mirrors.xtom.de
 mirror.xtom.ee
@@ -95,6 +96,9 @@ download.xbox.com
 mirror.xtom.com
 mirrors.xtom.com
 mirror-cdn.xtom.com
++.s3.brave.com
+go-updater.brave.com
+componentupdater.brave.com
 +.swupdate.chaos.com
 download.cpuid.com
 cdn-patch.swtor.com
@@ -113,6 +117,7 @@ download.sketch.com
 +.archive.ubuntu.com
 security.ubuntu.com
 softwareupdate.vmware.com
+dl.wechat.com
 static.adguard.com
 download.anydesk.com
 dl.devmate.com
@@ -230,6 +235,7 @@ update.googleapis.com
 deb.nodesource.com
 dl.cleverfiles.com
 +.egdownload.fastly-edge.com
+update.kiwibrowser.com
 downloads.raspberrypi.com
 +.content.steampowered.com
 content-origin.steampowered.com
@@ -284,6 +290,7 @@ cdn.kde.org
 invent.kde.org
 download.gimp.org
 cdimage.kali.org
+downloads.xiph.org
 +.deb.debian.org
 +.ftp.debian.org
 +.archive.debian.org

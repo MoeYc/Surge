@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2024-11-10T11:17:12.448Z
-# Size: 39
+# Last Updated: 2024-12-08T13:35:36.500Z
+# Size: 41
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -10,6 +10,7 @@
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 DOMAIN,cdn-msp.jmcomic.me
+DOMAIN,cdn-msp.jmcomic-zzz.one
 DOMAIN,cdn-msp.18comic.vip
 DOMAIN-KEYWORD,-files.gitbook.io
 DOMAIN-KEYWORD,vod-adaptive.akamaized.net
@@ -27,6 +28,7 @@ DOMAIN-REGEX,^cdn[\w.-]-thumbs\.pornhost\.com$
 DOMAIN-REGEX,^cdn[\w.-]-dl\.pornhost\.com$
 DOMAIN-REGEX,^cdn-msp[\w.-]\.18comic\.vip$
 DOMAIN-REGEX,^cdn-msp[\w.-]\.jmcomic\.me$
+DOMAIN-REGEX,^cdn-msp[\w.-]\.jmcomic-zzz\.one$
 DOMAIN-REGEX,^static-[\w.-][\w.-]-cdn\.eporner\.com$
 DOMAIN-REGEX,^file[\w.-]\.mikuclub\.fun$
 DOMAIN-REGEX,^cdn[\w.-]\.mikuclub\.fun$
