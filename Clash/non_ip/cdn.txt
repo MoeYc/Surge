@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2024-12-08T13:35:36.500Z
-# Size: 41
+# Last Updated: 2024-12-20T14:54:26.765Z
+# Size: 43
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -17,6 +17,7 @@ DOMAIN-KEYWORD,vod-adaptive.akamaized.net
 DOMAIN-KEYWORD,web-assets.zendesk
 DOMAIN-KEYWORD,-res.cloudinary.com
 DOMAIN-KEYWORD,dsn.algolia.net
+DOMAIN-KEYWORD,cdnstatic.
 DOMAIN-REGEX,^appcenter-filemanagement-[\w.-]*?\.cloudapp\.net$
 DOMAIN-REGEX,^proxy-[\w.-]*?\.dailymotion\.com$
 DOMAIN-REGEX,^static[\w.-]*?\.tgstat\.ru$
@@ -33,6 +34,7 @@ DOMAIN-REGEX,^static-[\w.-][\w.-]-cdn\.eporner\.com$
 DOMAIN-REGEX,^file[\w.-]\.mikuclub\.fun$
 DOMAIN-REGEX,^cdn[\w.-]\.mikuclub\.fun$
 DOMAIN-REGEX,^cdns\.[\w.-]*?\.gigya\.com$
+DOMAIN-REGEX,^sdk\.[\w.-]*?\.braze\.eu$
 DOMAIN-REGEX,^video-thumbnail2\.fc2\.com$
 DOMAIN-REGEX,^video[\w.-]-thumbnail[\w.-]\.fc2\.com$
 DOMAIN-REGEX,^video-thumbnail2\.liaoningmovie\.net$

@@ -3,6 +3,7 @@
   "rules": [
     {
       "domain": [
+        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe",
         "gog-cdn-fastly.gog.com",
         "gog-cdn-fastly-cp77.gog.com",
         "download.xbox.com",
@@ -38,10 +39,10 @@
         "steam.apac.qtlglb.com",
         "steam.naeu.qtlglb.com",
         "blizzard.gcdn.cloudn.co.kr",
-        "edge.steam-dns.top.comcast.net",
-        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe"
+        "edge.steam-dns.top.comcast.net"
       ],
       "domain_suffix": [
+        "this_ruleset_is_made_by_sukkaw.ruleset.skk.moe",
         "epicgamescdn.com",
         "steamcontent.com",
         "steamserver.net",

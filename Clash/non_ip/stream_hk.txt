@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Stream Services: Hong Kong
-# Last Updated: 2024-11-14T09:39:56.723Z
-# Size: 30
+# Last Updated: 2024-12-14T13:15:17.755Z
+# Size: 32
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -13,6 +13,7 @@
 # - Bilibili International
 #########################################
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
+DOMAIN-SUFFIX,hbogoasia.hk
 DOMAIN-SUFFIX,viu.tv
 DOMAIN-SUFFIX,bilibili.tv
 DOMAIN-SUFFIX,tvb.com
@@ -20,6 +21,7 @@ DOMAIN-SUFFIX,viu.com
 DOMAIN-SUFFIX,nowe.com
 DOMAIN-SUFFIX,hboasia.com
 DOMAIN-SUFFIX,biliintl.com
+DOMAIN-SUFFIX,hbogoasia.com
 DOMAIN-SUFFIX,mytvsuper.com
 DOMAIN-SUFFIX,viu.now.com
 DOMAIN,hbounify-prod.evergent.com

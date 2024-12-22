@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Always Real IP Plus
-# Last Updated: 2024-10-16T11:34:56.692Z
+# Last Updated: 2024-12-14T13:26:49.066Z
 # Size: 29
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
@@ -8,6 +8,7 @@
 #
 # Clash.Meta fake-ip-filter as ruleset
 #########################################
+this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 +.lan
 +.m2m
 +._tcp
@@ -36,5 +37,4 @@ injections.adguard.org
 +.30.172.in-addr.arpa
 +.31.172.in-addr.arpa
 +.168.192.in-addr.arpa
-this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 ################## EOF ##################

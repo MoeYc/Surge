@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Large Files Hosting Domains
-# Last Updated: 2024-12-09T10:19:27.947Z
+# Last Updated: 2024-12-15T16:58:17.643Z
 # Size: 628
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
@@ -8,6 +8,7 @@
 #
 # This file contains domains for software updating & large file hosting.
 #########################################
+this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 ghp.ci
 +.file.io
 +.ghcr.io
@@ -18,7 +19,7 @@ packagecloud.io
 iterm2.com
 +.1fichier.com
 +.fuwamofu.com
-pixeldrain.com
++.pixeldrain.com
 +.epicgamescdn.com
 +.steamcontent.com
 +.vultrobjects.com
@@ -635,5 +636,4 @@ blizzard.gcdn.cloudn.co.kr
 +.s3-website.dualstack.ap-southeast-5.amazonaws.com
 +.s3-accesspoint.dualstack.ap-southeast-5.amazonaws.com
 edge.steam-dns.top.comcast.net
-this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 ################## EOF ##################
