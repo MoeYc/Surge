@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Domestic Domains
-# Last Updated: 2024-12-09T10:19:27.834Z
-# Size: 759
+# Last Updated: 2025-01-09T02:36:43.588Z
+# Size: 761
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -96,6 +96,7 @@ DOMAIN-SUFFIX,authing.cn
 DOMAIN-SUFFIX,bytecdn.cn
 DOMAIN-SUFFIX,cmfunds.cn
 DOMAIN-SUFFIX,cmvideo.cn
+DOMAIN-SUFFIX,codehub.cn
 DOMAIN-SUFFIX,csdnimg.cn
 DOMAIN-SUFFIX,jiguang.cn
 DOMAIN-SUFFIX,oneplus.cn
@@ -520,7 +521,6 @@ DOMAIN-SUFFIX,miyoushe.com
 DOMAIN-SUFFIX,msstatic.com
 DOMAIN-SUFFIX,myalicdn.com
 DOMAIN-SUFFIX,myqcloud.com
-DOMAIN-SUFFIX,oray-img.com
 DOMAIN-SUFFIX,peiluyou.com
 DOMAIN-SUFFIX,pingwest.com
 DOMAIN-SUFFIX,qhstatic.com
@@ -589,6 +589,7 @@ DOMAIN-SUFFIX,soufunimg.com
 DOMAIN-SUFFIX,takungpao.com
 DOMAIN-SUFFIX,tantanapp.com
 DOMAIN-SUFFIX,taobaocdn.com
+DOMAIN-SUFFIX,volcvideo.com
 DOMAIN-SUFFIX,wandoujia.com
 DOMAIN-SUFFIX,weathercn.com
 DOMAIN-SUFFIX,wmsjsteam.com
@@ -604,6 +605,7 @@ DOMAIN-SUFFIX,cmpassport.com
 DOMAIN-SUFFIX,dbankcloud.com
 DOMAIN-SUFFIX,didiglobal.com
 DOMAIN-SUFFIX,didistatic.com
+DOMAIN-SUFFIX,edge-byted.com
 DOMAIN-SUFFIX,fqnovelpic.com
 DOMAIN-SUFFIX,guoguo-app.com
 DOMAIN-SUFFIX,heytapmobi.com
@@ -712,6 +714,7 @@ DOMAIN-SUFFIX,biliapi.net
 DOMAIN-SUFFIX,kdslife.net
 DOMAIN-SUFFIX,meituan.net
 DOMAIN-SUFFIX,oschina.net
+DOMAIN-SUFFIX,smtcdns.net
 DOMAIN-SUFFIX,biligame.net
 DOMAIN-SUFFIX,dizzylab.net
 DOMAIN-SUFFIX,staticdn.net
@@ -738,7 +741,6 @@ DOMAIN-SUFFIX,icourse163.org
 DOMAIN,doh.pub
 DOMAIN-SUFFIX,landian.vip
 DOMAIN-SUFFIX,gorouter.info
-DOMAIN-SUFFIX,126.link
 DOMAIN-SUFFIX,yqkk.link
 DOMAIN-SUFFIX,haowu.link
 DOMAIN-SUFFIX,chunyu.mobi

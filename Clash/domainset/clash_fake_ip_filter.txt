@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Always Real IP Plus
-# Last Updated: 2024-12-14T13:26:49.066Z
-# Size: 29
+# Last Updated: 2025-01-10T15:40:10.906Z
+# Size: 27
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -11,9 +11,7 @@
 this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
 +.lan
 +.m2m
-+._tcp
 +.bogon
-+._msdcs
 +.localdomain
 +.home.arpa
 local.adguard.org

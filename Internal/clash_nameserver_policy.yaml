@@ -121,6 +121,9 @@ dns:
     "*.qlivecdn.com": https://doh.pub/dns-query
     "*.tcdnlive.com": https://doh.pub/dns-query
     "*.dnsv1.com": https://doh.pub/dns-query
+    "*.smtcdns.net": https://doh.pub/dns-query
+    +.coding.net: https://doh.pub/dns-query
+    "*.codehub.cn": https://doh.pub/dns-query
     upos-sz-mirrorali.bilivideo.com: quic://dns.alidns.com:853
     upos-sz-estgoss.bilivideo.com: quic://dns.alidns.com:853
     upos-sz-mirrorbd.bilivideo.com: 180.76.76.76
@@ -200,6 +203,8 @@ dns:
     "*.byteacctimg.com": 180.184.2.2
     "*.ibytedapm.com": 180.184.2.2
     +.oceanengine.com: 180.184.2.2
+    "*.edge-byted.com": 180.184.2.2
+    "*.volcvideo.com": 180.184.2.2
     +.91.com: 180.76.76.76
     +.hao123.com: 180.76.76.76
     +.baidu.cn: 180.76.76.76
@@ -273,15 +278,7 @@ dns:
       - system://
       - system
       - dhcp://system
-    "*._tcp":
-      - system://
-      - system
-      - dhcp://system
     "*.bogon":
-      - system://
-      - system
-      - dhcp://system
-    "*._msdcs":
       - system://
       - system
       - dhcp://system
