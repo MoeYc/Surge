@@ -7,7 +7,7 @@ import { appendArrayInPlaceCurried } from './append-array-in-place';
 import { DEBUG_DOMAIN_TO_FIND, PHISHING_DOMAIN_LISTS_EXTRA, PHISHING_HOSTS_EXTRA } from '../constants/reject-data-source';
 import { loosTldOptWithPrivateDomains } from '../constants/loose-tldts-opt';
 import picocolors from 'picocolors';
-import { createAhoCorasick as createKeywordFilter } from 'foxts/ahocorasick';
+import { createRetrieKeywordFilter as createKeywordFilter } from 'foxts/retrie';
 import { createCacheKey, deserializeArray, serializeArray } from './cache-filesystem';
 import { cache } from './fs-memo';
 import { isCI } from 'ci-info';
@@ -185,14 +185,15 @@ const processPhihsingDomains = cache(function processPhihsingDomains(domainArr: 
       || (domainScoreMap[apexDomain] >= 13 && count >= 11)
       || (domainScoreMap[apexDomain] >= 5 && count >= 14)
       || (domainScoreMap[apexDomain] >= 3 && count >= 21)
+      || (domainScoreMap[apexDomain] >= 1 && count >= 60)
     ) {
       domainArr.push('.' + apexDomain);
     }
   });
 
   // console.log({
-  //   score: domainScoreMap['flk-ipfs.xyz'],
-  //   count: domainCountMap.get('flk-ipfs.xyz')
+  //   score: domainScoreMap['awicksin.com'],
+  //   count: domainCountMap.get('awicksin.com')
   // });
 
   // console.log({ duplicateCount, domainArrLen: domainArr.length });
@@ -218,8 +219,6 @@ export function getPhishingDomains(parentSpan: Span) {
 
       return domainArr;
     });
-
-    console.log({ len: domainArr.length });
 
     return span.traceChildAsync(
       'process phishing domain set',
@@ -249,20 +248,24 @@ export function calcDomainAbuseScore(subdomain: string, fullDomain: string = sub
 
   const subdomainLength = subdomain.length;
 
-  if (subdomainLength > 13) {
-    weight += 0.2;
-    if (subdomainLength > 20) {
-      weight += 1;
-      if (subdomainLength > 30) {
-        weight += 5;
-        if (subdomainLength > 40) {
-          weight += 10;
+  if (subdomainLength > 6) {
+    weight += 0.015;
+
+    if (subdomainLength > 13) {
+      weight += 0.2;
+      if (subdomainLength > 20) {
+        weight += 1;
+        if (subdomainLength > 30) {
+          weight += 5;
+          if (subdomainLength > 40) {
+            weight += 10;
+          }
         }
       }
-    }
 
-    if (subdomain.indexOf('.', 1) > 1) {
-      weight += 1;
+      if (subdomain.indexOf('.', 1) > 1) {
+        weight += 1;
+      }
     }
   }
 
