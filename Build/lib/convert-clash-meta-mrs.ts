@@ -7,10 +7,9 @@ import process from 'node:process';
 
 import { exec } from 'tinyexec';
 import { mkdirp } from './misc';
-import { $$fetch } from './fetch-retry';
-import { ROOT_DIR } from '../constants/dir';
+import { $fetch } from './make-fetch-happen';
 
-const mihomoBinaryDir = path.join(ROOT_DIR, '.cache/mihomo');
+const mihomoBinaryDir = path.join(__dirname, '../../node_modules/.cache/mihomo');
 const mihomoBinaryPath = path.join(mihomoBinaryDir, 'mihomo');
 
 const mihomoBinaryUrl: Partial<Record<NodeJS.Platform, Partial<Record<NodeJS.Architecture, string>>>> = {
@@ -33,7 +32,7 @@ async function ensureMihomoBinary() {
       throw new Error(`Unsupported platform: ${process.platform} ${process.arch}`);
     }
 
-    const res = await $$fetch(downloadUrl);
+    const res = await $fetch(downloadUrl);
 
     if (!res.ok || !res.body) {
       throw new Error(`Failed to download mihomo binary: ${res.statusText}`);

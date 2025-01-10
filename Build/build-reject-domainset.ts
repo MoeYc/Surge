@@ -6,7 +6,7 @@ import { processHosts, processFilterRules, processDomainLists } from './lib/pars
 
 import { HOSTS, ADGUARD_FILTERS, PREDEFINED_WHITELIST, DOMAIN_LISTS, HOSTS_EXTRA, DOMAIN_LISTS_EXTRA, ADGUARD_FILTERS_EXTRA, PHISHING_DOMAIN_LISTS_EXTRA, ADGUARD_FILTERS_WHITELIST } from './constants/reject-data-source';
 import { compareAndWriteFile } from './lib/create-file';
-import { readFileIntoProcessedArray } from './lib/fetch-text-by-line';
+import { readFileByLine, readFileIntoProcessedArray } from './lib/fetch-text-by-line';
 import { task } from './trace';
 // tldts-experimental is way faster than tldts, but very little bit inaccurate
 // (since it is hashes based). But the result is still deterministic, which is
@@ -18,13 +18,6 @@ import { addArrayElementsToSet } from 'foxts/add-array-elements-to-set';
 import { appendArrayInPlace } from './lib/append-array-in-place';
 import { OUTPUT_INTERNAL_DIR, SOURCE_DIR } from './constants/dir';
 import { DomainsetOutput } from './lib/create-file';
-
-const readLocalRejectDomainsetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'domainset/reject_sukka.conf'));
-const readLocalRejectExtraDomainsetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'domainset/reject_sukka_extra.conf'));
-const readLocalRejectRulesetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'non_ip/reject.conf'));
-const readLocalRejectDropRulesetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'non_ip/reject-drop.conf'));
-const readLocalRejectNoDropRulesetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'non_ip/reject-no-drop.conf'));
-const readLocalMyRejectRulesetPromise = readFileIntoProcessedArray(path.join(SOURCE_DIR, 'non_ip/my_reject.conf'));
 
 export const buildRejectDomainSet = task(require.main === module, __filename)(async (span) => {
   const rejectBaseDescription = [
@@ -105,17 +98,14 @@ export const buildRejectDomainSet = task(require.main === module, __filename)(as
           addArrayElementsToSet(filterRuleWhitelistDomainSets, black);
         })),
         getPhishingDomains(childSpan).then(appendArrayToRejectExtraOutput),
-        readLocalRejectDomainsetPromise.then(appendArrayToRejectOutput),
-        readLocalRejectDomainsetPromise.then(appendArrayToRejectExtraOutput),
-        readLocalRejectExtraDomainsetPromise.then(appendArrayToRejectExtraOutput),
+        readFileIntoProcessedArray(path.join(SOURCE_DIR, 'domainset/reject_sukka.conf')).then(appendArrayToRejectOutput),
         // Dedupe domainSets
         // span.traceChildAsync('collect black keywords/suffixes', async () =>
         /**
          * Collect DOMAIN, DOMAIN-SUFFIX, and DOMAIN-KEYWORD from non_ip/reject.conf for deduplication
          * DOMAIN-WILDCARD is not really useful for deduplication, it is only included in AdGuardHome output
         */
-        rejectOutput.addFromRuleset(readLocalRejectRulesetPromise),
-        rejectExtraOutput.addFromRuleset(readLocalRejectRulesetPromise)
+        rejectOutput.addFromRuleset(readFileByLine(path.resolve(__dirname, '../Source/non_ip/reject.conf')))
       ].flat());
       // eslint-disable-next-line sukka/no-single-return -- not single return
       return shouldStop;
@@ -174,17 +164,7 @@ export const buildRejectDomainSet = task(require.main === module, __filename)(as
           '! Description: The domainset supports AD blocking, tracking protection, privacy protection, anti-phishing, anti-mining',
           '!'
         ],
-        appendArrayInPlace(
-          rejectOutput.adguardhome(),
-          (
-            await new DomainsetOutput(span, 'my_reject')
-              .addFromRuleset(readLocalMyRejectRulesetPromise)
-              .addFromRuleset(readLocalRejectRulesetPromise)
-              .addFromRuleset(readLocalRejectDropRulesetPromise)
-              .addFromRuleset(readLocalRejectNoDropRulesetPromise)
-              .done()
-          ).adguardhome()
-        )
+        rejectOutput.adguardhome()
       ),
       path.join(OUTPUT_INTERNAL_DIR, 'reject-adguardhome.txt')
     )

@@ -18,22 +18,20 @@ const MAGIC_COMMAND_SGMODULE_MITM_HOSTNAMES = '# $ sgmodule_mitm_hostnames ';
 
 const domainsetSrcFolder = 'domainset' + path.sep;
 
-const clawSourceDirPromise = new Fdir()
-  .withRelativePaths()
-  .filter((filepath, isDirectory) => {
-    if (isDirectory) return true;
-
-    const extname = path.extname(filepath);
-
-    return !(extname === '.js' || extname === '.ts');
-  })
-  .crawl(SOURCE_DIR)
-  .withPromise();
-
 export const buildCommon = task(require.main === module, __filename)(async (span) => {
   const promises: Array<Promise<unknown>> = [];
 
-  const paths = await clawSourceDirPromise;
+  const paths = await new Fdir()
+    .withRelativePaths()
+    .filter((filepath, isDirectory) => {
+      if (isDirectory) return true;
+
+      const extname = path.extname(filepath);
+
+      return !(extname === '.js' || extname === '.ts');
+    })
+    .crawl(SOURCE_DIR)
+    .withPromise();
 
   for (let i = 0, len = paths.length; i < len; i++) {
     const relativePath = paths[i];
@@ -113,20 +111,20 @@ function transformDomainset(parentSpan: Span, sourcePath: string) {
         if (res === $skip) return;
 
         const id = basename;
-        const [title, incomingDescriptions, lines] = res;
+        const [title, descriptions, lines] = res;
 
-        let finalDescriptions: string[];
-        if (incomingDescriptions.length) {
-          finalDescriptions = SHARED_DESCRIPTION.slice();
-          finalDescriptions.push('');
-          appendArrayInPlace(finalDescriptions, incomingDescriptions);
+        let description: string[];
+        if (descriptions.length) {
+          description = SHARED_DESCRIPTION.slice();
+          description.push('');
+          appendArrayInPlace(description, descriptions);
         } else {
-          finalDescriptions = SHARED_DESCRIPTION;
+          description = SHARED_DESCRIPTION;
         }
 
         return new DomainsetOutput(span, id)
           .withTitle(title)
-          .withDescription(finalDescriptions)
+          .withDescription(description)
           .addFromDomainset(lines)
           .write();
       }
@@ -147,7 +145,7 @@ async function transformRuleset(parentSpan: Span, sourcePath: string, relativePa
       if (res === $skip) return;
 
       const id = basename;
-      const type = relativePath.slice(0, -extname.length).split(path.sep)[0];
+      const [type] = relativePath.slice(0, -extname.length).split(path.sep);
 
       if (type !== 'ip' && type !== 'non_ip') {
         throw new TypeError(`Invalid type: ${type}`);

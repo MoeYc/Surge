@@ -6,32 +6,13 @@ import picocolors from 'picocolors';
 import { normalizeDomain } from './normalize-domain';
 import { deserializeArray, fsFetchCache, serializeArray, getFileContentHash } from './cache-filesystem';
 import type { Span } from '../trace';
-import { createRetrieKeywordFilter as createKeywordFilter } from 'foxts/retrie';
+import { createAhoCorasick as createKeywordFilter } from 'foxts/ahocorasick';
 import { looseTldtsOpt } from '../constants/loose-tldts-opt';
 import { identity } from 'foxts/identity';
 import { DEBUG_DOMAIN_TO_FIND } from '../constants/reject-data-source';
-import { noop } from 'foxts/noop';
 
 let foundDebugDomain = false;
 const temporaryBypass = typeof DEBUG_DOMAIN_TO_FIND === 'string';
-
-const onBlackFound = DEBUG_DOMAIN_TO_FIND
-  ? (line: string, meta: string) => {
-    if (line.includes(DEBUG_DOMAIN_TO_FIND!)) {
-      console.warn(picocolors.red(meta), '(black)', line.replaceAll(DEBUG_DOMAIN_TO_FIND!, picocolors.bold(DEBUG_DOMAIN_TO_FIND)));
-      foundDebugDomain = true;
-    }
-  }
-  : noop;
-
-const onWhiteFound = DEBUG_DOMAIN_TO_FIND
-  ? (line: string, meta: string) => {
-    if (line.includes(DEBUG_DOMAIN_TO_FIND!)) {
-      console.warn(picocolors.red(meta), '(white)', line.replaceAll(DEBUG_DOMAIN_TO_FIND!, picocolors.bold(DEBUG_DOMAIN_TO_FIND)));
-      foundDebugDomain = true;
-    }
-  }
-  : noop;
 
 function domainListLineCb(l: string, set: string[], includeAllSubDomain: boolean, meta: string) {
   let line = processLine(l);
@@ -51,7 +32,10 @@ function domainListLineCb(l: string, set: string[], includeAllSubDomain: boolean
     return;
   }
 
-  onBlackFound(domain, meta);
+  if (DEBUG_DOMAIN_TO_FIND && line.includes(DEBUG_DOMAIN_TO_FIND)) {
+    console.warn(picocolors.red(meta), '(black)', line.replaceAll(DEBUG_DOMAIN_TO_FIND, picocolors.bold(DEBUG_DOMAIN_TO_FIND)));
+    foundDebugDomain = true;
+  }
 
   set.push(includeAllSubDomain ? `.${line}` : line);
 }
@@ -100,8 +84,10 @@ function hostsLineCb(l: string, set: string[], includeAllSubDomain: boolean, met
   if (!domain) {
     return;
   }
-
-  onBlackFound(domain, meta);
+  if (DEBUG_DOMAIN_TO_FIND && domain.includes(DEBUG_DOMAIN_TO_FIND)) {
+    console.warn(picocolors.red(meta), '(black)', domain.replaceAll(DEBUG_DOMAIN_TO_FIND, picocolors.bold(DEBUG_DOMAIN_TO_FIND)));
+    foundDebugDomain = true;
+  }
 
   set.push(includeAllSubDomain ? `.${domain}` : domain);
 }
@@ -183,10 +169,15 @@ export async function processFilterRules(
 
         const hostname = result[0];
 
-        if (flag === ParseType.WhiteIncludeSubdomain || flag === ParseType.WhiteAbsolute) {
-          onWhiteFound(hostname, filterRulesUrl);
-        } else {
-          onBlackFound(hostname, filterRulesUrl);
+        if (DEBUG_DOMAIN_TO_FIND && hostname.includes(DEBUG_DOMAIN_TO_FIND)) {
+          console.warn(
+            picocolors.red(filterRulesUrl),
+            flag === ParseType.WhiteIncludeSubdomain || flag === ParseType.WhiteAbsolute
+              ? '(white)'
+              : '(black)',
+            hostname.replaceAll(DEBUG_DOMAIN_TO_FIND, picocolors.bold(DEBUG_DOMAIN_TO_FIND))
+          );
+          foundDebugDomain = true;
         }
 
         switch (flag) {
@@ -300,22 +291,21 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
     return result;
   }
 
-  const line = $line.trim();
+  let line = $line.trim();
 
-  if (line.length === 0) {
+  /** @example line.length */
+  const len = line.length;
+  if (len === 0) {
     result[1] = ParseType.Null;
     return result;
   }
 
-  const firstCharCode = line.charCodeAt(0);
-  const lastCharCode = line.charCodeAt(line.length - 1);
+  const firstCharCode = line[0].charCodeAt(0);
+  const lastCharCode = line[len - 1].charCodeAt(0);
 
   if (
     firstCharCode === 47 // 47 `/`
     // ends with
-    // _160-600.
-    // -detect-adblock.
-    // _web-advert.
     || lastCharCode === 46 // 46 `.`, line.endsWith('.')
     || lastCharCode === 45 // 45 `-`, line.endsWith('-')
     || lastCharCode === 95 // 95 `_`, line.endsWith('_')
@@ -408,132 +398,255 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
     }
   }
 
-  /**
-   * From now on, we are mostly facing non-standard domain rules (some are regex like)
-   *
-   * We can still salvage some of them by removing modifiers
-   */
-
-  let sliceStart = 0;
-  let sliceEnd = 0;
-
   // After NetworkFilter.parse, it means the line can not be parsed by cliqz NetworkFilter
   // We now need to "salvage" the line as much as possible
 
-  let white = false;
-  let includeAllSubDomain = false;
-
-  if (
-    firstCharCode === 64 // 64 `@`
-    && line.charCodeAt(1) === 64 // 64 `@`
-  ) {
-    sliceStart += 2;
-    white = true;
-    includeAllSubDomain = true;
-  }
-
-  /**
-   * Some "malformed" regex-based filters can not be parsed by NetworkFilter
-   * "$genericblock`" is also not supported by NetworkFilter, see:
-   *  https://github.com/ghostery/adblocker/blob/62caf7786ba10ef03beffecd8cd4eec111bcd5ec/packages/adblocker/test/parsing.test.ts#L950
-   *
-   * `@@||cmechina.net^$genericblock`
-   * `@@|ftp.bmp.ovh^|`
-   * `@@|adsterra.com^|`
-   * `@@.atlassian.net$document`
-   * `@@||ad.alimama.com^$genericblock`
-   */
-
-  switch (line.charCodeAt(sliceStart)) {
-    case 124: /** | */
-      // line.startsWith('@@|') || line.startsWith('|')
-      sliceStart += 1;
-      includeAllSubDomain = false;
-
-      if (line[sliceStart] === '|') { // line.startsWith('@@||') || line.startsWith('||')
-        sliceStart += 1;
-        includeAllSubDomain = true;
-      }
-
-      break;
-
-    case 46: { /** | */ // line.startsWith('@@.') || line.startsWith('.')
-      /**
-       * `.ay.delivery^`
-       * `.m.bookben.com^`
-       * `.wap.x4399.com^`
-       */
-      sliceStart += 1;
-      includeAllSubDomain = true;
-      break;
-    }
-
-    default:
-      break;
-  }
-
-  switch (line.charCodeAt(sliceStart)) {
-    case 58: { /** : */
-      /**
-       * `@@://googleadservices.com^|`
-       * `@@://www.googleadservices.com^|`
-       * `://mine.torrent.pw^`
-       * `://say.ac^`
-       */
-      if (line[sliceStart + 1] === '/' && line[sliceStart + 2] === '/') {
-        includeAllSubDomain = false;
-        sliceStart += 3;
-      }
-      break;
-    }
-
-    case 104: { /** h */
-      /** |http://x.o2.pl^ */
-      if (line.startsWith('http://', sliceStart)) {
-        includeAllSubDomain = false;
-        sliceStart += 7;
-      } else if (line.startsWith('https://', sliceStart)) {
-        includeAllSubDomain = false;
-        sliceStart += 8;
-      }
-      break;
-    }
-
-    default:
-      break;
-  }
-
-  const indexOfDollar = line.indexOf('$', sliceStart);
-  if (indexOfDollar > -1) {
-    sliceEnd = indexOfDollar - line.length;
-  }
-
   /*
-   * We skip third-party and frame rules, as Surge / Clash can't handle them
+   * From now on, we are mostly facing non-standard domain rules (some are regex like)
+   * We first skip third-party and frame rules, as Surge / Clash can't handle them
    *
    * `.sharecounter.$third-party`
    * `.bbelements.com^$third-party`
    * `://o0e.ru^$third-party`
    * `.1.1.1.l80.js^$third-party`
    */
+  if (line.includes('$third-party')) {
+    if (!allowThirdParty) {
+      result[1] = ParseType.Null;
+      return result;
+    }
+
+    line = line
+      .replace('$third-party,', '$')
+      .replace('$third-party', '');
+  }
+
+  /** @example line.endsWith('^') */
+  const lineEndsWithCaret = lastCharCode === 94; // lastChar === '^';
+  /** @example line.endsWith('^|') */
+  const lineEndsWithCaretVerticalBar = (lastCharCode === 124 /** lastChar === '|' */) && line[len - 2] === '^';
+  /** @example line.endsWith('^') || line.endsWith('^|') */
+  const lineEndsWithCaretOrCaretVerticalBar = lineEndsWithCaret || lineEndsWithCaretVerticalBar;
+
+  // whitelist (exception)
   if (
-    !allowThirdParty
-    && (
-      line.includes('third-party', indexOfDollar + 1)
-      || line.includes('3p', indexOfDollar + 1)
-    )
+    firstCharCode === 64 // 64 `@`
+    && line[1] === '@'
   ) {
-    result[1] = ParseType.Null;
+    let whiteIncludeAllSubDomain = true;
+
+    /**
+     * Some "malformed" regex-based filters can not be parsed by NetworkFilter
+     * "$genericblock`" is also not supported by NetworkFilter, see:
+     *  https://github.com/ghostery/adblocker/blob/62caf7786ba10ef03beffecd8cd4eec111bcd5ec/packages/adblocker/test/parsing.test.ts#L950
+     *
+     * `@@||cmechina.net^$genericblock`
+     * `@@|ftp.bmp.ovh^|`
+     * `@@|adsterra.com^|`
+     * `@@.atlassian.net$document`
+     * `@@||ad.alimama.com^$genericblock`
+     */
+
+    let sliceStart = 0;
+    let sliceEnd: number | undefined;
+
+    switch (line[2]) {
+      case '|':
+        // line.startsWith('@@|')
+        sliceStart = 3;
+        whiteIncludeAllSubDomain = false;
+
+        if (line[3] === '|') { // line.startsWith('@@||')
+          sliceStart = 4;
+          whiteIncludeAllSubDomain = true;
+        }
+
+        break;
+
+      case '.': { // line.startsWith('@@.')
+        sliceStart = 3;
+        whiteIncludeAllSubDomain = true;
+        break;
+      }
+
+      case ':': {
+        /**
+         * line.startsWith('@@://')
+         *
+         * `@@://googleadservices.com^|`
+         * `@@://www.googleadservices.com^|`
+         */
+        if (line[3] === '/' && line[4] === '/') {
+          whiteIncludeAllSubDomain = false;
+          sliceStart = 5;
+        }
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    if (lineEndsWithCaretOrCaretVerticalBar) {
+      sliceEnd = -2;
+    } else if (line.endsWith('$genericblock')) {
+      sliceEnd = -13;
+      if (line[len - 14] === '^') { // line.endsWith('^$genericblock')
+        sliceEnd = -14;
+      }
+    } else if (line.endsWith('$document')) {
+      sliceEnd = -9;
+      if (line[len - 10] === '^') { // line.endsWith('^$document')
+        sliceEnd = -10;
+      }
+    }
+
+    if (sliceStart !== 0 || sliceEnd !== undefined) {
+      const sliced = line.slice(sliceStart, sliceEnd);
+      const domain = normalizeDomain(sliced);
+      if (domain) {
+        result[0] = domain;
+        result[1] = whiteIncludeAllSubDomain ? ParseType.WhiteIncludeSubdomain : ParseType.WhiteAbsolute;
+        return result;
+      }
+
+      result[0] = `[parse-filter E0001] (white) invalid domain: ${JSON.stringify({
+        line, sliced, sliceStart, sliceEnd, domain
+      })}`;
+      result[1] = ParseType.ErrorMessage;
+      return result;
+    }
+
+    result[0] = `[parse-filter E0006] (white) failed to parse: ${JSON.stringify({
+      line, sliceStart, sliceEnd
+    })}`;
+    result[1] = ParseType.ErrorMessage;
     return result;
   }
 
-  if (line.includes('badfilter', indexOfDollar + 1)) {
-    white = true;
-  }
-  if (line.includes('all', indexOfDollar + 1)) {
-    includeAllSubDomain = true;
+  if (
+    // 124 `|`
+    // line.startsWith('|')
+    firstCharCode === 124
+    && lineEndsWithCaretOrCaretVerticalBar
+  ) {
+    /**
+     * Some malformed filters can not be parsed by NetworkFilter:
+     *
+     * `||smetrics.teambeachbody.com^.com^`
+     * `||solutions.|pages.indigovision.com^`
+     * `||vystar..0rg@client.iebetanialaargentina.edu.co^`
+     * `app-uat.latrobehealth.com.au^predirect.snapdeal.com`
+     */
+
+    const includeAllSubDomain = line[1] === '|';
+
+    const sliceStart = includeAllSubDomain ? 2 : 1;
+    const sliceEnd = lineEndsWithCaret
+      ? -1
+      : (lineEndsWithCaretVerticalBar ? -2 : undefined);
+
+    const sliced = line.slice(sliceStart, sliceEnd); // we already make sure line startsWith "|"
+
+    const domain = normalizeDomain(sliced);
+    if (domain) {
+      result[0] = domain;
+      result[1] = includeAllSubDomain ? ParseType.BlackIncludeSubdomain : ParseType.BlackAbsolute;
+      return result;
+    }
+
+    result[0] = `[parse-filter E0002] (black) invalid domain: ${sliced}`;
+    result[1] = ParseType.ErrorMessage;
+    return result;
   }
 
+  // if (line.endsWith('$image')) {
+  //   /**
+  //    * Some $image filters are not NetworkFilter:
+  //    *
+  //    * `app.site123.com$image`
+  //    * `t.signaux$image`
+  //    * `track.customer.io$image`
+  //    */
+  // }
+
+  const lineStartsWithSingleDot = firstCharCode === 46; // 46 `.`
+  if (
+    lineStartsWithSingleDot
+    && lineEndsWithCaretOrCaretVerticalBar
+  ) {
+    /**
+     * `.ay.delivery^`
+     * `.m.bookben.com^`
+     * `.wap.x4399.com^`
+     */
+    const sliced = line.slice(
+      1, // remove prefix dot
+      lineEndsWithCaret // replaceAll('^', '')
+        ? -1
+        : (lineEndsWithCaretVerticalBar ? -2 : undefined) // replace('^|', '')
+    );
+
+    const suffix = tldts.getPublicSuffix(sliced, looseTldtsOpt);
+    if (!suffix) {
+      // This exclude domain-like resource like `1.1.4.514.js`
+      result[1] = ParseType.Null;
+      return result;
+    }
+
+    const domain = normalizeDomain(sliced);
+    if (domain) {
+      result[0] = domain;
+      result[1] = ParseType.BlackIncludeSubdomain;
+      return result;
+    }
+
+    result[0] = `[parse-filter E0003] (black) invalid domain: ${JSON.stringify({ sliced, domain })}`;
+    result[1] = ParseType.ErrorMessage;
+    return result;
+  }
+
+  /**
+   * `|http://x.o2.pl^`
+   * `://mine.torrent.pw^`
+   * `://say.ac^`
+   */
+  if (lineEndsWithCaretOrCaretVerticalBar) {
+    let sliceStart = 0;
+    let sliceEnd;
+    if (lineEndsWithCaret) { // line.endsWith('^')
+      sliceEnd = -1;
+    } else if (lineEndsWithCaretVerticalBar) { // line.endsWith('^|')
+      sliceEnd = -2;
+    }
+    if (line.startsWith('://')) {
+      sliceStart = 3;
+    } else if (line.startsWith('http://')) {
+      sliceStart = 7;
+    } else if (line.startsWith('https://')) {
+      sliceStart = 8;
+    } else if (line.startsWith('|http://')) {
+      sliceStart = 8;
+    } else if (line.startsWith('|https://')) {
+      sliceStart = 9;
+    }
+
+    if (sliceStart !== 0 || sliceEnd !== undefined) {
+      const sliced = line.slice(sliceStart, sliceEnd);
+      const domain = normalizeDomain(sliced);
+      if (domain) {
+        result[0] = domain;
+        result[1] = ParseType.BlackIncludeSubdomain;
+        return result;
+      }
+
+      result[0] = `[parse-filter E0004] (black) invalid domain: ${JSON.stringify({
+        line, sliced, sliceStart, sliceEnd, domain
+      })}`;
+      result[1] = ParseType.ErrorMessage;
+      return result;
+    }
+  }
   /**
    * `_vmind.qqvideo.tc.qq.com^`
    * `arketing.indianadunes.com^`
@@ -543,55 +656,82 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
    * `-logging.nextmedia.com`
    * `_social_tracking.js^`
    */
-  if (line.charCodeAt(line.length + sliceEnd - 1) === 94) { // 94 `^`
-    /** line.endsWith('^') */
-    sliceEnd -= 1;
-  } else if (line.charCodeAt(line.length + sliceEnd - 1) === 124) { // 124 `|`
-    /** line.endsWith('|') */
-    sliceEnd -= 1;
+  if (
+    firstCharCode !== 124 // 124 `|`
+    && lastCharCode === 94 // 94 `^`
+  ) {
+    const _domain = line.slice(0, -1);
 
-    if (line.charCodeAt(line.length + sliceEnd - 1) === 94) { // 94 `^`
-      /** line.endsWith('^|') */
-      sliceEnd -= 1;
+    const suffix = tldts.getPublicSuffix(_domain, looseTldtsOpt);
+    if (!suffix) {
+      // This exclude domain-like resource like `_social_tracking.js^`
+      result[1] = ParseType.Null;
+      return result;
     }
-  } else if (line.charCodeAt(line.length + sliceEnd - 1) === 46) { // 46 `.`
-    /** line.endsWith('.') */
-    sliceEnd -= 1;
-  }
 
-  const sliced = (sliceStart > 0 || sliceEnd < 0) ? line.slice(sliceStart, sliceEnd === 0 ? undefined : sliceEnd) : line;
-  if (sliced.charCodeAt(0) === 45 /* - */) {
-    // line.startsWith('-') is not a valid domain
+    const domain = normalizeDomain(_domain);
+    if (domain) {
+      result[0] = domain;
+      result[1] = ParseType.BlackAbsolute;
+      return result;
+    }
+
+    result[0] = `[parse-filter E0005] (black) invalid domain: ${_domain}`;
     result[1] = ParseType.ErrorMessage;
-    result[0] = `[parse-filter E0001] (${white ? 'white' : 'black'}) invalid domain: ${JSON.stringify({
-      line, sliced, sliceStart, sliceEnd
-    })}`;
     return result;
   }
 
-  const suffix = tldts.getPublicSuffix(sliced, looseTldtsOpt);
-  if (!suffix) {
-    // This exclude domain-like resource like `_social_tracking.js^`
-    result[1] = ParseType.Null;
+  // Possibly that entire rule is domain
+
+  /**
+   * lineStartsWithSingleDot:
+   *
+   * `.cookielaw.js`
+   * `.content_tracking.js`
+   * `.ads.css`
+   *
+   * else:
+   *
+   * `_prebid.js`
+   * `t.yesware.com`
+   * `ubmcmm.baidustatic.com`
+   * `://www.smfg-card.$document`
+   * `portal.librus.pl$$advertisement-module`
+   * `@@-ds.metric.gstatic.com^|`
+   * `://gom.ge/cookie.js`
+   * `://accout-update-smba.jp.$document`
+   * `_200x250.png`
+   * `@@://www.liquidweb.com/kb/wp-content/themes/lw-kb-theme/images/ads/vps-sidebar.jpg`
+   */
+  let sliceStart = 0;
+  let sliceEnd: number | undefined;
+
+  if (lineStartsWithSingleDot) {
+    sliceStart = 1;
+  }
+  if (line.endsWith('^$all')) { // This salvage line `thepiratebay3.com^$all`
+    sliceEnd = -5;
+  } else if (
+    // Try to salvage line like `://account.smba.$document`
+    // For this specific line, it will fail anyway though.
+    line.endsWith('$document')
+  ) {
+    sliceEnd = -9;
+  } else if (line.endsWith('$badfilter')) {
+    sliceEnd = -10;
+  }
+  const sliced = (sliceStart !== 0 || sliceEnd !== undefined) ? line.slice(sliceStart, sliceEnd) : line;
+
+  const tryNormalizeDomain = normalizeDomain(sliced);
+  if (tryNormalizeDomain === sliced) {
+    // the entire rule is domain
+    result[0] = sliced;
+    result[1] = ParseType.BlackIncludeSubdomain;
+
     return result;
   }
 
-  const domain = normalizeDomain(sliced);
-
-  if (domain && domain === sliced) {
-    result[0] = domain;
-
-    if (white) {
-      result[1] = includeAllSubDomain ? ParseType.WhiteIncludeSubdomain : ParseType.WhiteAbsolute;
-    } else {
-      result[1] = includeAllSubDomain ? ParseType.BlackIncludeSubdomain : ParseType.BlackAbsolute;
-    }
-    return result;
-  }
-
-  result[0] = `[parse-filter E0010] (${white ? 'white' : 'black'}) invalid domain: ${JSON.stringify({
-    line, domain, suffix, sliced, sliceStart, sliceEnd
-  })}`;
+  result[0] = `[parse-filter ${tryNormalizeDomain === null ? 'E0010' : 'E0011'}] can not parse: ${JSON.stringify({ line, tryNormalizeDomain, sliced })}`;
   result[1] = ParseType.ErrorMessage;
   return result;
 }

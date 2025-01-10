@@ -18,7 +18,6 @@ import { Custom304NotModifiedError, CustomAbortError, CustomNoETagFallbackError,
 
 import type { IncomingHttpHeaders } from 'undici/types/header';
 import { Headers } from 'undici';
-import { ROOT_DIR } from '../constants/dir';
 
 export interface CacheOptions<S = string> {
   /** Path to sqlite file dir */
@@ -292,9 +291,9 @@ export class Cache<S = string> {
 
     const createFetchFallbackPromise = async (url: string, index: number) => {
       // Most assets can be downloaded within 250ms. To avoid wasting bandwidth, we will wait for 500ms before downloading from the fallback URL.
-      if (index >= 0) {
+      if (index > 0) {
         try {
-          await sleepWithAbort(50 + (index + 1) * 100, controller.signal);
+          await sleepWithAbort(100 + (index + 1) * 10, controller.signal);
         } catch {
           console.log(picocolors.gray('[fetch cancelled early]'), picocolors.gray(url));
           throw new CustomAbortError();
@@ -364,63 +363,68 @@ export class Cache<S = string> {
     } catch (e) {
       const deserializer = 'deserializer' in opt ? opt.deserializer : identity as any;
 
-      const on304 = (error: Custom304NotModifiedError): NonNullable<T> => {
+      const on304 = (error: Custom304NotModifiedError) => {
         console.log(picocolors.green('[cache] http 304'), picocolors.gray(primaryUrl));
         this.updateTtl(cachedKey, TTL.ONE_WEEK_STATIC);
         return deserializer(error.data);
       };
 
-      const onNoETagFallback = (error: CustomNoETagFallbackError): NonNullable<T> => {
+      const onNoETagFallback = (error: CustomNoETagFallbackError) => {
         console.log(picocolors.green('[cache] hit'), picocolors.gray(primaryUrl));
         return deserializer(error.data);
-      };
-
-      const onSingleError = (error: object & {}) => {
-        if ('name' in error) {
-          if (error.name === 'Custom304NotModifiedError') {
-            return on304(error as Custom304NotModifiedError);
-          }
-          if (error.name === 'CustomNoETagFallbackError') {
-            return onNoETagFallback(error as CustomNoETagFallbackError);
-          }
-          if (error.name === 'CustomAbortError' || error.name === 'AbortError') {
-            // noop
-          }
-        }
-        if ('digest' in error) {
-          if (error.digest === 'Custom304NotModifiedError') {
-            return on304(error as Custom304NotModifiedError);
-          }
-          if (error.digest === 'CustomNoETagFallbackError') {
-            return onNoETagFallback(error as CustomNoETagFallbackError);
-          }
-        }
-        return null;
       };
 
       if (e && typeof e === 'object') {
         if ('errors' in e && Array.isArray(e.errors)) {
           for (let i = 0, len = e.errors.length; i < len; i++) {
             const error = e.errors[i];
-
-            const result = onSingleError(error);
-            if (result !== null) {
-              return result;
+            if ('name' in error) {
+              if (error.name === 'CustomAbortError' || error.name === 'AbortError') {
+                continue;
+              }
+              if (error.name === 'Custom304NotModifiedError') {
+                return on304(error);
+              }
+              if (error.name === 'CustomNoETagFallbackError') {
+                return onNoETagFallback(error);
+              }
+            }
+            if ('digest' in error) {
+              if (error.digest === 'Custom304NotModifiedError') {
+                return on304(error);
+              }
+              if (error.digest === 'CustomNoETagFallbackError') {
+                return onNoETagFallback(error);
+              }
             }
 
-            console.log(picocolors.red('[fetch error 1]'), picocolors.gray(`[${primaryUrl}]`), error);
+            console.log(picocolors.red('[fetch error]'), picocolors.gray(error.url), error);
           }
         } else {
-          const result = onSingleError(e);
-          if (result !== null) {
-            return result;
+          if ('name' in e) {
+            if (e.name === 'Custom304NotModifiedError') {
+              return on304(e as Custom304NotModifiedError);
+            }
+            if (e.name === 'CustomNoETagFallbackError') {
+              return onNoETagFallback(e as CustomNoETagFallbackError);
+            }
+          }
+          if ('digest' in e) {
+            if (e.digest === 'Custom304NotModifiedError') {
+              return on304(e as Custom304NotModifiedError);
+            }
+            if (e.digest === 'CustomNoETagFallbackError') {
+              return onNoETagFallback(e as CustomNoETagFallbackError);
+            }
           }
 
-          console.log(picocolors.red('[fetch error 2]'), picocolors.gray(`[${primaryUrl}]`), e);
+          console.log(picocolors.red('[fetch error]'), picocolors.gray(primaryUrl), e);
         }
       }
 
-      console.log(`Download Rule for [${primaryUrl}] failed`, { e, name: (e as any).name });
+      console.log({ e, name: (e as any).name });
+
+      console.log(`Download Rule for [${primaryUrl}] failed`);
       throw e;
     }
   }
@@ -430,10 +434,12 @@ export class Cache<S = string> {
   }
 }
 
-export const fsFetchCache = new Cache({ cachePath: path.resolve(ROOT_DIR, '.cache') });
+export const fsFetchCache = new Cache({ cachePath: path.resolve(__dirname, '../../.cache') });
 // process.on('exit', () => {
 //   fsFetchCache.destroy();
 // });
+
+// export const fsCache = traceSync('initializing filesystem cache', () => new Cache<Uint8Array>({ cachePath: path.resolve(__dirname, '../../.cache'), type: 'buffer' }));
 
 const separator = '\u0000';
 export const serializeSet = (set: Set<string>) => fastStringArrayJoin(Array.from(set), separator);

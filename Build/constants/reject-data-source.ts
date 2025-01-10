@@ -29,26 +29,14 @@ export const HOSTS_EXTRA: HostsSource[] = [
 
 export const DOMAIN_LISTS: HostsSource[] = [
   // CoinBlockerList
-  // Although the hosts file is still actively maintained, the hosts_browser file is not updated since 2024-03, so we set a 14 days cache ttl
-  // [
-  //   'https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt',
-  //   [
-  //     'https://proxy.cdn.skk.moe/?https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt'
-  //   ],
-  //   true,
-  //   TTL.TWO_WEEKS()
-  // ]
+  // Although the hosts file is still actively maintained, the hosts_browser file is not updated since 2021-07, so we set a 14 days cache ttl
+  ['https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt', [], true, TTL.TWO_WEEKS()]
 ];
 
 export const DOMAIN_LISTS_EXTRA: HostsSource[] = [
   // CoinBlockerList - Full
-  // Lat update 10 months ago, so we set a 14 days cache ttl
-  // [
-  //   'https://zerodot1.gitlab.io/CoinBlockerLists/list.txt',
-  //   ['https://proxy.cdn.skk.moe/?https://zerodot1.gitlab.io/CoinBlockerLists/list.txt'],
-  //   true,
-  //   TTL.TWO_WEEKS()
-  // ],
+  // Lat update 8 months ago, so we set a 14 days cache ttl
+  ['https://zerodot1.gitlab.io/CoinBlockerLists/list.txt', [], true, TTL.TWO_WEEKS()],
 
   // BarbBlock
   // The barbblock list has never been updated since 2019-05, so we set a 14 days cache ttl
@@ -132,8 +120,7 @@ export const ADGUARD_FILTERS: AdGuardFilterSource[] = [
       'https://secure.fanboy.co.nz/easylist.txt',
       'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist.txt',
       'https://ublockorigin.pages.dev/thirdparties/easylist.txt',
-      'https://raw.githubusercontent.com/easylist/easylist/gh-pages/easylist.txt',
-      'https://filters.adtidy.org/extension/ublock/filters/101_optimized.txt'
+      'https://raw.githubusercontent.com/easylist/easylist/gh-pages/easylist.txt'
     ],
     TTL.TWLVE_HOURS()
   ],
@@ -145,8 +132,7 @@ export const ADGUARD_FILTERS: AdGuardFilterSource[] = [
       'https://secure.fanboy.co.nz/easyprivacy.txt',
       'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easyprivacy.txt',
       'https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt',
-      'https://raw.githubusercontent.com/easylist/easylist/gh-pages/easyprivacy.txt',
-      'https://filters.adtidy.org/extension/ublock/filters/118_optimized.txt'
+      'https://raw.githubusercontent.com/easylist/easylist/gh-pages/easyprivacy.txt'
     ],
     TTL.TWLVE_HOURS()
   ],
@@ -160,29 +146,13 @@ export const ADGUARD_FILTERS: AdGuardFilterSource[] = [
     TTL.TWLVE_HOURS()
   ],
   // AdGuard Base Filter
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt'],
-    TTL.THREE_HOURS()
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt', null, TTL.THREE_HOURS()],
   // AdGuard Mobile AD
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/11_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt'],
-    TTL.THREE_HOURS()
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/11_optimized.txt', null, TTL.THREE_HOURS()],
   // AdGuard Tracking Protection
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/3_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/3_optimized.txt'],
-    TTL.THREE_HOURS()
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/3_optimized.txt', null, TTL.THREE_HOURS()],
   // AdGuard Chinese filter (EasyList China + AdGuard Chinese filter)
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/224_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/224_optimized.txt'],
-    TTL.THREE_HOURS()
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/224_optimized.txt', null, TTL.THREE_HOURS()],
   // GameConsoleAdblockList
   // Update almost once per 1 to 3 months, let's set a 10 days cache ttl
   ['https://raw.githubusercontent.com/DandelionSprout/adfilt/master/GameConsoleAdblockList.txt', null, TTL.TEN_DAYS()],
@@ -224,12 +194,7 @@ export const ADGUARD_FILTERS_WHITELIST: AdGuardFilterSource[] = [
 
 export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   // AdGuard Annoyances filter
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/14_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/14_optimized.txt'],
-    TTL.THREE_HOURS(),
-    true
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/14_optimized.txt', null, TTL.THREE_HOURS(), true],
   // AdGuard Cookie Notices, included in Annoyances filter
   // ['https://filters.adtidy.org/extension/ublock/filters/18_optimized.txt', null, TTL.THREE_HOURS(), true],
   // EasyList Germany filter, not even included in extra for now
@@ -241,11 +206,7 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   //   TTL.TWLVE_HOURS()
   // ],
   // AdGuard Japanese filter
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/7_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/7_optimized.txt'],
-    TTL.THREE_HOURS()
-  ],
+  ['https://filters.adtidy.org/extension/ublock/filters/7_optimized.txt', null, TTL.THREE_HOURS()],
   // uBlock Origin Filter List
   [
     'https://ublockorigin.github.io/uAssetsCDN/filters/filters.min.txt',
@@ -280,7 +241,7 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   //   'https://ublockorigin.github.io/uAssetsCDN/filters/resource-abuse.txt',
   //   ['https://ublockorigin.pages.dev/filters/resource-abuse.txt']
   // ],
-  // uBlock Origin Annoyances (the un-merged of Fanboy Annoyances List)
+  // uBlock Origin Annoyances
   [
     'https://ublockorigin.github.io/uAssetsCDN/filters/annoyances.min.txt',
     ['https://ublockorigin.pages.dev/filters/annoyances.min.txt'],
@@ -292,6 +253,8 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
     ['https://ublockorigin.pages.dev/thirdparties/easylist-annoyances.txt'],
     TTL.THREE_HOURS()
   ],
+  // Dandelion Sprout's Annoyances
+  ['https://filters.adtidy.org/extension/ublock/filters/250_optimized.txt', null, TTL.THREE_HOURS(), true],
   // EasyList - Newsletters
   [
     'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-newsletters.txt',
@@ -312,22 +275,6 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
       'https://secure.fanboy.co.nz/fanboy-cookiemonster_ubo.txt'
     ],
     TTL.TWLVE_HOURS()
-  ],
-  // Dandelion Sprout's Annoyances
-  [
-    'https://filters.adtidy.org/extension/ublock/filters/250_optimized.txt',
-    ['https://proxy.cdn.skk.moe/?https://filters.adtidy.org/extension/ublock/filters/250_optimized.txt'],
-    TTL.THREE_HOURS(),
-    true
-  ],
-  // Adblock Warning Removal List
-  [
-    'https://easylist-downloads.adblockplus.org/antiadblockfilters.txt',
-    [
-      'https://filters.adtidy.org/extension/ublock/filters/207_optimized.txt'
-    ],
-    TTL.TWLVE_HOURS(),
-    true
   ]
 ];
 
@@ -465,16 +412,9 @@ export const PREDEFINED_WHITELIST = [
   '.host.secureserver.net', // rDNS .64.149.167.72.host.secureserver.net,
   '.ip.linodeusercontent.com', // rDNS 45-79-169-153.ip.linodeusercontent.com
   '.static.akamaitechnologies.com', // rDNS a23-57-90-107.deploy.static.akamaitechnologies.com
-  '.compute.amazonaws.com', // rDNS ec2-3-22-96-128.us-east-2.compute.amazonaws.com
   '.shoppy.gg', // Spam404
   'transcend-cdn.com', // AdGuard Annoyances
   'store1.gofile.io', // Dandelion Sprout's Annoyances List
   'ad.12306.cn', // https://github.com/jdlingyu/ad-wars
-  '.ib.snssdk.com', // AdGuard Tracking Protection -- breaks 今日头条专业版
-  '.nstool.netease.com', // it is only used to check local dns
-
-  // Expired domains
-  '.expobarrio.com',
-  '.hamdandates.com',
-  '.amzone.co.jp'
+  '.ib.snssdk.com' // AdGuard Tracking Protection -- breaks 今日头条专业版
 ];

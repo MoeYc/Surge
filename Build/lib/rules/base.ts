@@ -36,7 +36,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   protected otherRules: string[] = [];
   protected abstract type: 'domainset' | 'non_ip' | 'ip';
 
-  private pendingPromise: Promise<any> | null = null;
+  private pendingPromise: Promise<void> | null = null;
 
   static readonly jsonToLines = (json: unknown): string[] => stringify(json).split('\n');
 
@@ -201,13 +201,8 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     }
   }
 
-  addFromRuleset(source: AsyncIterable<string> | Iterable<string> | Promise<Iterable<string>>) {
-    if (this.pendingPromise) {
-      this.pendingPromise = this.pendingPromise.then(() => source);
-    } else {
-      this.pendingPromise = Promise.resolve(source);
-    }
-    this.pendingPromise = this.pendingPromise.then((source) => this.addFromRulesetPromise(source));
+  addFromRuleset(source: AsyncIterable<string> | Iterable<string>) {
+    this.pendingPromise = (this.pendingPromise ||= Promise.resolve()).then(() => this.addFromRulesetPromise(source));
     return this;
   }
 
@@ -252,7 +247,6 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   async done() {
     await this.pendingPromise;
     this.pendingPromise = null;
-    return this;
   }
 
   private guardPendingPromise() {
@@ -377,10 +371,6 @@ export async function fileEqual(linesA: string[], source: AsyncIterable<string>)
     const lineA = linesA[index];
 
     if (lineA[0] === '#' && lineB[0] === '#') {
-      continue;
-    }
-    // adguard conf
-    if (lineA[0] === '!' && lineB[0] === '!') {
       continue;
     }
     if (

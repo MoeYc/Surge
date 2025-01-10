@@ -1,4 +1,3 @@
-import { noop } from 'foxts/noop';
 import { basename, extname } from 'node:path';
 import process from 'node:process';
 import picocolors from 'picocolors';
@@ -99,12 +98,8 @@ export function createSpan(name: string, parentTraceResult?: TraceResult): Span 
 export const dummySpan = createSpan('');
 
 export function task(importMetaMain: boolean, importMetaPath: string) {
-  return <T>(fn: (span: Span, onCleanup: (cb: () => Promise<void> | void) => void) => Promise<T>, customName?: string) => {
+  return <T>(fn: (span: Span) => Promise<T>, customName?: string) => {
     const taskName = customName ?? basename(importMetaPath, extname(importMetaPath));
-    let cleanup: () => Promise<void> | void = noop;
-    const onCleanup = (cb: () => void) => {
-      cleanup = cb;
-    };
 
     const dummySpan = createSpan(taskName);
     if (importMetaMain) {
@@ -117,7 +112,7 @@ export function task(importMetaMain: boolean, importMetaPath: string) {
         process.exit(1);
       });
 
-      dummySpan.traceChildAsync('dummy', (childSpan) => fn(childSpan, onCleanup)).finally(() => {
+      dummySpan.traceChildAsync('dummy', fn).finally(() => {
         dummySpan.stop();
         printTraceResult(dummySpan.traceResult);
         whyIsNodeRunning();
@@ -126,9 +121,9 @@ export function task(importMetaMain: boolean, importMetaPath: string) {
 
     return async (span?: Span) => {
       if (span) {
-        return span.traceChildAsync(taskName, (childSpan) => fn(childSpan, onCleanup).finally(() => cleanup()));
+        return span.traceChildAsync(taskName, fn);
       }
-      return fn(dummySpan, onCleanup).finally(() => cleanup());
+      return fn(dummySpan);
     };
   };
 }

@@ -5,18 +5,14 @@ import { task } from './trace';
 import { SHARED_DESCRIPTION } from './constants/description';
 import { createMemoizedPromise } from './lib/memo-promise';
 import { RulesetOutput } from './lib/create-file';
-import { $$fetch } from './lib/fetch-retry';
+import { $fetch } from './lib/make-fetch-happen';
 
 export const getTelegramCIDRPromise = createMemoizedPromise(async () => {
-  const resp = await $$fetch('https://core.telegram.org/resources/cidr.txt');
+  const resp = await $fetch('https://core.telegram.org/resources/cidr.txt');
   const lastModified = resp.headers.get('last-modified');
   const date = lastModified ? new Date(lastModified) : new Date();
 
-  const ipcidr: string[] = [
-    // Telegram secret backup CIDR, announced by AS62041
-    // see also https://github.com/Telegram-FOSS-Team/Telegram-FOSS/blob/10da5406ed92d30c6add3b25d40b2b3b6995d873/TMessagesProj/src/main/java/org/telegram/tgnet/ConnectionsManager.java#L1157
-    '95.161.64.0/20'
-  ];
+  const ipcidr: string[] = [];
   const ipcidr6: string[] = [];
 
   for await (const cidr of createReadlineInterfaceFromResponse(resp, true)) {

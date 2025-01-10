@@ -37,7 +37,9 @@ export const DIRECTS = {
       '$injections.adguard.org',
       '$local.adguard.org',
       // Auto Discovery
-      '+bogon'
+      '+_tcp',
+      '+bogon',
+      '+_msdcs'
     ]
   }
 } as const satisfies Record<string, DNSMapping>;

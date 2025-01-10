@@ -138,10 +138,7 @@ export const DOMESTICS: Record<string, DNSMapping> = {
       '$url.cn',
       '+qlivecdn.com',
       '+tcdnlive.com',
-      '+dnsv1.com',
-      '+smtcdns.net',
-      'coding.net',
-      '+codehub.cn'
+      '+dnsv1.com'
     ]
   },
   BILIBILI_ALI: {
@@ -262,9 +259,7 @@ export const DOMESTICS: Record<string, DNSMapping> = {
       '+byteimg.com', // Uses alidns.com as NS
       '+byteacctimg.com', // Uses alidns.com as NS
       '+ibytedapm.com', // China NS
-      'oceanengine.com',
-      '+edge-byted.com',
-      '+volcvideo.com'
+      'oceanengine.com'
     ]
   },
   BAIDU: {

@@ -8,7 +8,8 @@ import { TextLineStream } from './text-line-transform-stream';
 import type { ReadableStream } from 'node:stream/web';
 import { TextDecoderStream } from 'node:stream/web';
 import { processLine, ProcessLineStream } from './process-line';
-import { $$fetch } from './fetch-retry';
+import { $fetch } from './make-fetch-happen';
+import type { NodeFetchResponse } from './make-fetch-happen';
 import type { UndiciResponseData } from './fetch-retry';
 import type { Response as UnidiciWebResponse } from 'undici';
 
@@ -37,7 +38,7 @@ export async function readFileByLineNew(file: string): Promise<AsyncIterable<str
   return fsp.open(file, 'r').then(fdReadLines);
 }
 
-function ensureResponseBody<T extends UndiciResponseData | UnidiciWebResponse>(resp: T): NonNullable<T['body']> {
+function ensureResponseBody<T extends NodeFetchResponse | UndiciResponseData | UnidiciWebResponse>(resp: T): NonNullable<T['body']> {
   if (resp.body == null) {
     throw new Error('Failed to fetch remote text');
   }
@@ -47,7 +48,7 @@ function ensureResponseBody<T extends UndiciResponseData | UnidiciWebResponse>(r
   return resp.body;
 }
 
-export const createReadlineInterfaceFromResponse: ((resp: UndiciResponseData | UnidiciWebResponse, processLine?: boolean) => ReadableStream<string>) = (resp, processLine = false) => {
+export const createReadlineInterfaceFromResponse: ((resp: NodeFetchResponse | UndiciResponseData | UnidiciWebResponse, processLine?: boolean) => ReadableStream<string>) = (resp, processLine = false) => {
   const stream = ensureResponseBody(resp);
 
   const webStream: ReadableStream<Uint8Array> = 'getReader' in stream
@@ -69,7 +70,7 @@ export const createReadlineInterfaceFromResponse: ((resp: UndiciResponseData | U
 };
 
 export function fetchRemoteTextByLine(url: string, processLine = false): Promise<AsyncIterable<string>> {
-  return $$fetch(url).then(resp => createReadlineInterfaceFromResponse(resp, processLine));
+  return $fetch(url).then(resp => createReadlineInterfaceFromResponse(resp, processLine));
 }
 
 export async function readFileIntoProcessedArray(file: string /* | FileHandle */) {
