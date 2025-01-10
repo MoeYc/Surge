@@ -71,6 +71,10 @@ jobs:
             echo "public directory is empty"
             exit 1
           fi
+          if [ ! -f .BUILD_FINISHED ]; then
+            echo ".BUILD_FINISHED not found"
+            exit 1
+          fi
       - name: Create CNAME file
         uses: actions/github-script@v7
         with:
