@@ -11,7 +11,7 @@
   "scripts": {
     "node": "SWCRC=true node -r @swc-node/register",
     "dexnode": "SWCRC=true dexnode -r @swc-node/register",
-    "build": "pnpm run node ./Build/index.ts",
+    "build": "tsx ./Build/index.ts",
     "build-profile": "pnpm run dexnode -r @swc-node/register ./Build/index.ts",
     "build-webstream": "ENABLE_EXPERIMENTAL_WEBSTREAMS=true pnpm run node ./Build/index.ts",
     "lint": "eslint --format=sukka .",
@@ -69,6 +69,7 @@
     "expect": "^29.7.0",
     "mitata": "^1.0.27",
     "mocha": "^11.0.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   },
   "packageManager": "pnpm@9.15.3",
