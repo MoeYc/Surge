@@ -16,7 +16,12 @@ export type UndiciResponseData<T = unknown> = Dispatcher.ResponseData<T>;
 
 import { inspect } from 'node:util';
 import path from 'node:path';
-import { ROOT_DIR } from '../constants/dir';
+import fs from 'node:fs';
+import { CACHE_DIR } from '../constants/dir';
+
+if (!fs.existsSync(CACHE_DIR)) {
+  fs.mkdirSync(CACHE_DIR, { recursive: true });
+}
 
 const agent = new Agent({});
 
@@ -106,8 +111,8 @@ setGlobalDispatcher(agent.compose(
   }),
   interceptors.cache({
     store: new BetterSqlite3CacheStore({
-      location: path.join(ROOT_DIR, '.cache/undici-better-sqlite3-cache-store.db'),
-      maxEntrySize: 1024 * 1024 * 50 // 50 MiB
+      location: path.join(CACHE_DIR, 'undici-better-sqlite3-cache-store.db'),
+      maxEntrySize: 1024 * 1024 * 100 // 100 MiB
     })
   })
 ));
