@@ -154,7 +154,7 @@ jobs:
       - name: Upload Dist to GitLab
         if: contains(needs.build.outputs.platform, 'gitlab')
         run: |
-          git clone --filter=tree:0 https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
+          git clone --filter=tree:0 --no-tags --prune https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
           cd ./deploy-git
           git config --global push.default matching
           git config --global user.email "${GITLAB_EMAIL}"
@@ -183,4 +183,3 @@ jobs:
           # personal_token: ${{ secrets.GIT_TOKEN }}
           # user_name: ${{ secrets.GIT_USER }}
           # user_email: ${{ secrets.GIT_EMAIL }}
-      
