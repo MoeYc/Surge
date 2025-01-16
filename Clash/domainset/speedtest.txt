@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Speedtest Domains
-# Last Updated: 2025-01-11T15:00:21.216Z
-# Size: 450
+# Last Updated: 2025-01-16T23:14:01.118Z
+# Size: 455
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -40,6 +40,7 @@ speedtest.sewan.fr
 +.speedtest.orange.fr
 +.speed.pfm.gg
 speedtest-sg.cbn.id
+horizon.sadata.id
 speedtest.mtnetworks.mn
 +.speedtest.rt.ru
 +.speedtest.rascom.ru
@@ -173,7 +174,6 @@ sptkh1.taiwanmobile.com
 sptkh1_tc.taiwanmobile.com
 spttp1_tc.taiwanmobile.com
 speed.ccspublichost.com
-speedtest1.indosatooredoo.com
 ooklatins.redeconexaonet.com
 speedtest.redrawinternet.com
 speedtest.unlimitedfiber.com
@@ -213,6 +213,7 @@ speedtest.telerys.net
 speedtest.wolfpaw.net
 open.cachefly.net
 speedtest5.fybercom.net
+velocimetrostm.interlig.net
 ookla.lanetcie.net
 speedtest-ams.melbicom.net
 speedtest-fra.melbicom.net
@@ -225,6 +226,7 @@ speedtest.polycomm.net
 +.speedtest.clouvider.net
 speedtest-lax.perfectip.net
 +.speedtest.sbcglobal.net
+lon-hex-speedtest.cloudconnx.net
 lg-hkg.fdcservers.net
 lg-syd.fdcservers.net
 lg-tok.fdcservers.net
@@ -237,6 +239,7 @@ speedtest.packetworks.net
 speedtest-ad-1.zoominternet.net
 hkthspeedtest02.telstraglobal.net
 dllstx-ookla1.vyvebroadband.net
+speedtest.provedoracesso.net
 speedtest.voip-unlimited.net
 +.speed.misaka.one
 speedtest.eidnet.org
@@ -332,6 +335,7 @@ velocidade-pvh.amazoniatelecom.com.br
 speedtest.conectaamazonia.com.br
 speed.newclicktelecom.com.br
 velocidade.impertechtelecom.com.br
+speedtest.cyberlinkinternet.com.br
 test.infoconnecttelecom.com.br
 ookla.jgainterlinktelecom.com.br
 speedtest.topnettelecomservicos.com.br
@@ -396,6 +400,7 @@ gay1speedtest.turktelekom.com.tr
 gun1speedtest.turktelekom.com.tr
 sam1speedtest.turktelekom.com.tr
 umr1speedtest.turktelekom.com.tr
+st-denizli-1.turksatkablo.com.tr
 speed.radius2online.com.tr
 hiztesti.mehmetakif.edu.tr
 speedtest.spd.net.tr
@@ -426,7 +431,6 @@ nycny-speedtest-ookla-01.st.charter.com
 syrny-speedtest-ookla-02.st.charter.com
 lsanca-speedtest-ookla-02.st.charter.com
 speedtest.ams.macarne.com
-speedtest.eu-lo.kamatera.com
 csfw.fj.chinamobile.com
 speedtest.hk.chinamobile.com
 speedtestbb.hk.chinamobile.com
@@ -455,6 +459,7 @@ ookla-speedtest-central.hgconair.hgc.com.hk
 sosimhk.datapath.three.com.hk
 +.speedtest.seattle.wa.limewave.net
 speedtest.hk212.hkg.cn.nerocloud.io
+speedtest.sg220.sgp.sg.ctcsci.com
 ipl3pt.fft.ops.eu.uu.net
 ipl3pt.syd.ops.aspac.uu.net
 speedtest.thn.lon.network.as201838.net
