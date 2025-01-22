@@ -20,6 +20,7 @@ jobs:
       platform: ${{ steps.enable_check.outputs.result }}
 
     steps:
+      - run: df -h
       # - name: Tune GitHub-hosted runner network
       #   # https://github.com/actions/runner-images/issues/1187
       #   uses: smorimoto/tune-github-hosted-runner-network@v1
@@ -33,6 +34,33 @@ jobs:
         with:
           node-version-file: ".node-version"
           cache: "pnpm"
+      - name: Create RAM Disk for building
+        id: ramdisk
+        run: |
+          BUILD_DIR=$(mktemp -d -p /dev/shm/ -t sakina-surge-public.XXXXXXXXXX)
+          echo "Build dir created at $BUILD_DIR"
+          echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
+      - name: Download Previous Build
+        uses: actions/checkout@v4
+        with:
+          repository: MoeYc/Surge
+          ref: gh-pages
+          persist-credentials: false
+          path: previous-build-${{ github.run_id }}-${{ github.run_number }}
+      - name: Setup build folder
+        run: |
+          mv previous-build-${{ github.run_id }}-${{ github.run_number }}/{.,}* ${{ steps.ramdisk.outputs.build_dir }}/
+          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/.git ]; then
+            echo ".git not found"
+            exit 1
+          fi
+          rm -rf "${{ steps.ramdisk.outputs.build_dir }}/.git"
+
+          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/List ]; then
+            echo "List not found"
+            exit 1
+          fi
+          echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
       - name: Get current date
         id: date
         run: |
@@ -61,16 +89,16 @@ jobs:
       - run: pnpm install
       - run: pnpm run build
         env:
-          PUBLIC_DIR: public
+          PUBLIC_DIR: ${{ steps.ramdisk.outputs.build_dir }}
       - name: Pre-deploy check
         # If the public directory doesn't exist, the build should fail.
         # If the public directory is empty, the build should fail.
         run: |
-          if [ ! -d public ]; then
+          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }} ]; then
             echo "public directory not found"
             exit 1
           fi
-          if [ ! "$(ls -A public)" ]; then
+          if [ ! "$(ls -A ${{ steps.ramdisk.outputs.build_dir }})" ]; then
             echo "public directory is empty"
             exit 1
           fi
@@ -78,6 +106,7 @@ jobs:
             echo ".BUILD_FINISHED not found"
             exit 1
           fi
+          echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
       - name: Create CNAME file
         uses: actions/github-script@v7
         with:
@@ -91,7 +120,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: build-artifact-${{ github.ref_name }}
-          path: public
+          path: ${{ steps.ramdisk.outputs.build_dir }}
           if-no-files-found: error
           retention-days: 1
           compression-level: 4
