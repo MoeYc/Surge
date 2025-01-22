@@ -1,95 +1,92 @@
-import path from 'node:path'
-import fs from 'node:fs'
-import { pipeline } from 'node:stream/promises'
-import { task } from './trace'
-import { extract as tarExtract } from 'tar-fs'
-import type { Headers as TarEntryHeaders } from 'tar-fs'
-import zlib from 'node:zlib'
-import undici from 'undici'
-import picocolors from 'picocolors'
-import { PUBLIC_DIR } from './constants/dir'
-import { requestWithLog } from './lib/fetch-retry'
-import { isDirectoryEmptySync } from './lib/misc'
-import { isCI } from 'ci-info'
+import path from 'node:path';
+import fs from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+import { task } from './trace';
+import { extract as tarExtract } from 'tar-fs';
+import type { Headers as TarEntryHeaders } from 'tar-fs';
+import zlib from 'node:zlib';
+import undici from 'undici';
+import picocolors from 'picocolors';
+import { PUBLIC_DIR } from './constants/dir';
+import { requestWithLog } from './lib/fetch-retry';
+import { isDirectoryEmptySync } from './lib/misc';
+import { isCI } from 'ci-info';
 
-const GITHUB_CODELOAD_URL =
-  'https://codeload.github.com/MoeYc/Surge/tar.gz/gh-pages'
+const GITHUB_CODELOAD_URL = 'https://codeload.github.com/MoeYc/Surge/tar.gz/gh-pages';
 
-export const downloadPreviousBuild = task(
-  require.main === module,
-  __filename,
-)(async (span) => {
+export const downloadPreviousBuild = task(require.main === module, __filename)(async (span) => {
   if (fs.existsSync(PUBLIC_DIR) && !isDirectoryEmptySync(PUBLIC_DIR)) {
-    console.log(
-      picocolors.blue(
-        'Public directory exists, skip downloading previous build',
-      ),
-    )
-    return
+    console.log(picocolors.blue('Public directory exists, skip downloading previous build'));
+    return;
   }
 
   // we uses actions/checkout to download the previous build now, so we should throw if the directory is empty
   if (isCI) {
-    throw new Error('CI environment detected, but public directory is empty')
+    throw new Error('CI environment detected, but public directory is empty');
   }
 
   const tarGzUrl = await span.traceChildAsync('get tar.gz url', async () => {
-    await requestWithLog(GITHUB_CODELOAD_URL, { method: 'HEAD' })
-    return GITHUB_CODELOAD_URL
-  })
+    await requestWithLog(GITHUB_CODELOAD_URL, { method: 'HEAD' });
+    return GITHUB_CODELOAD_URL;
+  });
 
   return span.traceChildAsync('download & extract previoud build', async () => {
-    const respBody = undici
-      .pipeline(
-        tarGzUrl,
-        {
-          method: 'GET',
-          headers: {
-            'User-Agent': 'curl/8.9.1',
-            // https://github.com/unjs/giget/issues/97
-            // https://gitlab.com/gitlab-org/gitlab/-/commit/50c11f278d18fe1f3fb12eb595067216bb58ade2
-            'sec-fetch-mode': 'same-origin',
-          },
-          // Allow redirects by default
-          maxRedirections: 5,
+    const respBody = undici.pipeline(
+      tarGzUrl,
+      {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'curl/8.9.1',
+          // https://github.com/unjs/giget/issues/97
+          // https://gitlab.com/gitlab-org/gitlab/-/commit/50c11f278d18fe1f3fb12eb595067216bb58ade2
+          'sec-fetch-mode': 'same-origin'
         },
-        ({ statusCode, body }) => {
-          if (statusCode !== 200) {
-            console.warn('Download previous build failed! Status:', statusCode)
-            if (statusCode === 404) {
-              throw new Error('Download previous build failed! 404')
-            }
-          }
-
-          return body
-        },
-        // by default, undici.pipeline returns a duplex stream (for POST/PUT)
-        // Since we are using GET, we need to end the write immediately
-      )
-      .end()
-
-    const pathPrefix = 'ruleset.skk.moe-master/'
-
-    const gunzip = zlib.createGunzip()
-    const extract = tarExtract(PUBLIC_DIR, {
-      ignore(_: string, header?: TarEntryHeaders) {
-        if (header) {
-          if (header.type !== 'file' && header.type !== 'directory') {
-            return true
-          }
-          if (header.type === 'file' && path.extname(header.name) === '.ts') {
-            return true
+        // Allow redirects by default
+        maxRedirections: 5
+      },
+      ({ statusCode, body }) => {
+        if (statusCode !== 200) {
+          console.warn('Download previous build failed! Status:', statusCode);
+          if (statusCode === 404) {
+            throw new Error('Download previous build failed! 404');
           }
         }
 
-        return false
-      },
-      map(header) {
-        header.name = header.name.replace(pathPrefix, '')
-        return header
-      },
-    })
+        return body;
+      }
+      // by default, undici.pipeline returns a duplex stream (for POST/PUT)
+      // Since we are using GET, we need to end the write immediately
+    ).end();
 
-    return pipeline(respBody, gunzip, extract)
-  })
-})
+    const pathPrefix = 'ruleset.skk.moe-master/';
+
+    const gunzip = zlib.createGunzip();
+    const extract = tarExtract(
+      PUBLIC_DIR,
+      {
+        ignore(_: string, header?: TarEntryHeaders) {
+          if (header) {
+            if (header.type !== 'file' && header.type !== 'directory') {
+              return true;
+            }
+            if (header.type === 'file' && path.extname(header.name) === '.ts') {
+              return true;
+            }
+          }
+
+          return false;
+        },
+        map(header) {
+          header.name = header.name.replace(pathPrefix, '');
+          return header;
+        }
+      }
+    );
+
+    return pipeline(
+      respBody,
+      gunzip,
+      extract
+    );
+  });
+});
