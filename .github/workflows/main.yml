@@ -113,7 +113,8 @@ jobs:
           result-encoding: string
           script: |
             const path = require('path');
-            const cnamePath = path.join(process.cwd(), 'public', 'CNAME');
+            console.log('Creating CNAME file to ${{ steps.ramdisk.outputs.build_dir }}');
+            const cnamePath = path.join("${{ steps.ramdisk.outputs.build_dir }}", 'CNAME');
             const fs = require('fs');
             fs.writeFileSync(cnamePath, 'ruleset.hsre.top', 'utf-8');
             console.log('CNAME file created');
