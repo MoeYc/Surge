@@ -20,7 +20,6 @@ jobs:
       platform: ${{ steps.enable_check.outputs.result }}
 
     steps:
-      - run: df -h
       # - name: Tune GitHub-hosted runner network
       #   # https://github.com/actions/runner-images/issues/1187
       #   uses: smorimoto/tune-github-hosted-runner-network@v1
@@ -61,8 +60,6 @@ jobs:
             ${{ runner.os }}-v3-
       - run: pnpm install
       - run: pnpm run build
-        env:
-          PUBLIC_DIR: ${{ steps.ramdisk.outputs.build_dir }}
       - name: Pre-deploy check
         # If the public directory doesn't exist, the build should fail.
         # If the public directory is empty, the build should fail.
