@@ -64,11 +64,11 @@ jobs:
         # If the public directory doesn't exist, the build should fail.
         # If the public directory is empty, the build should fail.
         run: |
-          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }} ]; then
+          if [ ! -d public ]; then
             echo "public directory not found"
             exit 1
           fi
-          if [ ! "$(ls -A ${{ steps.ramdisk.outputs.build_dir }})" ]; then
+          if [ ! "$(ls -A public)" ]; then
             echo "public directory is empty"
             exit 1
           fi
