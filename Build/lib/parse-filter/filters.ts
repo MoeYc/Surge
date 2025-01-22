@@ -1,9 +1,9 @@
 import picocolors from 'picocolors';
 import type { Span } from '../../trace';
-import { fetchAssetsWithout304 } from '../fetch-assets';
+import { fetchAssets } from '../fetch-assets';
 import { onBlackFound, onWhiteFound } from './shared';
 import { createRetrieKeywordFilter as createKeywordFilter } from 'foxts/retrie';
-import { normalizeDomain } from '../normalize-domain';
+import { fastNormalizeDomain } from '../normalize-domain';
 import { looseTldtsOpt } from '../../constants/loose-tldts-opt';
 import tldts from 'tldts-experimental';
 import { NetworkFilter } from '@ghostery/adblocker';
@@ -20,17 +20,21 @@ const enum ParseType {
 
 export { type ParseType };
 
-export async function processFilterRules(
-  parentSpan: Span,
+export function processFilterRulesWithPreload(
   filterRulesUrl: string,
   fallbackUrls?: string[] | null,
-  allowThirdParty = false
-): Promise<{ white: string[], black: string[] }> {
-  const [white, black, warningMessages] = await parentSpan.traceChild(`process filter rules: ${filterRulesUrl}`).traceAsyncFn(async (span) => {
-    const text = await span.traceChildAsync('download', () => fetchAssetsWithout304(filterRulesUrl, fallbackUrls));
+  includeThirdParty = false
+) {
+  const downloadPromise = fetchAssets(filterRulesUrl, fallbackUrls);
 
-    const whitelistDomainSets = new Set<string>();
-    const blacklistDomainSets = new Set<string>();
+  return (span: Span) => span.traceChildAsync<Record<'whiteDomains' | 'whiteDomainSuffixes' | 'blackDomains' | 'blackDomainSuffixes', string[]>>(`process filter rules: ${filterRulesUrl}`, async (span) => {
+    const text = await span.traceChildPromise('download', downloadPromise);
+
+    const whiteDomains = new Set<string>();
+    const whiteDomainSuffixes = new Set<string>();
+
+    const blackDomains = new Set<string>();
+    const blackDomainSuffixes = new Set<string>();
 
     const warningMessages: string[] = [];
 
@@ -39,7 +43,7 @@ export async function processFilterRules(
        * @param {string} line
        */
     const lineCb = (line: string) => {
-      const result = parse(line, MUTABLE_PARSE_LINE_RESULT, allowThirdParty);
+      const result = parse(line, MUTABLE_PARSE_LINE_RESULT, includeThirdParty);
       const flag = result[1];
 
       if (flag === ParseType.NotParsed) {
@@ -59,24 +63,16 @@ export async function processFilterRules(
 
       switch (flag) {
         case ParseType.WhiteIncludeSubdomain:
-          if (hostname[0] === '.') {
-            whitelistDomainSets.add(hostname);
-          } else {
-            whitelistDomainSets.add(`.${hostname}`);
-          }
+          whiteDomainSuffixes.add(hostname);
           break;
         case ParseType.WhiteAbsolute:
-          whitelistDomainSets.add(hostname);
+          whiteDomains.add(hostname);
           break;
         case ParseType.BlackIncludeSubdomain:
-          if (hostname[0] === '.') {
-            blacklistDomainSets.add(hostname);
-          } else {
-            blacklistDomainSets.add(`.${hostname}`);
-          }
+          blackDomainSuffixes.add(hostname);
           break;
         case ParseType.BlackAbsolute:
-          blacklistDomainSets.add(hostname);
+          blackDomains.add(hostname);
           break;
         case ParseType.ErrorMessage:
           warningMessages.push(hostname);
@@ -94,31 +90,27 @@ export async function processFilterRules(
       }
     });
 
-    return [
-      Array.from(whitelistDomainSets),
-      Array.from(blacklistDomainSets),
-      warningMessages
-    ] as const;
-  });
+    for (let i = 0, len = warningMessages.length; i < len; i++) {
+      console.warn(
+        picocolors.yellow(warningMessages[i]),
+        picocolors.gray(picocolors.underline(filterRulesUrl))
+      );
+    }
 
-  for (let i = 0, len = warningMessages.length; i < len; i++) {
-    console.warn(
-      picocolors.yellow(warningMessages[i]),
-      picocolors.gray(picocolors.underline(filterRulesUrl))
+    console.log(
+      picocolors.gray('[process filter]'),
+      picocolors.gray(filterRulesUrl),
+      picocolors.gray(`white: ${whiteDomains.size + whiteDomainSuffixes.size}`),
+      picocolors.gray(`black: ${blackDomains.size + blackDomainSuffixes.size}`)
     );
-  }
 
-  console.log(
-    picocolors.gray('[process filter]'),
-    picocolors.gray(filterRulesUrl),
-    picocolors.gray(`white: ${white.length}`),
-    picocolors.gray(`black: ${black.length}`)
-  );
-
-  return {
-    white,
-    black
-  };
+    return {
+      whiteDomains: Array.from(whiteDomains),
+      whiteDomainSuffixes: Array.from(whiteDomainSuffixes),
+      blackDomains: Array.from(blackDomains),
+      blackDomainSuffixes: Array.from(blackDomainSuffixes)
+    };
+  });
 }
 
 // const R_KNOWN_NOT_NETWORK_FILTER_PATTERN_2 = /(\$popup|\$removeparam|\$popunder|\$cname)/;
@@ -150,7 +142,7 @@ const kwfilter = createKeywordFilter([
   '^popup'
 ]);
 
-export function parse($line: string, result: [string, ParseType], allowThirdParty: boolean): [hostname: string, flag: ParseType] {
+export function parse($line: string, result: [string, ParseType], includeThirdParty: boolean): [hostname: string, flag: ParseType] {
   if (
     // doesn't include
     !$line.includes('.') // rule with out dot can not be a domain
@@ -227,7 +219,7 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
       && filter.isPlain() // isPlain() === !isRegex()
       && (!filter.isFullRegex())
     ) {
-      const hostname = normalizeDomain(filter.hostname);
+      const hostname = fastNormalizeDomain(filter.hostname);
       if (!hostname) {
         result[1] = ParseType.Null;
         return result;
@@ -258,7 +250,7 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
         return result;
       }
       if (_3p) {
-        if (allowThirdParty) {
+        if (includeThirdParty) {
           result[0] = hostname;
           result[1] = isIncludeAllSubDomain ? ParseType.BlackIncludeSubdomain : ParseType.BlackAbsolute;
           return result;
@@ -378,7 +370,7 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
    * `.1.1.1.l80.js^$third-party`
    */
   if (
-    !allowThirdParty
+    !includeThirdParty
     && (
       line.includes('third-party', indexOfDollar + 1)
       || line.includes('3p', indexOfDollar + 1)
@@ -421,6 +413,11 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
   }
 
   const sliced = (sliceStart > 0 || sliceEnd < 0) ? line.slice(sliceStart, sliceEnd === 0 ? undefined : sliceEnd) : line;
+  if (sliced.length === 0 || sliced.includes('/')) {
+    result[1] = ParseType.Null;
+    return result;
+  }
+
   if (sliced.charCodeAt(0) === 45 /* - */) {
     // line.startsWith('-') is not a valid domain
     result[1] = ParseType.ErrorMessage;
@@ -437,7 +434,7 @@ export function parse($line: string, result: [string, ParseType], allowThirdPart
     return result;
   }
 
-  const domain = normalizeDomain(sliced);
+  const domain = fastNormalizeDomain(sliced);
 
   if (domain && domain === sliced) {
     result[0] = domain;
