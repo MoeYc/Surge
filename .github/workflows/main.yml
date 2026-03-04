@@ -38,25 +38,6 @@ jobs:
           BUILD_DIR=$(mktemp -d -p /dev/shm/ -t sakina-surge-public.XXXXXXXXXX)
           echo "Build dir created at $BUILD_DIR"
           echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
-      - name: Download Previous Build
-        continue-on-error: true
-        uses: actions/checkout@v6
-        with:
-          repository: MoeYc/Surge
-          ref: gh-pages
-          persist-credentials: false
-          filter: "tree:0" # we don't care about git history here
-          fetch-tags: false
-          path: ${{ steps.ramdisk.outputs.build_dir }}
-      - name: Setup build folder
-        run: |
-          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/.git ]; then
-            echo "gh-pages branch not found or checkout failed, will do a fresh build"
-          else
-            rm -rf "${{ steps.ramdisk.outputs.build_dir }}/.git"
-            echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
-          fi
-          mkdir -p ${{ steps.ramdisk.outputs.build_dir }}
       - name: Get current date
         id: date
         run: |
