@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 
 import tldts from 'tldts-experimental';
 import { task } from './trace';
@@ -78,7 +79,10 @@ export const buildSpeedtestDomainSet = task(require.main === module, __filename)
       'This file contains common speedtest endpoints.'
     )
     .addFromDomainset(readFileIntoProcessedArray(path.resolve(SOURCE_DIR, 'domainset/speedtest.conf')))
-    .addFromDomainset(readFileIntoProcessedArray(path.resolve(OUTPUT_SURGE_DIR, 'domainset/speedtest.conf')))
+    .addFromDomainset((() => {
+      const prevBuildFile = path.resolve(OUTPUT_SURGE_DIR, 'domainset/speedtest.conf');
+      return fs.existsSync(prevBuildFile) ? readFileIntoProcessedArray(prevBuildFile) : Promise.resolve([]);
+    })())
     .bulkAddDomain(await span.traceChildPromise('get speedtest.test servers', getSpeedtestHostsGroupsPromise))
     .bulkAddDomain(await span.traceChildPromise('get librespeed backends', getLibrespeedBackendsPromise))
     .write()
