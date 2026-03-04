@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Reject Extra
-# Last Updated: 2026-03-04T10:04:08.055Z
-# Size: 82230
+# Last Updated: 2026-03-04T10:25:12.672Z
+# Size: 82240
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -886,6 +886,7 @@
 +.suawddlsmamci.website
 +.suamhsrqfuqle.website
 +.stxtocrtgkwgb.website
++.stxjrqrcxybwq.website
 +.stwwdyowpkzof.website
 +.stscczovfaipx.website
 +.stjzxkgygmznc.website
@@ -1551,6 +1552,7 @@
 +.njpwzgxksptql.website
 +.njpusnyeyzljn.website
 +.njjbetmhmfjon.website
++.njhgtstulgste.website
 +.njdapsyolatla.website
 +.njctyixrmclgc.website
 +.niwzwkovvakfn.website
@@ -5638,6 +5640,7 @@
 +.iskremtqgpjir.online
 +.iqtvvevbydoat.online
 +.iqrpmnofrcapi.online
++.iqdgdswynmgrp.online
 +.ipimsnjzdlevp.online
 +.ioyfmfjrtkpvt.online
 +.ioqnzknrqjqic.online
@@ -13677,6 +13680,7 @@
 +.msexpwlqpfcbr.site
 +.msaxsvykyvxuk.site
 +.mrzlfkyfmtwdn.site
++.mruxzqrysdqee.site
 +.mrutpcuemgqez.site
 +.mrsivqqtsnlcx.site
 +.mrpqqtuzjnkdc.site
@@ -15949,6 +15953,7 @@
 +.degenerthelium.qpon
 +.deftestromansh.qpon
 +.deedeedwrinkle.qpon
++.decodonbronzen.qpon
 +.cyphershaskard.qpon
 +.cutoutsscissel.qpon
 +.crownetsketchy.qpon
@@ -17164,6 +17169,7 @@
 +.amapapish.qpon
 +.tuthsand.qpon
 +.tuarthoc.qpon
++.sycomaun.qpon
 +.swiveiba.qpon
 +.ssuserau.qpon
 +.skalnona.qpon
@@ -48317,6 +48323,7 @@ otn.samsungcloudcdn.com
 +.seizureblade.com
 +.seitenaufruf.com
 +.sefeethameel.com
++.seeksgironny.com
 +.security60-e.com
 +.securerunner.com
 +.securefun420.com
@@ -56706,6 +56713,7 @@ gpm.samsungqbe.com
 +.167999d759.com
 +.f1e17919db.15b4a9d5e8.com
 +.15946bfe8d.com
++.158e65a1db.com
 +.153c349024.com
 +.486ebce767.1521f6cf6a.com
 +.150791bf69.com
@@ -57652,6 +57660,7 @@ gpm.samsungqbe.com
 samsungeurope.eu.qualtrics.com
 +.quaintcan.com
 +.qrlmining.com
++.qnrgspmds.com
 +.qloi-jjcl.com
 +.qasirgame.com
 +.q1connect.com
@@ -70233,6 +70242,7 @@ healthdata.hicloud.com
 +.phellumunused.cfd
 +.phajusabluent.cfd
 +.phagedaormazd.cfd
++.pencilsfactor.cfd
 +.peisergondola.cfd
 +.peasantexcess.cfd
 +.passeskannume.cfd
