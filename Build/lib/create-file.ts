@@ -1,10 +1,11 @@
 import { asyncWriteToStream } from 'foxts/async-write-to-stream';
 import { fastStringArrayJoin } from 'foxts/fast-string-array-join';
 import fs from 'node:fs';
+import path from 'node:path';
 import picocolors from 'picocolors';
 import type { Span } from '../trace';
 import { readFileByLine } from './fetch-text-by-line';
-import { writeFile } from './misc';
+import { mkdirp, writeFile } from './misc';
 import { createCompareSource, fileEqualWithCommentComparator } from 'foxts/compare-source';
 import { promisify } from 'node:util';
 
@@ -34,6 +35,9 @@ export async function compareAndWriteFile(span: Span, linesA: string[], filePath
     if (linesALen < 250) {
       return writeFile(filePath, fastStringArrayJoin(linesA, '\n'));
     }
+
+    const mkdirPromise = mkdirp(path.dirname(filePath));
+    if (mkdirPromise) await mkdirPromise;
 
     const writeStream = fs.createWriteStream(filePath);
     for (let i = 0; i < linesALen; i++) {
