@@ -39,6 +39,7 @@ jobs:
           echo "Build dir created at $BUILD_DIR"
           echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
       - name: Download Previous Build
+        continue-on-error: true
         uses: actions/checkout@v6
         with:
           repository: MoeYc/Surge
@@ -50,16 +51,12 @@ jobs:
       - name: Setup build folder
         run: |
           if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/.git ]; then
-            echo ".git not found"
-            exit 1
+            echo "gh-pages branch not found or checkout failed, will do a fresh build"
+          else
+            rm -rf "${{ steps.ramdisk.outputs.build_dir }}/.git"
+            echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
           fi
-          rm -rf "${{ steps.ramdisk.outputs.build_dir }}/.git"
-
-          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/List ]; then
-            echo "List not found"
-            exit 1
-          fi
-          echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
+          mkdir -p ${{ steps.ramdisk.outputs.build_dir }}
       - name: Get current date
         id: date
         run: |
