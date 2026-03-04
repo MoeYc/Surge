@@ -11,8 +11,8 @@ import { buildRejectDomainSet } from './build-reject-domainset';
 import { buildTelegramCIDR } from './build-telegram-cidr';
 import { buildChnCidr } from './build-chn-cidr';
 import { buildSpeedtestDomainSet } from './build-speedtest-domainset';
-import { buildInternalReverseChnCIDR } from './build-internal-reverse-chn-cidr';
 import { buildDomesticRuleset } from './build-domestic-direct-lan-ruleset-dns-mapping-module';
+import { buildGlobalRuleset } from './build-global-server-dns-mapping';
 import { buildStreamService } from './build-stream-service';
 
 import { buildRedirectModule } from './build-sgmodule-redirect';
@@ -30,6 +30,7 @@ import { createSpan, printTraceResult, whyIsNodeRunning } from './trace';
 import { buildDeprecateFiles } from './build-deprecate-files';
 import path from 'node:path';
 import { ROOT_DIR } from './constants/dir';
+import { isCI } from 'ci-info';
 
 process.on('uncaughtException', (error) => {
   console.error('Uncaught exception:', error);
@@ -60,6 +61,10 @@ const buildFinishedLock = path.join(ROOT_DIR, '.BUILD_FINISHED');
       .map((key) => `${key} x ${cpus[key]}`)
       .join('\n')
   }`);
+  if ('availableParallelism' in os) {
+    console.log(`Available parallelism: ${os.availableParallelism()}`);
+  }
+
   console.log(`Memory: ${os.totalmem() / (1024 * 1024)} MiB`);
 
   const rootSpan = createSpan('root');
@@ -69,6 +74,11 @@ const buildFinishedLock = path.join(ROOT_DIR, '.BUILD_FINISHED');
   }
 
   try {
+    // only enable why-is-node-running in GitHub Actions debug mode
+    if (isCI && process.env.RUNNER_DEBUG === '1') {
+      await import('why-is-node-running');
+    }
+
     const downloadPreviousBuildPromise = downloadPreviousBuild(rootSpan);
     const buildCommonPromise = downloadPreviousBuildPromise.then(() => buildCommon(rootSpan));
 
@@ -82,8 +92,8 @@ const buildFinishedLock = path.join(ROOT_DIR, '.BUILD_FINISHED');
       downloadPreviousBuildPromise.then(() => buildTelegramCIDR(rootSpan)),
       downloadPreviousBuildPromise.then(() => buildChnCidr(rootSpan)),
       downloadPreviousBuildPromise.then(() => buildSpeedtestDomainSet(rootSpan)),
-      buildInternalReverseChnCIDR(rootSpan),
       downloadPreviousBuildPromise.then(() => buildDomesticRuleset(rootSpan)),
+      downloadPreviousBuildPromise.then(() => buildGlobalRuleset(rootSpan)),
       downloadPreviousBuildPromise.then(() => buildRedirectModule(rootSpan)),
       downloadPreviousBuildPromise.then(() => buildAlwaysRealIPModule(rootSpan)),
       downloadPreviousBuildPromise.then(() => buildStreamService(rootSpan)),

@@ -123,6 +123,7 @@ const BAHAMUT: StreamService = {
 
     'DOMAIN-SUFFIX,bahamut.com.tw',
     'DOMAIN-SUFFIX,ani.gamer.com.tw',
+    'DOMAIN-SUFFIX,api.gamer.com.tw',
 
     'USER-AGENT,Anime*'
   ]
@@ -134,6 +135,7 @@ const BBC: StreamService = {
     'DOMAIN-SUFFIX,tvlicensing.co.uk',
     'DOMAIN-KEYWORD,bbcfmt',
     'DOMAIN-KEYWORD,uk-live',
+    'DOMAIN,bbc.mp-pxcdn.com', // CloudFront country blocking https://t.me/SURGEPRO/2669346
 
     'DOMAIN-SUFFIX,bbc.co.uk',
     'DOMAIN-SUFFIX,bbci.co.uk',
@@ -152,6 +154,14 @@ const BILIBILI_INTL: StreamService = {
     // upos-sz-mirroralibstar1.bilivideo.com, from domain bilivideo.com and without geoblocking
     'DOMAIN-SUFFIX,bilibili.tv',
     'PROCESS-NAME,com.bstar.intl'
+  ]
+};
+
+export const CRACKLE = {
+  name: 'Crackle',
+  rules: [
+    // 'DOMAIN,www.crackle.com', Hosted on S3, solely based on API to detect region
+    'DOMAIN,prod-api.crackle.com'
   ]
 };
 
@@ -282,7 +292,6 @@ const HBO: StreamService = {
     'DOMAIN-SUFFIX,hbomax.com',
     'DOMAIN-SUFFIX,hbomaxcdn.com',
 
-    // 'USER-AGENT,Max',
     // 'PROCESS-NAME,com.wbd.stream',
     'DOMAIN-SUFFIX,max.com',
     'DOMAIN-SUFFIX,discomax.com'
@@ -295,7 +304,10 @@ const HBO_ASIA: StreamService = {
     'DOMAIN-SUFFIX,hboasia.com',
     'DOMAIN-SUFFIX,hbogoasia.com',
     'DOMAIN-SUFFIX,hbogoasia.hk',
-    'DOMAIN-KEYWORD,.hbogoasia.',
+    'DOMAIN-SUFFIX,hbogoasia.id',
+    'DOMAIN-SUFFIX,hbogoasia.sg',
+    'DOMAIN-SUFFIX,hbogoasia.tw',
+    'DOMAIN-SUFFIX,hbogoasia.ph',
 
     'DOMAIN,44wilhpljf.execute-api.ap-southeast-1.amazonaws.com',
     // 'DOMAIN,bcbolthboa-a.akamaihd.net',
@@ -378,7 +390,7 @@ const IQIYI_GLOBAL: StreamService = {
     'DOMAIN,cache-video.iq.com',
     'DOMAIN,akmcdnoversea-tw.inter.ptqy.gitv.tv',
     'DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv',
-    'DOMAIN-SUFFIX,inter.iqiyi.com',
+    // 'DOMAIN-SUFFIX,inter.iqiyi.com', // matching domestic CDN lvbaiducdncmn.inter.iqiyi.com, baiducdnct.inter.iqiyi.com, etc.
     'DOMAIN-SUFFIX,intl-rcd.iqiyi.com',
     'DOMAIN-SUFFIX,intl-subscription.iqiyi.com',
     'DOMAIN-SUFFIX,intl.iqiyi.com'
@@ -435,7 +447,9 @@ const LITV: StreamService = {
   name: 'LiTV',
   rules: [
     'DOMAIN,litvfreemobile-hichannel.cdn.hinet.net',
-    'DOMAIN-SUFFIX,litv.tv'
+    'DOMAIN,ntdfreepc-tgc.cdn.hinet.net',
+    'DOMAIN,www.litv.tv',
+    'DOMAIN,cdi.ofiii.com' // Ofiii Free Movie
   ]
 };
 
@@ -777,7 +791,49 @@ const WETV: StreamService = {
 const VUDU: StreamService = {
   name: 'Vudu',
   rules: [
-    'DOMAIN-SUFFIX,vudu.com'
+    'DOMAIN,vudu.com',
+    'DOMAIN,athome.fandango.com'
+    // images2.vudu.com -- no geo block
+    // api.vudu.com -- no geo block
+  ]
+};
+
+const FRIDAY_TW: StreamService = {
+  name: 'Friday TW',
+  rules: [
+    // https://github.com/SukkaW/Surge/pull/74#issuecomment-3188450562
+    'DOMAIN,video.friday.tw',
+    'DOMAIN,ana.video.friday.tw' // Does't actually a detection, only a log report stuff and not actually being used anywhere
+  ]
+};
+
+const MANGAFOX: StreamService = {
+  name: 'MangaFox',
+  rules: [
+    'DOMAIN-SUFFIX,mangafox.me',
+    'DOMAIN-SUFFIX,fanfox.net'
+  ]
+};
+
+const TUBI_TV: StreamService = {
+  name: 'Tubi TV',
+  rules: [
+    'DOMAIN,tubi.tv',
+    'DOMAIN,www.tubi.tv',
+    'DOMAIN,tubitv.com',
+    'DOMAIN,www.tubitv.com',
+    'DOMAIN-SUFFIX,production-public.tubi.io'
+    // mcdn.tubi.tv -- no geo block
+    // canvas-lb.tubitv.com -- image CDN, also no geo blocking
+    // tubi.video -- streaming CDN, also no geo blocking
+  ]
+};
+
+const PLUTO_TV: StreamService = {
+  name: 'Pluto TV',
+  rules: [
+    'DOMAIN,pluto.tv',
+    'DOMAIN,www.pluto.tv'
   ]
 };
 
@@ -785,22 +841,23 @@ export const ALL: StreamService[] = [
   $4GTV,
   ABEMA_TV, AMAZON_PRIME_VIDEO, ALL4, APPLE_TV, APPLE_MUSIC_TV,
   BAHAMUT, BBC, BILIBILI_INTL,
+  CRACKLE,
   DAZN, DEEZER, DISNEY_PLUS, DISCOVERY_PLUS, DMM,
   ENCORE_TVB,
   ENCORE_TVB_JP_TVER,
-  FOX_NOW, FOX_PLUS,
+  FRIDAY_TW, FOX_NOW, FOX_PLUS,
   HBO, HBO_ASIA, HIMALAYA_FM, HULU, HWTV,
   IQIYI_GLOBAL, ITV,
   JOOX,
   KKBOX,
   KKTV,
-  LINE_TV, LITV,
-  MY5, MYTV_SUPER,
+  LINE_TV,
+  MANGAFOX, MY5, MYTV_SUPER,
   NETFLIX, NAVER_TV, NICONICO, NHK_PLUS, NOW_E,
   OVERCAST_FM,
-  PARAMOUNT, PBS, PEACOCK, PANDORA, PORNHUB,
+  PARAMOUNT, PBS, PEACOCK, PANDORA, PORNHUB, PLUTO_TV,
   SOUNDCLOUD, SHOWTIME, SPOTIFY,
-  TAIWAN_GOOD, TIDAL, TIKTOK, TVB_ANYWHERE, TWITCH,
+  TAIWAN_GOOD, TIDAL, TIKTOK, TVB_ANYWHERE, TWITCH, TUBI_TV,
   VIUTV, VUDU,
   WETV,
   YOUTUBE, YOUTUBE_MUSIC
@@ -828,14 +885,16 @@ export const NORTH_AMERICA: StreamService[] = [
   // https://setantasports.com/
   // tubitv.com
   // SlingTV
-  // PlutoTV
+  PLUTO_TV,
   // AcornTV
   SHOWTIME,
   ENCORE_TVB,
   // Funimation
   DISCOVERY_PLUS,
   PARAMOUNT,
-  PEACOCK
+  PEACOCK,
+  CRACKLE,
+  TUBI_TV
   // Popcornflix
   // Crunchyroll
   // ATTNOW
@@ -892,8 +951,10 @@ export const TW: StreamService[] = [
   // HamiVideo
   // CatchPlay
   HBO_ASIA,
-  BAHAMUT
-  // elevensportstw
+  BAHAMUT,
+  // elevensportstw,
+  FRIDAY_TW,
+  MANGAFOX
 ];
 
 export const JP: StreamService[] = [
@@ -946,6 +1007,7 @@ export const KR = [
 ];
 
 export const SOUTH_EAST_ASIA = [
+  MANGAFOX
   // HBO
   // B-Global SouthEastAsia
   // MeWatch SG

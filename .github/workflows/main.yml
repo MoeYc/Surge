@@ -20,36 +20,35 @@ jobs:
       platform: ${{ steps.enable_check.outputs.result }}
 
     steps:
-      - run: df -h
-      # - name: Tune GitHub-hosted runner network
-      #   # https://github.com/actions/runner-images/issues/1187
-      #   uses: smorimoto/tune-github-hosted-runner-network@v1
-      - uses: actions/checkout@v4
+      - uses: smorimoto/tune-github-hosted-runner-network@v1
+        # https://github.com/actions/runner-images/issues/1187
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           run_install: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: ".node-version"
           cache: "pnpm"
-      - name: Create RAM Disk for building
+      - name: Grab Building Folder
         id: ramdisk
         run: |
           BUILD_DIR=$(mktemp -d -p /dev/shm/ -t sakina-surge-public.XXXXXXXXXX)
           echo "Build dir created at $BUILD_DIR"
           echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
       - name: Download Previous Build
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: MoeYc/Surge
           ref: gh-pages
           persist-credentials: false
-          path: previous-build-${{ github.run_id }}-${{ github.run_number }}
+          filter: "tree:0" # we don't care about git history here
+          fetch-tags: false
+          path: ${{ steps.ramdisk.outputs.build_dir }}
       - name: Setup build folder
         run: |
-          mv previous-build-${{ github.run_id }}-${{ github.run_number }}/{.,}* ${{ steps.ramdisk.outputs.build_dir }}/
           if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/.git ]; then
             echo ".git not found"
             exit 1
@@ -72,7 +71,7 @@ jobs:
           echo "minute=$(date +'%M')" >> $GITHUB_OUTPUT
           echo "second=$(date +'%S')" >> $GITHUB_OUTPUT
       - name: Restore cache.db
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: cache-db-restore
         with:
           path: |
@@ -128,7 +127,7 @@ jobs:
           include-hidden-files: false
       - name: Cache cache.db
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             .cache
@@ -144,35 +143,7 @@ jobs:
             const cf = process.env.CLOUDFLARE_API_TOKEN ? 'cloudflare' : '';
             const ghpage = process.env.GITLAB_EMAIL ? 'gitlab' : '';
             return [cf, ghpage].join(',');
-  deploy_to_cloudflare_pages:
-    needs:
-      - build
-    name: Deploy to Cloudflare Pages
-    if: github.ref == 'refs/heads/master' && contains(needs.build.outputs.platform, 'cloudflare')
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - name: Get NPM cache directory path
-        id: npm_cache_path
-        shell: sh
-        run: echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
-      - name: Cache NPM cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ steps.npm_cache_path.outputs.dir }}
-            node_modules
-          key: ${{ runner.os }}-${{ runner.arch }}-deploy-to-cloudflare-npm
-      - uses: actions/download-artifact@v4
-        with:
-          name: build-artifact-${{ github.ref_name }}
-          path: public
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=sukkaw-ruleset --commit-dirty=true --branch=main
-          wranglerVersion: '3.81.0'
+
   deploy_to_github_gitlab:
     needs:
       - build
@@ -180,9 +151,9 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
-          name: build-artifact-${{ github.ref_name }}
+          name: build-artifact-${{ github.sha }}-${{ github.run_number }}
           path: public
       - name: Upload Dist to GitLab
         if: contains(needs.build.outputs.platform, 'gitlab')

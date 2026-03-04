@@ -36,13 +36,11 @@ export const downloadPreviousBuild = task(require.main === module, __filename)(a
       {
         method: 'GET',
         headers: {
-          'User-Agent': 'curl/8.9.1',
+          'User-Agent': 'curl/8.12.1',
           // https://github.com/unjs/giget/issues/97
           // https://gitlab.com/gitlab-org/gitlab/-/commit/50c11f278d18fe1f3fb12eb595067216bb58ade2
           'sec-fetch-mode': 'same-origin'
-        },
-        // Allow redirects by default
-        maxRedirections: 5
+        }
       },
       ({ statusCode, body }) => {
         if (statusCode !== 200) {
@@ -60,33 +58,30 @@ export const downloadPreviousBuild = task(require.main === module, __filename)(a
 
     const pathPrefix = 'ruleset.skk.moe-master/';
 
-    const gunzip = zlib.createGunzip();
-    const extract = tarExtract(
-      PUBLIC_DIR,
-      {
-        ignore(_: string, header?: TarEntryHeaders) {
-          if (header) {
-            if (header.type !== 'file' && header.type !== 'directory') {
-              return true;
-            }
-            if (header.type === 'file' && path.extname(header.name) === '.ts') {
-              return true;
-            }
-          }
-
-          return false;
-        },
-        map(header) {
-          header.name = header.name.replace(pathPrefix, '');
-          return header;
-        }
-      }
-    );
-
     return pipeline(
       respBody,
-      gunzip,
-      extract
+      zlib.createGunzip(),
+      tarExtract(
+        PUBLIC_DIR,
+        {
+          ignore(_: string, header?: TarEntryHeaders) {
+            if (header) {
+              if (header.type !== 'file' && header.type !== 'directory') {
+                return true;
+              }
+              if (header.type === 'file' && path.extname(header.name) === '.ts') {
+                return true;
+              }
+            }
+
+            return false;
+          },
+          map(header) {
+            header.name = header.name.replace(pathPrefix, '');
+            return header;
+          }
+        }
+      )
     );
   });
 });

@@ -5,7 +5,49 @@ import tldts from 'tldts';
 import { normalizeTldtsOpt } from '../constants/loose-tldts-opt';
 import { isProbablyIpv4, isProbablyIpv6 } from 'foxts/is-probably-ip';
 
-type TldTsParsed = ReturnType<typeof tldts.parse>;
+export type TldTsParsed = ReturnType<typeof tldts.parse>;
+
+/**
+ * Skipped the input non-empty check, the `domain` should not be empty.
+ */
+function fastNormalizeDomainWithoutWwwNoIP(domain: string, parsed: TldTsParsed | null = null) {
+  // We don't want tldts to call its own "extractHostname" on ip, bail out ip first.
+  // This function won't run with IP, we can safely set normalizeTldtsOpt.detectIp to false.
+
+  parsed ??= tldts.parse(domain, normalizeTldtsOpt);
+  // Private invalid domain (things like .tor, .dn42, etc)
+  if (!parsed.isIcann && !parsed.isPrivate) return null;
+
+  if (parsed.subdomain) {
+    if (
+      parsed.subdomain === 'www'
+      || parsed.subdomain === 'xml-v4'
+      || parsed.subdomain === 'xml-eu'
+      || parsed.subdomain === 'xml-eu-v4'
+      // || (parsed.subdomain.length === 4 && parsed.subdomain.startsWith('www'))
+    ) {
+      return parsed.domain;
+    }
+    if (parsed.subdomain.startsWith('www.')) {
+      return parsed.subdomain.slice(4) + '.' + parsed.domain;
+    }
+  }
+
+  return parsed.hostname;
+}
+
+/**
+ * Skipped the input non-empty check, the `domain` should not be empty.
+ */
+export function fastNormalizeDomainWithoutWww(domain: string, parsed: TldTsParsed | null = null) {
+  // We don't want tldts to call its own "extractHostname" on ip, bail out ip first.
+  // Now ip has been bailed out, we can safely set normalizeTldtsOpt.detectIp to false.
+  if (isProbablyIpv4(domain) || isProbablyIpv6(domain)) {
+    return null;
+  }
+
+  return fastNormalizeDomainWithoutWwwNoIP(domain, parsed);
+}
 
 /**
  * Skipped the input non-empty check, the `domain` should not be empty.
@@ -21,24 +63,6 @@ export function fastNormalizeDomain(domain: string, parsed: TldTsParsed | null =
   // Private invalid domain (things like .tor, .dn42, etc)
   if (!parsed.isIcann && !parsed.isPrivate) return null;
 
-  return parsed.hostname;
-}
-
-export function fastNormalizeDomainIgnoreWww(domain: string, parsed: TldTsParsed | null = null) {
-  // We don't want tldts to call its own "extractHostname" on ip, bail out ip first.
-  // Now ip has been bailed out, we can safely set normalizeTldtsOpt.detectIp to false.
-  if (isProbablyIpv4(domain) || isProbablyIpv6(domain)) {
-    return null;
-  }
-
-  parsed ??= tldts.parse(domain, normalizeTldtsOpt);
-
-  // Private invalid domain (things like .tor, .dn42, etc)
-  if (!parsed.isIcann && !parsed.isPrivate) return null;
-
-  if (parsed.subdomain === 'www') {
-    return parsed.domain;
-  }
   return parsed.hostname;
 }
 

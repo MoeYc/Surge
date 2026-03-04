@@ -1,89 +1,82 @@
-import { readFileByLine } from './lib/fetch-text-by-line';
-import { processLine } from './lib/process-line';
-
 import { SOURCE_DIR } from './constants/dir';
 import path from 'node:path';
-import { newQueue } from '@henrygd/queue';
-import { isDomainAlive, keyedAsyncMutexWithQueue } from './lib/is-domain-alive';
+import { getMethods } from './lib/is-domain-alive';
 import { fdir as Fdir } from 'fdir';
+import runAgainstSourceFile from './lib/run-against-source-file';
 
-const queue = newQueue(24);
+import cliProgress from 'cli-progress';
+import { newQueue } from '@henrygd/queue';
+
+const queue = newQueue(32);
 
 const deadDomains: string[] = [];
-function onDomain(args: [string, boolean]) {
-  if (!args[1]) {
-    deadDomains.push(args[0]);
-  }
-}
 
 (async () => {
-  const domainSets = await new Fdir()
-    .withFullPaths()
-    .crawl(SOURCE_DIR + path.sep + 'domainset')
-    .withPromise();
-  const domainRules = await new Fdir()
-    .withFullPaths()
-    .crawl(SOURCE_DIR + path.sep + 'non_ip')
-    .withPromise();
+  const [
+    { isDomainAlive, isRegisterableDomainAlive },
+    domainSets,
+    domainRules
+  ] = await Promise.all([
+    getMethods(),
+    new Fdir()
+      .withFullPaths()
+      .filter((filePath, isDirectory) => {
+        if (isDirectory) return false;
+        const extname = path.extname(filePath);
+        return extname === '.txt' || extname === '.conf';
+      })
+      .crawl(SOURCE_DIR + path.sep + 'domainset')
+      .withPromise(),
+    new Fdir()
+      .withFullPaths()
+      .filter((filePath, isDirectory) => {
+        if (isDirectory) return false;
+        const extname = path.extname(filePath);
+        return extname === '.txt' || extname === '.conf';
+      })
+      .crawl(SOURCE_DIR + path.sep + 'non_ip')
+      .withPromise()
+  ]);
+
+  const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  bar.start(0, 0);
 
   await Promise.all([
-    ...domainSets.map(runAgainstDomainset),
-    ...domainRules.map(runAgainstRuleset)
-  ]);
+    ...domainRules,
+    ...domainSets
+  ].map(filepath => runAgainstSourceFile(
+    filepath,
+    (domain: string, includeAllSubdomain: boolean) => {
+      bar.setTotal(bar.getTotal() + 1);
+
+      return queue.add(async () => {
+        let registerableDomainAlive, registerableDomain, alive: boolean | undefined;
+
+        if (includeAllSubdomain) {
+          // we only need to check apex domain, because we don't know if there is any stripped subdomain
+          ({ alive: registerableDomainAlive, registerableDomain } = await isRegisterableDomainAlive(domain));
+        } else {
+          ({ alive, registerableDomainAlive, registerableDomain } = await isDomainAlive(domain));
+        }
+
+        bar.increment();
+
+        if (!registerableDomainAlive) {
+          if (registerableDomain) {
+            deadDomains.push('.' + registerableDomain);
+          }
+        } else if (!includeAllSubdomain && alive != null && !alive) {
+          deadDomains.push(domain);
+        }
+      });
+    }
+  ).then(() => console.log('[crawl]', filepath))));
+
+  await queue.done();
+
+  bar.stop();
 
   console.log();
   console.log();
   console.log(JSON.stringify(deadDomains));
 })();
-
-export async function runAgainstRuleset(filepath: string) {
-  const extname = path.extname(filepath);
-  if (extname !== '.conf') {
-    console.log('[skip]', filepath);
-    return;
-  }
-
-  const promises: Array<Promise<void>> = [];
-
-  for await (const l of readFileByLine(filepath)) {
-    const line = processLine(l);
-    if (!line) continue;
-    const [type, domain] = line.split(',');
-    switch (type) {
-      case 'DOMAIN-SUFFIX':
-      case 'DOMAIN': {
-        promises.push(
-          queue.add(() => keyedAsyncMutexWithQueue(domain, () => isDomainAlive(domain, type === 'DOMAIN-SUFFIX')))
-            .then(onDomain)
-        );
-        break;
-      }
-      // no default
-    }
-  }
-
-  await Promise.all(promises);
-  console.log('[done]', filepath);
-}
-
-export async function runAgainstDomainset(filepath: string) {
-  const extname = path.extname(filepath);
-  if (extname !== '.conf') {
-    console.log('[skip]', filepath);
-    return;
-  }
-
-  const promises: Array<Promise<void>> = [];
-
-  for await (const l of readFileByLine(filepath)) {
-    const line = processLine(l);
-    if (!line) continue;
-    promises.push(
-      queue.add(() => keyedAsyncMutexWithQueue(line, () => isDomainAlive(line, line[0] === '.')))
-        .then(onDomain)
-    );
-  }
-
-  await Promise.all(promises);
-  console.log('[done]', filepath);
-}

@@ -1,6 +1,6 @@
 # Sukka Ruleset
 
-由 [Sukka](https://skk.moe) 搜集、整理、维护的、个人自用的、适用于 [Surge](https://nssurge.com/)、[Clash Meta (mihomo)](https://wiki.metacubex.one/) 和 [sing-box](https://sing-box.sagernet.org/) 的 Ruleset Snippet。
+由 [Sukka](https://skk.moe) 搜集、整理、维护的、个人自用的、适用于 [Surge](https://nssurge.com/)、[Clash Meta (mihomo)](https://wiki.metacubex.one/)、[Clash Premium (Dreamacro)](https://web.archive.org/web/20230521135419/https://dreamacro.github.io/clash/premium/rule-providers.html)、[sing-box](https://sing-box.sagernet.org/)、[Surfboard for Android](https://getsurfboard.com) 和 [Stash](https://stash.ws/) 的 Ruleset Snippet。
 
 ## 条款和协议
 
@@ -10,13 +10,45 @@
 
 如果你从 Sukka 提供的 Ruleset Server（[`https://ruleset.skk.moe`](https://ruleset.skk.moe)）获取本项目中的规则组文件，则意味着你已知晓并同意 [隐私政策](https://skk.moe/privacy-policy/) 中的所有条款。如果你不同意，请通过 GitHub 获取本项目中的源码、自行构建规则组文件。
 
+## 镜像
+
+`ruleset.skk.moe` 是由 Sukka 提供的 Ruleset Server，由 Cloudflare 驱动。但是由于众所周知的原因、Cloudflare 的节点在中国大陆的访问速度和稳定性都不理想。目前，Sukka Ruleset 提供了以下官方镜像：
+
+- `ruleset-mirror.skk.moe`：由 Sukka 维护。
+
+为了改善访问速度和稳定性，欢迎大家搭建镜像、从以下 Git 仓库同步更新：
+
+- https://github.com/SukkaLab/ruleset.skk.moe
+- https://gitlab.com/SukkaW/ruleset.skk.moe
+
 ## 规则组列表
+
+- **Surge (Mac/iOS/tvOS)**，Surge 对所有类型的规则都有不同程度的优化
+  - `/List/domainset/`：`DOMAIN-SET`，不会触发 DNS 解析的、仅包含域名的规则组
+  - `/List/non_ip/`：`RULE-SET`，不会触发 DNS 解析的规则组
+  - `/List/ip/`：`RULE-SET`，会触发 DNS 解析的规则组
+- **Mihomo (Clash.Meta)**
+  - `/Clash/domainset/`：`domain & text`，不会触发 DNS 解析的、仅域名的规则组截至 2025 年 5 月 3 日 UTC+0，Mihomo 仅针对 behavior 为 domain 和 ipcidr 的规则组进行了优化
+  - `/Clash/non_ip/`：`classical & text`，不会触发 DNS 解析的规则组
+  - `/Clash/ip/`：`classical & text` 或 `ipcidr & text`，会触发 DNS 解析的规则组
+- **Clash Premium (Dreamacro)**
+  - 不单独提供 `/LegacyClashPremium/domainset/` 的 DOMAIN SET 的格式，请使用 Mihomo (Clash.Meta) 的 DOMAIN SET 规则组（`/Clash/domainset/`），behavior 和 format 一致。
+  - `/LegacyClashPremium/non_ip/`：`classical & text`，不会触发 DNS 解析的规则组
+  - `/LegacyClashPremium/ip/`：`classical & text` 或 `ipcidr & text`，会触发 DNS 解析的规则组
+- **sing-box**，sing-box 只提供一种规则格式 Headless Rule 且有优化
+  - `/sing-box/domainset/`：不会触发 DNS 解析的、仅包含域名的规则
+  - `/sing-box/non_ip/`：不会触发 DNS 解析的规则
+  - `/sing-box/ip/`：会触发 DNS 解析的规则
+- **Surfboard for Android**
+  - 不单独提供 `/Surfboard/domainset/` 的 DOMAIN-SET，请使用 Surge 的 DOMAIN SET 规则组（`/List/domainset/`）。
+  - `/Surfboard/non_ip/`：`RULE-SET`，不会触发 DNS 解析的规则
+  - `/Surfboard/ip/`：`RULE-SET`，会触发 DNS 解析的规则
 
 **请务必按照 `domainset`、`non_ip`、`ip`，和 README 中的顺序 将规则组添加到你的配置文件中，确保所有 `domainset` 或 `non_ip` 规则组 位于所有的 `ip` 规则组之前**。
 
-> Surge 和 Clash 会按照规则在配置中的顺序、从上到下逐一匹配，当且仅当进行 IP 规则的匹配、FINAL、或 direct 策略时，才会进行 DNS 解析。按照一定的顺序添加规则组，可以避免不必要的 DNS 解析。
+> Surge、Clash、Surfboard 会按照规则在配置中的顺序、从上到下逐一匹配，当且仅当进行 IP 规则的匹配、FINAL、或 direct 策略时，才会进行 DNS 解析。按照一定的顺序添加规则组，可以避免本地发生不必要的 DNS 解析、从而提供一定程度的所谓「DNS 污染」的保护。
 
-#### 广告拦截 / 隐私保护 / Malware 拦截 / Phiishing 拦截
+#### 广告拦截 / 隐私保护 / Malware 拦截 / Phishing 拦截
 
 - 自动生成
 - 数据来源、白名单域名列表和生成方式，请参考 [`build-reject-domainset.ts`](Build/build-reject-domainset.ts)
@@ -27,14 +59,17 @@
 
 ```ini
 # Non IP
-# 基础的 12 万拦截域名
-DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject.conf,REJECT,extended-matching,pre-matching
-# 额外 20 万拦截域名，作为基础的补充，启用时需要搭配基础一起使用
-# 在 Surge 5 for Mac（或更新版本），即使同时启用基础和额外的拦截域名也不会导致匹配性能下降或内存占用过高
-DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject_extra.conf,REJECT,pre-matching
-RULE-SET,https://ruleset.skk.moe/List/non_ip/reject.conf,REJECT,extended-matching,pre-matching
-RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-no-drop.conf,REJECT-NO-DROP,extended-matching,pre-matching
 RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-drop.conf,REJECT-DROP,pre-matching
+
+# 基础的 12 万拦截域名
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject.conf,REJECT,extended-matching
+# 额外 9 万拦截域名，作为基础的补充，启用时需要搭配基础一起使用
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject_extra.conf,REJECT
+# 钓鱼网站拦截域名列表，共 13 万拦截域名
+# 在 Surge 5 for Mac（或更新版本），即使同时启用基础和额外的拦截域名也不会导致匹配性能下降或内存占用过高
+# DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject_phishing.conf,REJECT
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject.conf,REJECT,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-no-drop.conf,REJECT-NO-DROP,extended-matching
 # URL-REGEX
 # 需搭配 Surge 模块 https://ruleset.skk.moe/Modules/sukka_mitm_hostnames.sgmodule 使用
 # MITM 和 URL-REGEX 性能开销极大，不推荐使用
@@ -93,14 +128,14 @@ rule-providers:
     path: ./sukkaw_ruleset/reject_ip.txt
 
 rules:
-  - RULE-SET,reject_non_ip,REJECT
+  - RULE-SET,reject_non_ip_drop,REJECT-DROP
 
   - RULE-SET,reject_domainset,REJECT
   - RULE-SET,reject_extra_domainset,REJECT
+  - RULE-SET,reject_non_ip,REJECT
 
-  - RULE-SET,reject_ip,REJECT
-  - RULE-SET,reject_non_ip_drop,REJECT-DROP
   - RULE-SET,reject_non_ip_no_drop,REJECT
+  - RULE-SET,reject_ip,REJECT
 ```
 
 #### 搜狗输入法
@@ -141,7 +176,23 @@ rules:
 **Surge**
 
 ```ini
-DOMAIN-SET,https://ruleset.skk.moe/List/domainset/speedtest.conf,[替换你的策略名],extended-matching
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/speedtest.conf,[Replace with your policy],extended-matching
+```
+
+**Clash Meta**
+
+```yaml
+rule-providers:
+  speedtest:
+    type: http
+    behavior: domain
+    format: text
+    interval: 43200
+    url: https://ruleset.skk.moe/Clash/domainset/speedtest.txt
+    path: ./sukkaw_ruleset/speedtest.txt
+
+rules:
+  - RULE-SET,speedtest,[Replace with your policy]
 ```
 
 #### 常见静态 CDN
@@ -350,6 +401,7 @@ rules:
 
 ```ini
 RULE-SET,https://ruleset.skk.moe/List/non_ip/ai.conf,[Replace with your policy]
+RULE-SET,https://ruleset.skk.moe/List/non_ip/apple_intelligence.conf,[Replace with your policy],extended-matching
 ```
 
 **Clash Meta**
@@ -363,9 +415,17 @@ rule-providers:
     interval: 43200
     url: https://ruleset.skk.moe/Clash/non_ip/ai.txt
     path: ./sukkaw_ruleset/ai_non_ip.txt
+  apple_intelligence_non_ip:
+    type: http
+    behavior: classical
+    format: text
+    interval: 43200
+    url: https://ruleset.skk.moe/Clash/non_ip/apple_intelligence.txt
+    path: ./sukkaw_ruleset/apple_intelligence_non_ip.txt
 
 rules:
   - RULE-SET,ai_non_ip,[Replace with your policy]
+  - RULE-SET,apple_intelligence_non_ip,[Replace with your policy]
 ```
 
 #### Telegram
@@ -665,7 +725,7 @@ rules:
 ```ini
 RULE-SET,https://ruleset.skk.moe/List/non_ip/domestic.conf,[Replace with your policy]
 RULE-SET,https://ruleset.skk.moe/List/non_ip/direct.conf,[Replace with your policy]
-RULE-SET,https://ruleset.skk.moe/List/non_ip/global.conf,PROXY
+RULE-SET,https://ruleset.skk.moe/List/non_ip/global.conf,[Replace with your policy]
 RULE-SET,https://ruleset.skk.moe/List/ip/domestic.conf,[Replace with your policy]
 ```
 

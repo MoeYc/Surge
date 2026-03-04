@@ -1,14 +1,16 @@
 import path from 'node:path';
 import { task } from './trace';
-import { compareAndWriteFile, DomainsetOutput } from './lib/create-file';
+import { compareAndWriteFile } from './lib/create-file';
 import { DIRECTS, LAN } from '../Source/non_ip/direct';
 import type { DNSMapping } from '../Source/non_ip/direct';
 import { DOMESTICS, DOH_BOOTSTRAP } from '../Source/non_ip/domestic';
 import * as yaml from 'yaml';
 import { OUTPUT_INTERNAL_DIR, OUTPUT_MODULES_DIR } from './constants/dir';
-import { appendArrayInPlace } from './lib/append-array-in-place';
+import { appendArrayInPlace } from 'foxts/append-array-in-place';
 import { SHARED_DESCRIPTION } from './constants/description';
 import { createGetDnsMappingRule } from './build-domestic-direct-lan-ruleset-dns-mapping-module';
+import { ClashDomainSet } from './lib/writing-strategy/clash';
+import { FileOutput } from './lib/rules/base';
 
 const HOSTNAMES = [
   // Network Detection, Captive Portal
@@ -24,7 +26,7 @@ const HOSTNAMES = [
   '*.turn.twilio.com',
   '*.stun.twilio.com',
   'stun.syncthing.net',
-  'stun.*'
+  'stun.*',
   // 'controlplane.tailscale.com',
   // NTP
   // 'time.*.com', 'time.*.gov', 'time.*.edu.cn', 'time.*.apple.com', 'time?.*.com', 'ntp.*.com', 'ntp?.*.com', '*.time.edu.cn', '*.ntp.org.cn', '*.pool.ntp.org'
@@ -34,16 +36,27 @@ const HOSTNAMES = [
   // 'localhost.ptlogin2.qq.com
   // 'localhost.sec.qq.com',
   // 'localhost.work.weixin.qq.com',
+  '127.*.*.*.sslip.io',
+  '127-*-*-*.sslip.io',
+  '*.127.*.*.*.sslip.io',
+  '*-127-*-*-*.sslip.io',
+  '127.*.*.*.nip.io',
+  '127-*-*-*.nip.io',
+  '*.127.*.*.*.nip.io',
+  '*-127-*-*-*.nip.io'
 ];
 
 export const buildAlwaysRealIPModule = task(require.main === module, __filename)(async (span) => {
   const surge: string[] = [];
-  const clashFakeIpFilter = new DomainsetOutput(span, 'clash_fake_ip_filter')
+  const clashFakeIpFilter = new FileOutput(span, 'clash_fake_ip_filter')
     .withTitle('Sukka\'s Ruleset - Always Real IP Plus')
     .withDescription([
       ...SHARED_DESCRIPTION,
       '',
       'Clash.Meta fake-ip-filter as ruleset'
+    ])
+    .withStrategies([
+      new ClashDomainSet('domainset')
     ]);
 
   // Intranet, Router Setup, and mant more
@@ -75,7 +88,6 @@ export const buildAlwaysRealIPModule = task(require.main === module, __filename)
       ],
       path.resolve(OUTPUT_MODULES_DIR, 'sukka_common_always_realip.sgmodule')
     ),
-    clashFakeIpFilter.writeClash(),
     compareAndWriteFile(
       span,
       yaml.stringify(
@@ -83,7 +95,16 @@ export const buildAlwaysRealIPModule = task(require.main === module, __filename)
           dns: {
             'fake-ip-filter': appendArrayInPlace(
               /** clash */
-              dataset.flatMap(({ domains }) => domains.map((domain) => `+.${domain}`)),
+              dataset.flatMap(({ domains }) => domains.map((domain) => {
+                switch (domain[0]) {
+                  case '$':
+                    return domain.slice(1);
+                  case '+':
+                    return '+.' + domain.slice(1);
+                  default:
+                    return domain;
+                }
+              })),
               HOSTNAMES
             )
           }

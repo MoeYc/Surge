@@ -21,9 +21,10 @@ export function processLine(line: string): string | null {
   if (line_0 === 35 /** # */) {
     if (trimmed.charCodeAt(1) !== 35 /** # */) {
       // # Comment
+      // AdGuard Rule like #@.not_ad
       return null;
     }
-    if (trimmed.charCodeAt(2) === 35 /** # */ && trimmed.charCodeAt(3) === 35) {
+    if (trimmed.charCodeAt(2) === 35 /** # */ && trimmed.charCodeAt(3) === 35 /** # */) {
       // ################## EOF ##################
       return null;
     }

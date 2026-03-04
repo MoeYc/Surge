@@ -5,118 +5,81 @@ import { task } from './trace';
 import { SHARED_DESCRIPTION } from './constants/description';
 import { readFileIntoProcessedArray } from './lib/fetch-text-by-line';
 
-import { DomainsetOutput } from './lib/create-file';
+import { DomainsetOutput } from './lib/rules/domainset';
 import { OUTPUT_SURGE_DIR, SOURCE_DIR } from './constants/dir';
-import { newQueue } from '@henrygd/queue';
 import { $$fetch } from './lib/fetch-retry';
 
-const KEYWORDS = [
-  'Hong Kong',
-  'Taiwan',
-  'China Telecom',
-  'China Mobile',
-  'China Unicom',
-  'Japan',
-  'Tokyo',
-  'Singapore',
-  'Korea',
-  'Seoul',
-  'Canada',
-  'Toronto',
-  'Montreal',
-  'Los Ang',
-  'San Jos',
-  'Seattle',
-  'New York',
-  'Dallas',
-  'Miami',
-  'Berlin',
-  'Frankfurt',
-  'London',
-  'Paris',
-  'Amsterdam',
-  'Moscow',
-  'Australia',
-  'Sydney',
-  'Brazil',
-  'Turkey'
-];
+import { fastUri } from 'fast-uri';
 
-const s = newQueue(2);
+interface SpeedTestServer {
+  url: string,
+  lat: string,
+  lon: string,
+  distance: number,
+  name: string,
+  country: string,
+  cc: string,
+  sponsor: string,
+  id: string,
+  preferred: number,
+  https_functional: number,
+  host: string
+}
 
-const latestTopUserAgentsPromise = $$fetch('https://raw.githubusercontent.com/microlinkhq/top-user-agents/master/src/desktop.json')
-  .then(res => res.json() as Promise<string[]>)
-  .then((userAgents: string[]) => userAgents.filter(ua => ua.startsWith('Mozilla/5.0 ')));
-const getSpeedtestHostsGroupsPromise = Promise.all(KEYWORDS.flatMap(querySpeedtestApi));
+const getSpeedtestHostsGroupsPromise = $$fetch('https://speedtest-net-servers.cdn.skk.moe/servers.json')
+  .then(res => res.json() as Promise<SpeedTestServer[]>)
+  .then((data) => data.reduce<string[]>((prev, cur) => {
+    let hn: string | null | undefined = null;
+    if (cur.host) {
+      hn = tldts.getHostname(cur.host, { detectIp: false, validateHostname: true });
+      if (hn) {
+        prev.push(hn.trim()); // speedtest API typo: "url":"http:// t4y-toronto-ca-osts1.ser.tek4you.ca:8080/speedtest/upload.php"
+      }
+    }
+    if (cur.url) {
+      hn = fastUri.parse(cur.url).host;
+      if (hn) {
+        prev.push(hn.trim()); // speedtest API typo: "url":"http:// t4y-toronto-ca-osts1.ser.tek4you.ca:8080/speedtest/upload.php"
+      }
+    }
+    return prev;
+  }, []));
 
-export const buildSpeedtestDomainSet = task(require.main === module, __filename)(async (span) => {
-  const output = new DomainsetOutput(span, 'speedtest')
+interface LibreSpeedServerInfo {
+  name: string,
+  dlURL: string,
+  ulURL: string,
+  pingURL: string,
+  getIpURL: string,
+  server: string,
+  sponsorName: string
+}
+
+const getLibrespeedBackendsPromise = $$fetch('https://speedtest-net-servers.cdn.skk.moe/librespeed-servers.json')
+  .then(res => res.json() as Promise<LibreSpeedServerInfo[]>)
+  .then((data) => data.reduce<string[]>((prev, cur) => {
+    let hn: string | null | undefined = null;
+    if (cur.server) {
+      hn = fastUri.parse(cur.server).host;
+      if (hn) {
+        prev.push(hn.trim());
+      }
+    }
+
+    return prev;
+  }, []));
+
+export const buildSpeedtestDomainSet = task(require.main === module, __filename)(
+  async (span) => new DomainsetOutput(span, 'speedtest')
     .withTitle('Sukka\'s Ruleset - Speedtest Domains')
-    .withDescription([
-      ...SHARED_DESCRIPTION,
+    .appendDescription(
+      SHARED_DESCRIPTION,
       '',
       'This file contains common speedtest endpoints.'
-    ])
-    .addFromDomainset(await readFileIntoProcessedArray(path.resolve(SOURCE_DIR, 'domainset/speedtest.conf')))
-    .addFromDomainset(
-      (await readFileIntoProcessedArray(path.resolve(OUTPUT_SURGE_DIR, 'domainset/speedtest.conf')))
-        .reduce<string[]>((acc, cur) => {
-          const hn = tldts.getHostname(cur, { detectIp: false, validateHostname: true });
-          if (hn) {
-            acc.push(hn);
-          }
-          return acc;
-        }, [])
-    );
-
-  const hostnameGroup = await span.traceChildPromise('get speedtest hosts groups', getSpeedtestHostsGroupsPromise);
-
-  hostnameGroup.forEach(hostname => output.bulkAddDomain(hostname));
-  await output.done();
-
-  return output.write();
-});
-
-async function querySpeedtestApi(keyword: string) {
-  const topUserAgents = await latestTopUserAgentsPromise;
-
-  const url = `https://www.speedtest.net/api/js/servers?engine=js&search=${keyword}&limit=100`;
-
-  try {
-    const randomUserAgent = topUserAgents[Math.floor(Math.random() * topUserAgents.length)];
-
-    const data = await s.add<Array<{ url: string, host: string }>>(() => $$fetch(url, {
-      headers: {
-        dnt: '1',
-        Referer: 'https://www.speedtest.net/',
-        accept: 'application/json, text/plain, */*',
-        'User-Agent': randomUserAgent,
-        'Accept-Language': 'en-US,en;q=0.9',
-        ...(randomUserAgent.includes('Chrome')
-          ? {
-            'Sec-Ch-Ua-Mobile': '?0',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Gpc': '1'
-          }
-          : {})
-      },
-      signal: AbortSignal.timeout(1000 * 60)
-    }).then(res => res.json() as any));
-
-    return data.reduce<string[]>(
-      (prev, cur) => {
-        const hn = tldts.getHostname(cur.host || cur.url, { detectIp: false, validateHostname: true });
-        if (hn) {
-          prev.push(hn);
-        }
-        return prev;
-      },
-      []
-    );
-  } catch (e) {
-    console.error(e);
-    return [];
-  }
-}
+    )
+    .addFromDomainset(readFileIntoProcessedArray(path.resolve(SOURCE_DIR, 'domainset/speedtest.conf')))
+    .addFromDomainset(readFileIntoProcessedArray(path.resolve(OUTPUT_SURGE_DIR, 'domainset/speedtest.conf')))
+    .bulkAddDomain(await span.traceChildPromise('get speedtest.test servers', getSpeedtestHostsGroupsPromise))
+    .bulkAddDomain(await span.traceChildPromise('get librespeed backends', getLibrespeedBackendsPromise))
+    .write()
+);

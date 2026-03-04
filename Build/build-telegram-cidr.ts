@@ -1,39 +1,11 @@
 // @ts-check
-import { createReadlineInterfaceFromResponse } from './lib/fetch-text-by-line';
-import { isProbablyIpv4, isProbablyIpv6 } from 'foxts/is-probably-ip';
 import { task } from './trace';
 import { SHARED_DESCRIPTION } from './constants/description';
-import { createMemoizedPromise } from './lib/memo-promise';
-import { RulesetOutput } from './lib/create-file';
-import { $$fetch } from './lib/fetch-retry';
-
-export const getTelegramCIDRPromise = createMemoizedPromise(async () => {
-  const resp = await $$fetch('https://core.telegram.org/resources/cidr.txt');
-  const lastModified = resp.headers.get('last-modified');
-  const date = lastModified ? new Date(lastModified) : new Date();
-
-  const ipcidr: string[] = [
-    // Telegram secret backup CIDR, announced by AS62041
-    // see also https://github.com/Telegram-FOSS-Team/Telegram-FOSS/blob/10da5406ed92d30c6add3b25d40b2b3b6995d873/TMessagesProj/src/main/java/org/telegram/tgnet/ConnectionsManager.java#L1157
-    '95.161.64.0/20'
-  ];
-  const ipcidr6: string[] = [];
-
-  for await (const cidr of createReadlineInterfaceFromResponse(resp, true)) {
-    const [subnet] = cidr.split('/');
-    if (isProbablyIpv4(subnet)) {
-      ipcidr.push(cidr);
-    }
-    if (isProbablyIpv6(subnet)) {
-      ipcidr6.push(cidr);
-    }
-  }
-
-  return { date, ipcidr, ipcidr6 };
-});
+import { RulesetOutput } from './lib/rules/ruleset';
+import { getTelegramCIDRPromise } from './lib/get-telegram-backup-ip';
 
 export const buildTelegramCIDR = task(require.main === module, __filename)(async (span) => {
-  const { date, ipcidr, ipcidr6 } = await span.traceChildAsync('get telegram cidr', getTelegramCIDRPromise);
+  const { timestamp, ipcidr, ipcidr6 } = await span.traceChildAsync('get telegram cidr', getTelegramCIDRPromise);
 
   if (ipcidr.length + ipcidr6.length === 0) {
     throw new Error('Failed to fetch data!');
@@ -48,7 +20,10 @@ export const buildTelegramCIDR = task(require.main === module, __filename)(async
   return new RulesetOutput(span, 'telegram', 'ip')
     .withTitle('Sukka\'s Ruleset - Telegram IP CIDR')
     .withDescription(description)
-    .withDate(date)
+    // .withDate(date) // With extra data source, we no longer use last-modified for file date
+    .appendDataSource(
+      'https://core.telegram.org/resources/cidr.txt (last updated: ' + new Date(timestamp).toISOString() + ')'
+    )
     .bulkAddCIDR4NoResolve(ipcidr)
     .bulkAddCIDR6NoResolve(ipcidr6)
     .write();

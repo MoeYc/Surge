@@ -1,3 +1,4 @@
+import { isCI } from 'ci-info';
 import { noop } from 'foxts/noop';
 import { basename, extname } from 'node:path';
 import process from 'node:process';
@@ -120,7 +121,8 @@ export function task(importMetaMain: boolean, importMetaPath: string) {
       dummySpan.traceChildAsync('dummy', (childSpan) => fn(childSpan, onCleanup)).finally(() => {
         dummySpan.stop();
         printTraceResult(dummySpan.traceResult);
-        whyIsNodeRunning();
+        process.nextTick(whyIsNodeRunning);
+        process.nextTick(() => process.exit(0));
       });
     }
 
@@ -134,8 +136,10 @@ export function task(importMetaMain: boolean, importMetaPath: string) {
 }
 
 export async function whyIsNodeRunning() {
-  const mod = await import('why-is-node-running');
-  return mod.default();
+  if (isCI && process.env.RUNNER_DEBUG === '1') {
+    const mod = await import('why-is-node-running');
+    return mod.default();
+  }
 }
 
 // const isSpan = (obj: any): obj is Span => {

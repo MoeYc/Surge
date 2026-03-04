@@ -1,21 +1,32 @@
-import { OUTPUT_CLASH_DIR, OUTPUT_MODULES_DIR, OUTPUT_SINGBOX_DIR, OUTPUT_SURGE_DIR } from '../../constants/dir';
 import type { Span } from '../../trace';
 import { HostnameSmolTrie } from '../trie';
-import stringify from 'json-stringify-pretty-compact';
+import { not, nullthrow } from 'foxts/guard';
+import { fastIpVersion } from 'foxts/fast-ip-version';
+import { addArrayElementsToSet } from 'foxts/add-array-elements-to-set';
+import type { MaybePromise } from '../misc';
+import type { BaseWriteStrategy } from '../writing-strategy/base';
+import { merge as mergeCidr } from 'fast-cidr-tools';
+import { createRetrieKeywordFilter as createKeywordFilter } from 'foxts/retrie';
 import path from 'node:path';
-import { withBannerArray } from '../misc';
-import { invariant } from 'foxts/guard';
-import picocolors from 'picocolors';
-import fs from 'node:fs';
-import { writeFile } from '../misc';
-import { fastStringArrayJoin } from 'foxts/fast-string-array-join';
-import { readFileByLine } from '../fetch-text-by-line';
-import { asyncWriteToStream } from 'foxts/async-write-to-stream';
+import { SurgeMitmSgmodule } from '../writing-strategy/surge';
+import { appendArrayInPlace } from 'foxts/append-array-in-place';
 
-export abstract class RuleOutput<TPreprocessed = unknown> {
-  protected domainTrie = new HostnameSmolTrie(null);
+/**
+ * Holds the universal rule data (domain, ip, url-regex, etc. etc.)
+ * This class is not about format, instead it will call the class that does
+ */
+export class FileOutput {
+  protected strategies: BaseWriteStrategy[] = [];
+
+  protected dataSource = new Set<string>();
+
+  public domainTrie = new HostnameSmolTrie(null);
+  public wildcardSet = new Set<string>();
+
   protected domainKeywords = new Set<string>();
-  protected domainWildcard = new Set<string>();
+
+  private readonly whitelistKeywords = new Set<string>();
+
   protected userAgent = new Set<string>();
   protected processName = new Set<string>();
   protected processPath = new Set<string>();
@@ -32,38 +43,20 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   protected sourceIpOrCidr = new Set<string>();
   protected sourcePort = new Set<string>();
   protected destPort = new Set<string>();
+  protected protocol = new Set<string>();
 
   protected otherRules: string[] = [];
-  protected abstract type: 'domainset' | 'non_ip' | 'ip' | (string & {});
 
   private pendingPromise: Promise<any> | null = null;
-
-  static readonly jsonToLines = (json: unknown): string[] => stringify(json).split('\n');
 
   whitelistDomain = (domain: string) => {
     this.domainTrie.whitelist(domain);
     return this;
   };
 
-  static readonly domainWildCardToRegex = (domain: string) => {
-    let result = '^';
-    for (let i = 0, len = domain.length; i < len; i++) {
-      switch (domain[i]) {
-        case '.':
-          result += String.raw`\.`;
-          break;
-        case '*':
-          result += String.raw`[\w.-]*?`;
-          break;
-        case '?':
-          result += String.raw`[\w.-]`;
-          break;
-        default:
-          result += domain[i];
-      }
-    }
-    result += '$';
-    return result;
+  whitelistKeyword = (keyword: string) => {
+    this.whitelistKeywords.add(keyword);
+    return this;
   };
 
   protected readonly span: Span;
@@ -78,9 +71,33 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     return this;
   }
 
-  protected description: string[] | readonly string[] | null = null;
+  public withStrategies(strategies: BaseWriteStrategy[]) {
+    this.strategies = strategies;
+    return this;
+  }
+
+  withExtraStrategies(strategy: BaseWriteStrategy) {
+    this.strategies.push(strategy);
+  }
+
+  protected description: string[] | null = null;
   withDescription(description: string[] | readonly string[]) {
-    this.description = description;
+    this.description = description as string[];
+    return this;
+  }
+
+  appendDescription(description: string | string[], ...rest: string[]) {
+    this.description ??= [];
+    if (typeof description === 'string') {
+      this.description.push(description);
+    } else {
+      appendArrayInPlace(this.description, description);
+    }
+
+    if (rest.length) {
+      appendArrayInPlace(this.description, rest);
+    }
+
     return this;
   }
 
@@ -107,7 +124,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
   }
 
   addDomainSuffix(domain: string, lineFromDot = domain[0] === '.') {
-    this.domainTrie.add(domain, true, lineFromDot ? 1 : 0);
+    this.domainTrie.add(domain, true, null, lineFromDot ? 1 : 0);
     return this;
   }
 
@@ -123,8 +140,40 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     return this;
   }
 
-  private async addFromDomainsetPromise(source: AsyncIterable<string> | Iterable<string> | string[]) {
-    for await (const line of source) {
+  bulkAddDomainKeyword(keywords: string[]) {
+    for (let i = 0, len = keywords.length; i < len; i++) {
+      this.domainKeywords.add(keywords[i]);
+    }
+    return this;
+  }
+
+  bulkAddDomainWildcard(domains: string[]) {
+    for (let i = 0, len = domains.length; i < len; i++) {
+      this.wildcardSet.add(domains[i]);
+    }
+    return this;
+  }
+
+  addIPASN(asn: string) {
+    this.ipasn.add(asn);
+    return this;
+  }
+
+  bulkAddIPASN(asns: string[]) {
+    for (let i = 0, len = asns.length; i < len; i++) {
+      this.ipasn.add(asns[i]);
+    }
+    return this;
+  }
+
+  private async addFromDomainsetPromise(source: MaybePromise<AsyncIterable<string> | Iterable<string> | string[]>) {
+    for await (let line of await source) {
+      const otherPoundSign = line.lastIndexOf('#');
+
+      if (otherPoundSign > 0) {
+        line = line.slice(0, otherPoundSign).trimEnd();
+      }
+
       if (line[0] === '.') {
         this.addDomainSuffix(line, true);
       } else {
@@ -133,15 +182,25 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     }
   }
 
-  addFromDomainset(source: AsyncIterable<string> | Iterable<string> | string[]) {
-    this.pendingPromise = (this.pendingPromise ||= Promise.resolve()).then(() => this.addFromDomainsetPromise(source));
+  addFromDomainset(source: MaybePromise<AsyncIterable<string> | Iterable<string> | string[]>) {
+    if (this.pendingPromise) {
+      this.pendingPromise = this.pendingPromise.then(() => this.addFromDomainsetPromise(source));
+      return this;
+    }
+    this.pendingPromise = this.addFromDomainsetPromise(source);
     return this;
   }
 
-  private async addFromRulesetPromise(source: AsyncIterable<string> | Iterable<string>) {
-    for await (const line of source) {
+  private async addFromRulesetPromise(source: MaybePromise<AsyncIterable<string> | Iterable<string> | string[]>) {
+    for await (let line of await source) {
+      const otherPoundSign = line.lastIndexOf('#');
+
+      if (otherPoundSign > 0) {
+        line = line.slice(0, otherPoundSign).trimEnd();
+      }
+
       const splitted = line.split(',');
-      const type = splitted[0];
+      const type = splitted[0].toUpperCase();
       const value = splitted[1];
       const arg = splitted[2];
 
@@ -156,7 +215,7 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
           this.addDomainKeyword(value);
           break;
         case 'DOMAIN-WILDCARD':
-          this.domainWildcard.add(value);
+          this.wildcardSet.add(value);
           break;
         case 'USER-AGENT':
           this.userAgent.add(value);
@@ -194,6 +253,9 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
         case 'DEST-PORT':
           this.destPort.add(value);
           break;
+        case 'PROTOCOL':
+          this.protocol.add(value.toUpperCase());
+          break;
         default:
           this.otherRules.push(line);
           break;
@@ -201,13 +263,12 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     }
   }
 
-  addFromRuleset(source: AsyncIterable<string> | Iterable<string> | Promise<Iterable<string>>) {
+  addFromRuleset(source: MaybePromise<AsyncIterable<string> | Iterable<string>>) {
     if (this.pendingPromise) {
-      this.pendingPromise = this.pendingPromise.then(() => source);
-    } else {
-      this.pendingPromise = Promise.resolve(source);
+      this.pendingPromise = this.pendingPromise.then(() => this.addFromRulesetPromise(source));
+      return this;
     }
-    this.pendingPromise = this.pendingPromise.then((source) => this.addFromRulesetPromise(source));
+    this.pendingPromise = this.addFromRulesetPromise(source);
     return this;
   }
 
@@ -219,35 +280,82 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     return ip + '/128';
   };
 
+  addAnyCIDR(cidr: string, noResolve = false) {
+    const version = fastIpVersion(cidr);
+    if (version === 0) return this;
+
+    let list: Set<string>;
+    if (version === 4) {
+      list = noResolve ? this.ipcidrNoResolve : this.ipcidr;
+    } else /* if (version === 6) */ {
+      list = noResolve ? this.ipcidr6NoResolve : this.ipcidr6;
+    }
+
+    list.add(FileOutput.ipToCidr(cidr, version));
+    return this;
+  }
+
+  bulkAddAnyCIDR(cidrs: string[], noResolve = false) {
+    const list4 = noResolve ? this.ipcidrNoResolve : this.ipcidr;
+    const list6 = noResolve ? this.ipcidr6NoResolve : this.ipcidr6;
+
+    for (let i = 0, len = cidrs.length; i < len; i++) {
+      let cidr = cidrs[i];
+      const version = fastIpVersion(cidr);
+      if (version === 0) {
+        continue; // skip invalid IPs
+      }
+      cidr = FileOutput.ipToCidr(cidr, version);
+
+      if (version === 4) {
+        list4.add(cidr);
+      } else /* if (version === 6) */ {
+        list6.add(cidr);
+      }
+    }
+    return this;
+  }
+
   bulkAddCIDR4(cidrs: string[]) {
     for (let i = 0, len = cidrs.length; i < len; i++) {
-      this.ipcidr.add(RuleOutput.ipToCidr(cidrs[i], 4));
+      this.ipcidr.add(FileOutput.ipToCidr(cidrs[i], 4));
     }
     return this;
   }
 
   bulkAddCIDR4NoResolve(cidrs: string[]) {
     for (let i = 0, len = cidrs.length; i < len; i++) {
-      this.ipcidrNoResolve.add(RuleOutput.ipToCidr(cidrs[i], 4));
+      this.ipcidrNoResolve.add(FileOutput.ipToCidr(cidrs[i], 4));
     }
     return this;
   }
 
   bulkAddCIDR6(cidrs: string[]) {
     for (let i = 0, len = cidrs.length; i < len; i++) {
-      this.ipcidr6.add(RuleOutput.ipToCidr(cidrs[i], 6));
+      this.ipcidr6.add(FileOutput.ipToCidr(cidrs[i], 6));
     }
     return this;
   }
 
   bulkAddCIDR6NoResolve(cidrs: string[]) {
     for (let i = 0, len = cidrs.length; i < len; i++) {
-      this.ipcidr6NoResolve.add(RuleOutput.ipToCidr(cidrs[i], 6));
+      this.ipcidr6NoResolve.add(FileOutput.ipToCidr(cidrs[i], 6));
     }
     return this;
   }
 
-  protected abstract preprocess(): TPreprocessed extends null ? null : NonNullable<TPreprocessed>;
+  /**
+   * Add data source information. This will be rendered inside description
+   */
+  appendDataSource(source: string | string[]) {
+    if (typeof source === 'string') {
+      this.dataSource.add(source);
+    } else {
+      addArrayElementsToSet(this.dataSource, source);
+    }
+
+    return this;
+  }
 
   async done() {
     await this.pendingPromise;
@@ -255,222 +363,241 @@ export abstract class RuleOutput<TPreprocessed = unknown> {
     return this;
   }
 
-  private guardPendingPromise() {
-    // reverse invariant
-    if (this.pendingPromise !== null) {
-      console.trace('Pending promise:', this.pendingPromise);
-      throw new Error('You should call done() before calling this method');
+  // private guardPendingPromise() {
+  //   // reverse invariant
+  //   if (this.pendingPromise !== null) {
+  //     console.trace('Pending promise:', this.pendingPromise);
+  //     throw new Error('You should call done() before calling this method');
+  //   }
+  // }
+
+  // async writeClash(outputDir?: null | string) {
+  //   await this.done();
+
+  //   invariant(this.title, 'Missing title');
+  //   invariant(this.description, 'Missing description');
+
+  //   return compareAndWriteFile(
+  //     this.span,
+  //     withBannerArray(
+  //       this.title,
+  //       this.description,
+  //       this.date,
+  //       this.clash()
+  //     ),
+  //     path.join(outputDir ?? OUTPUT_CLASH_DIR, this.type, this.id + '.txt')
+  //   );
+  // }
+  private strategiesWritten = false;
+
+  private writeToStrategies() {
+    if (this.pendingPromise) {
+      throw new Error('You should call done() before calling writeToStrategies()');
     }
-  }
-
-  private $$preprocessed: TPreprocessed | null = null;
-  protected runPreprocess() {
-    if (this.$$preprocessed === null) {
-      this.guardPendingPromise();
-
-      this.$$preprocessed = this.span.traceChildSync('preprocess', () => this.preprocess());
+    if (this.strategiesWritten) {
+      throw new Error('Strategies already written');
     }
-  }
 
-  get $preprocessed(): TPreprocessed extends null ? null : NonNullable<TPreprocessed> {
-    this.runPreprocess();
-    return this.$$preprocessed as any;
-  }
+    this.strategiesWritten = true;
 
-  async writeClash(outputDir?: null | string) {
-    await this.done();
-
-    invariant(this.title, 'Missing title');
-    invariant(this.description, 'Missing description');
-
-    return compareAndWriteFile(
-      this.span,
-      withBannerArray(
-        this.title,
-        this.description,
-        this.date,
-        this.clash()
-      ),
-      path.join(outputDir ?? OUTPUT_CLASH_DIR, this.type, this.id + '.txt')
+    // We use both DOMAIN-KEYWORD and whitelisted keyword to whitelist DOMAIN and DOMAIN-SUFFIX
+    const kwfilter = createKeywordFilter(
+      Array.from(this.domainKeywords)
+        .concat(Array.from(this.whitelistKeywords))
     );
-  }
 
-  write({
-    surge = true,
-    clash = true,
-    singbox = true,
-    surgeDir = OUTPUT_SURGE_DIR,
-    clashDir = OUTPUT_CLASH_DIR,
-    singboxDir = OUTPUT_SINGBOX_DIR
-  }: {
-    surge?: boolean,
-    clash?: boolean,
-    singbox?: boolean,
-    surgeDir?: string,
-    clashDir?: string,
-    singboxDir?: string
-  } = {}): Promise<void> {
-    return this.done().then(() => this.span.traceChildAsync('write all', async () => {
-      invariant(this.title, 'Missing title');
-      invariant(this.description, 'Missing description');
+    if (this.strategies.filter(not(false)).length === 0) {
+      throw new Error('No strategies to write ' + this.id);
+    }
 
-      const promises: Array<Promise<void>> = [];
+    const strategiesLen = this.strategies.length;
 
-      if (surge) {
-        promises.push(compareAndWriteFile(
-          this.span,
-          withBannerArray(
-            this.title,
-            this.description,
-            this.date,
-            this.surge()
-          ),
-          path.join(surgeDir, this.type, this.id + '.conf')
-        ));
-      }
-      if (clash) {
-        promises.push(compareAndWriteFile(
-          this.span,
-          withBannerArray(
-            this.title,
-            this.description,
-            this.date,
-            this.clash()
-          ),
-          path.join(clashDir, this.type, this.id + '.txt')
-        ));
-      }
-      if (singbox) {
-        promises.push(compareAndWriteFile(
-          this.span,
-          this.singbox(),
-          path.join(singboxDir, this.type, this.id + '.json')
-        ));
+    this.domainTrie.dumpWithoutDot((domain, includeAllSubdomain) => {
+      if (kwfilter(domain)) {
+        return;
       }
 
-      if (this.mitmSgmodule) {
-        const sgmodule = this.mitmSgmodule();
-        const sgModulePath = this.mitmSgmodulePath ?? path.join(this.type, this.id + '.sgmodule');
-
-        if (sgmodule) {
-          promises.push(
-            compareAndWriteFile(
-              this.span,
-              sgmodule,
-              path.join(OUTPUT_MODULES_DIR, sgModulePath)
-            )
-          );
+      for (let i = 0; i < strategiesLen; i++) {
+        const strategy = this.strategies[i];
+        if (includeAllSubdomain) {
+          strategy.writeDomainSuffix(domain);
+        } else {
+          strategy.writeDomain(domain);
         }
       }
+    }, true);
 
-      await Promise.all(promises);
-    }));
+    // Now, we whitelisted out DOMAIN-KEYWORD
+    const whiteKwfilter = createKeywordFilter(Array.from(this.whitelistKeywords));
+    const whitelistedKeywords = Array.from(this.domainKeywords).filter(kw => !whiteKwfilter(kw));
+
+    for (let i = 0; i < strategiesLen; i++) {
+      const strategy = this.strategies[i];
+      if (whitelistedKeywords.length) {
+        strategy.writeDomainKeywords(this.domainKeywords);
+      }
+
+      if (this.protocol.size) {
+        strategy.writeProtocols(this.protocol);
+      }
+    }
+
+    if (this.wildcardSet.size) {
+      this.wildcardSet.forEach((wildcard) => {
+        // Overlapped w/ DOMAIN-kEYWORD
+        if (kwfilter(wildcard)) {
+          return;
+        }
+
+        for (let i = 0; i < strategiesLen; i++) {
+          const strategy = this.strategies[i];
+          strategy.writeDomainWildcard(wildcard);
+        }
+      });
+    }
+
+    const sourceIpOrCidr = Array.from(this.sourceIpOrCidr);
+
+    for (let i = 0; i < strategiesLen; i++) {
+      const strategy = this.strategies[i];
+
+      if (this.userAgent.size) {
+        strategy.writeUserAgents(this.userAgent);
+      }
+      if (this.processName.size) {
+        strategy.writeProcessNames(this.processName);
+      }
+      if (this.processPath.size) {
+        strategy.writeProcessPaths(this.processPath);
+      }
+
+      if (this.sourceIpOrCidr.size) {
+        strategy.writeSourceIpCidrs(sourceIpOrCidr);
+      }
+
+      if (this.sourcePort.size) {
+        strategy.writeSourcePorts(this.sourcePort);
+      }
+      if (this.destPort.size) {
+        strategy.writeDestinationPorts(this.destPort);
+      }
+      if (this.otherRules.length) {
+        strategy.writeOtherRules(this.otherRules);
+      }
+      if (this.urlRegex.size) {
+        strategy.writeUrlRegexes(this.urlRegex);
+      }
+    }
+
+    let ipcidr: string[] | null = null;
+    let ipcidrNoResolve: string[] | null = null;
+    let ipcidr6: string[] | null = null;
+    let ipcidr6NoResolve: string[] | null = null;
+
+    if (this.ipcidr.size) {
+      ipcidr = mergeCidr(Array.from(this.ipcidr), true);
+    }
+    if (this.ipcidrNoResolve.size) {
+      ipcidrNoResolve = mergeCidr(Array.from(this.ipcidrNoResolve), true);
+    }
+    if (this.ipcidr6.size) {
+      ipcidr6 = Array.from(this.ipcidr6);
+    }
+    if (this.ipcidr6NoResolve.size) {
+      ipcidr6NoResolve = Array.from(this.ipcidr6NoResolve);
+    }
+
+    for (let i = 0; i < strategiesLen; i++) {
+      const strategy = this.strategies[i];
+      // no-resolve
+      if (ipcidrNoResolve) {
+        strategy.writeIpCidrs(ipcidrNoResolve, true);
+      }
+      if (ipcidr6NoResolve) {
+        strategy.writeIpCidr6s(ipcidr6NoResolve, true);
+      }
+      if (this.ipasnNoResolve.size) {
+        strategy.writeIpAsns(this.ipasnNoResolve, true);
+      }
+      if (this.groipNoResolve.size) {
+        strategy.writeGeoip(this.groipNoResolve, true);
+      }
+
+      // triggers DNS resolution
+      if (ipcidr?.length) {
+        strategy.writeIpCidrs(ipcidr, false);
+      }
+      if (ipcidr6?.length) {
+        strategy.writeIpCidr6s(ipcidr6, false);
+      }
+      if (this.ipasn.size) {
+        strategy.writeIpAsns(this.ipasn, false);
+      }
+      if (this.geoip.size) {
+        strategy.writeGeoip(this.geoip, false);
+      }
+    }
   }
 
-  abstract surge(): string[];
-  abstract clash(): string[];
-  abstract singbox(): string[];
+  write(): Promise<unknown> {
+    return this.span.traceChildAsync('write all', async (childSpan) => {
+      await childSpan.traceChildAsync('done', () => this.done());
 
-  protected mitmSgmodulePath: string | null = null;
-  withMitmSgmodulePath(path: string | null) {
-    if (path) {
-      this.mitmSgmodulePath = path;
+      childSpan.traceChildSync('write to strategies', () => this.writeToStrategies());
+
+      return childSpan.traceChildAsync('output to disk', (childSpan) => {
+        const promises: Array<Promise<void>> = [];
+
+        const descriptions = nullthrow(this.description, 'Missing description');
+
+        if (this.dataSource.size) {
+          descriptions.push(
+            '',
+            'This file contains data from:'
+          );
+          appendArrayInPlace(descriptions, Array.from(this.dataSource).sort().map((source) => `  - ${source}`));
+        }
+
+        for (let i = 0, len = this.strategies.length; i < len; i++) {
+          const strategy = this.strategies[i];
+
+          const basename = (strategy.overwriteFilename || this.id) + '.' + strategy.fileExtension;
+
+          promises.push(
+            childSpan.traceChildAsync('write ' + strategy.name, (childSpan) => Promise.resolve(strategy.output(
+              childSpan,
+              nullthrow(this.title, 'Missing title'),
+              descriptions,
+              this.date,
+              path.join(
+                strategy.outputDir,
+                strategy.type
+                  ? path.join(strategy.type, basename)
+                  : basename
+              )
+            )))
+          );
+        }
+
+        return Promise.all(promises);
+      });
+    });
+  }
+
+  async compile(): Promise<Array<string[] | null>> {
+    await this.done();
+    this.writeToStrategies();
+
+    return this.strategies.reduce<Array<string[] | null>>((acc, strategy) => {
+      acc.push(strategy.content);
+      return acc;
+    }, []);
+  }
+
+  withMitmSgmodulePath(moduleName: string | null) {
+    if (moduleName) {
+      this.withExtraStrategies(new SurgeMitmSgmodule(moduleName));
     }
     return this;
   }
-  abstract mitmSgmodule?(): string[] | null;
-}
-
-export async function fileEqual(linesA: string[], source: AsyncIterable<string> | Iterable<string>): Promise<boolean> {
-  if (linesA.length === 0) {
-    return false;
-  }
-
-  const linesABound = linesA.length - 1;
-
-  let index = -1;
-  for await (const lineB of source) {
-    index++;
-
-    if (index > linesABound) {
-      return (index === linesA.length && lineB.length === 0);
-    }
-
-    const lineA = linesA[index];
-
-    if (lineA.length === 0 && lineB.length === 0) {
-      continue;
-    }
-
-    // not both line are empty
-    if (lineA.length === 0 || lineB.length === 0) {
-      return false;
-    }
-
-    const firstCharA = lineA.charCodeAt(0);
-    const firstCharB = lineB.charCodeAt(0);
-
-    if (firstCharA !== firstCharB) {
-      return false;
-    }
-
-    if (firstCharA === 35 /* # */ && firstCharB === 35 /* # */) {
-      continue;
-    }
-    // adguard conf
-    if (firstCharA === 33 /* ! */ && firstCharB === 33 /* ! */) {
-      continue;
-    }
-
-    if (
-      firstCharA === 47 /* / */ && firstCharB === 47 /* / */
-      && lineA[1] === '/' && lineB[1] === '/'
-      && lineA[3] === '#' && lineB[3] === '#'
-    ) {
-      continue;
-    }
-
-    if (lineA !== lineB) {
-      return false;
-    }
-  }
-
-  // The file becomes larger
-  return !(index < linesABound);
-}
-
-export async function compareAndWriteFile(span: Span, linesA: string[], filePath: string) {
-  const linesALen = linesA.length;
-
-  const isEqual = await span.traceChildAsync(`compare ${filePath}`, async () => {
-    if (fs.existsSync(filePath)) {
-      return fileEqual(linesA, readFileByLine(filePath));
-    }
-
-    console.log(`${filePath} does not exists, writing...`);
-    return false;
-  });
-
-  if (isEqual) {
-    console.log(picocolors.gray(picocolors.dim(`same content, bail out writing: ${filePath}`)));
-    return;
-  }
-
-  await span.traceChildAsync(`writing ${filePath}`, async () => {
-    // The default highwater mark is normally 16384,
-    // So we make sure direct write to file if the content is
-    // most likely less than 500 lines
-    if (linesALen < 500) {
-      return writeFile(filePath, fastStringArrayJoin(linesA, '\n') + '\n');
-    }
-
-    const writeStream = fs.createWriteStream(filePath);
-    for (let i = 0; i < linesALen; i++) {
-      const p = asyncWriteToStream(writeStream, linesA[i] + '\n');
-      // eslint-disable-next-line no-await-in-loop -- stream high water mark
-      if (p) await p;
-    }
-
-    writeStream.end();
-  });
 }
