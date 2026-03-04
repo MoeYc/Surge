@@ -147,7 +147,7 @@ jobs:
   deploy_to_github_gitlab:
     needs:
       - build
-    name: Deploy to GitHub and GitLab
+    name: Deploy to GitHub
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04-arm
     steps:
@@ -155,26 +155,6 @@ jobs:
         with:
           name: build-artifact-${{ github.sha }}-${{ github.run_number }}
           path: public
-      - name: Upload Dist to GitLab
-        if: contains(needs.build.outputs.platform, 'gitlab')
-        run: |
-          git clone --filter=tree:0 --no-tags https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git
-          cd ./deploy-git
-          git config --global push.default matching
-          git config --global user.email "${GITLAB_EMAIL}"
-          git config --global user.name "${GITLAB_USER}"
-          rm -rf ./*
-          cp -rf ../public/* ./
-          git add --all .
-          git commit -m "deploy: https://github.com/SukkaW/Surge/commit/${GITHUB_SHA}"
-          git push --quiet --force origin HEAD:master
-          cd ..
-          rm -rf ./deploy-git
-        env:
-          GITLAB_EMAIL: ${{ secrets.GITLAB_EMAIL }}
-          GITLAB_USER: ${{ secrets.GITLAB_USER }}
-          GITLAB_TOKEN_NAME: ${{ secrets.GITLAB_TOKEN_NAME }}
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
       - name: Upload Dist to GitHub
         uses: peaceiris/actions-gh-pages@v4
         continue-on-error: true
