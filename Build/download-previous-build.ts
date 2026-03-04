@@ -22,7 +22,9 @@ export const downloadPreviousBuild = task(require.main === module, __filename)(a
 
   // we uses actions/checkout to download the previous build now, so we should throw if the directory is empty
   if (isCI) {
-    throw new Error('CI environment detected, but public directory is empty');
+    console.warn(picocolors.yellow('[download-previous-build] CI environment detected, but public directory is empty. Skipping previous build download, all files will be written fresh.'));
+    fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+    return;
   }
 
   const tarGzUrl = await span.traceChildAsync('get tar.gz url', async () => {
