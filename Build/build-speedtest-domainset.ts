@@ -83,7 +83,7 @@ export const buildSpeedtestDomainSet = task(require.main === module, __filename)
       const prevBuildFile = path.resolve(OUTPUT_SURGE_DIR, 'domainset/speedtest.conf');
       return fs.existsSync(prevBuildFile) ? readFileIntoProcessedArray(prevBuildFile) : Promise.resolve([]);
     })())
-    .bulkAddDomain(await span.traceChildPromise('get speedtest.test servers', getSpeedtestHostsGroupsPromise))
+    .bulkAddDomain(await span.traceChildPromise('get speedtest.net servers', getSpeedtestHostsGroupsPromise))
     .bulkAddDomain(await span.traceChildPromise('get librespeed backends', getLibrespeedBackendsPromise))
     .write()
 );

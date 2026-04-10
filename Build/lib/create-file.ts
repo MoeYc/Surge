@@ -12,6 +12,11 @@ import { promisify } from 'node:util';
 export const fileEqual = createCompareSource(fileEqualWithCommentComparator);
 
 export async function compareAndWriteFile(span: Span, linesA: string[], filePath: string) {
+  // readFileByLine will not include last empty line. So we always pop the linesA for comparison purpose
+  if (linesA.length > 0 && linesA[linesA.length - 1] === '') {
+    linesA.pop();
+  }
+
   const isEqual = await span.traceChildAsync(`compare ${filePath}`, async () => {
     if (fs.existsSync(filePath)) {
       return fileEqual(linesA, readFileByLine(filePath));
@@ -40,12 +45,16 @@ export async function compareAndWriteFile(span: Span, linesA: string[], filePath
     if (mkdirPromise) await mkdirPromise;
 
     const writeStream = fs.createWriteStream(filePath);
+    let p;
     for (let i = 0; i < linesALen; i++) {
-      const p = asyncWriteToStream(writeStream, linesA[i] + '\n');
+      p = asyncWriteToStream(writeStream, linesA[i] + '\n');
       // eslint-disable-next-line no-await-in-loop -- stream high water mark
       if (p) await p;
     }
-    await promisify(writeStream.end.bind(writeStream))();
+    await new Promise<void>(resolve => {
+      // Since we previously poped the last empty line for comparison, we need to add it back here to ensure final EOF line
+      writeStream.end(resolve);
+    });
     await promisify(writeStream.close.bind(writeStream))();
   });
 }
