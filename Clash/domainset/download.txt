@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Large Files Hosting Domains
-# Last Updated: 2026-03-04T10:25:13.462Z
-# Size: 1893
+# Last Updated: 2026-04-10T09:35:41.796Z
+# Size: 1913
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -21,6 +21,7 @@ mirrors.esto.network
 ubuntu.netforce.hosting
 debian.netforce.hosting
 mirror.eliv.digital
+cr.yandex
 mirror.jeonnam.school
 mirrors.gethosted.online
 mirror.kkg.berlin
@@ -138,6 +139,7 @@ versioncheck.addons.mozilla.org
 aus5.mozilla.org
 +.mirrors.ionfish.org
 mirrors.ibiblio.org
++.files.ghostty.org
 mirror.freedif.org
 distcache.freebsd.org
 ftp.kr.freebsd.org
@@ -260,13 +262,13 @@ apache.melbourneitmirror.net
 apache.website-solution.net
 gpl.savoirfairelinux.net
 ctan.mc1.root.project-creative.net
++.launchpadcontent.net
 debian-archive.trafficmanager.net
 +.mirrors.lucidnetworks.net
 fdroid.tetaneutral.net
 ctan.tetaneutral.net
 cpan.tetaneutral.net
 apt.tetaneutral.net
-+.steamserver.net
 downloads.sourceforge.net
 +.dl.sourceforge.net
 +.dl.playstation.net
@@ -587,6 +589,7 @@ mirror.softaculous.com
 mirror.scaleuptech.com
 ubuntu.rootlicense.com
 downloads.raspberrypi.com
+archive.raspberrypi.com
 mirrors.rackhosting.com
 mirror.nodesdirect.com
 mirrors.nepalicloud.com
@@ -610,6 +613,7 @@ bigfiles.virustotal.com
 mirrors.usinternet.com
 +.mirror.thegigabit.com
 mirror.pit.teraswitch.com
+download.technitium.com
 mirror.team-cymru.com
 downloads.slack-edge.com
 mirror.plusserver.com
@@ -668,10 +672,12 @@ cdn.winget.microsoft.com
 +.update.microsoft.com
 +.download.prss.microsoft.com
 msdl.microsoft.com
+mcr.microsoft.com
 +.delivery.mp.microsoft.com
 mirrors.liquidweb.com
 packages.linuxmint.com
 download-cdn.jetbrains.com
+downloads.marketplace.jetbrains.com
 download.jetbrains.com
 cdn.hyperbeam.com
 +.releases.hashicorp.com
@@ -689,6 +695,8 @@ mirror.citrahost.com
 mirror.biznetgio.com
 product-downloads.atlassian.com
 gnu.askapache.com
+release.arcboxcdn.com
+boot.arcboxcdn.com
 downloadr2.apkmirror.com
 +.s3-website-ap-southeast-2.amazonaws.com
 +.s3-website-ap-southeast-1.amazonaws.com
@@ -1000,6 +1008,7 @@ xvcf2.xboxlive.com
 xvcf1.xboxlive.com
 +.mirror.vexxhost.com
 mirror.verinomi.com
+cdn.vemetric.com
 mirror.ukrnames.com
 mirrors.storpool.com
 download.snipaste.com
@@ -1147,6 +1156,9 @@ download.mlcc.google.com
 dl.google.com
 dl.l.google.com
 codeload.github.com
+omtmapupdate.garmin.com
+worldwide.omtmapupdate.garmin.com
+download.garmin.com
 download.edovia.com
 updates.edovia.com
 download.eassos.com
@@ -1174,6 +1186,7 @@ free.hands.com
 addins.deepl.com
 download.cpuid.com
 +.swupdate.chaos.com
+extensionupdater.brave.com
 componentupdater.brave.com
 go-updater.brave.com
 +.s3.brave.com
@@ -1185,6 +1198,7 @@ download.xbox.com
 +.mirrors.pair.com
 cpan.pair.com
 cdnorg.d.miui.com
+download01.logi.com
 cdn.kagi.com
 +.mirror.iweb.com
 edgedl.me.gvt1.com
@@ -1211,8 +1225,10 @@ apache.cbox.biz
 +.public.ecr.aws
 su.virtualbuddy.app
 cdn.organicmaps.app
+dl.vibeisland.app
 updates.istatmenus.app
 dl.vanadium.app
+releases.landrop.app
 builds.parsec.app
 dl.motrix.app
 meta.omaps.app
@@ -1527,6 +1543,7 @@ download.ameliorated.io
 docker.cloudsmith.io
 dl.cloudsmith.io
 registry.terraform.io
+downloads.portainer.io
 ubuntu.letscloud.io
 +.mirror.letscloud.io
 mirror.datamossa.io
@@ -1540,6 +1557,7 @@ pkgs.netbird.io
 +.jitpack.io
 download.cypress.io
 cdn.cypress.io
+cdn.affonso.io
 rep-ubuntu-il.upress.io
 download.typora.io
 packages.httpie.io
@@ -1564,6 +1582,7 @@ dl-portal.iina.io
 dl.iina.io
 +.ghcr.io
 +.file.io
+dl.min.io
 +.k8s.io
 npm.jsr.io
 +.gcr.io
@@ -1899,7 +1918,7 @@ mirrors.asnet.am
 updates.64gr.am
 +.mirror.gnc.am
 +.mirror.homacloud.ai
+downloads.claude.ai
 mirror.host.ag
 mirror.bg.host.ag
 ################## EOF ##################
-

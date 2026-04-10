@@ -131,6 +131,7 @@
         "wallstreetcn.com",
         "toutiaocloud.com",
         "tencentmusic.com",
+        "cm.steampowered.com",
         "segmentfault.com",
         "realmemobile.com",
         "huoshanzhibo.com",
@@ -863,8 +864,7 @@
         "t.cn",
         "6.cn",
         "3.cn"
-      ],
-      "domain_regex": ["^[\\w.-]*?\\.qhimgs[\\w.-]\\.com$"]
+      ]
     }
   ]
 }

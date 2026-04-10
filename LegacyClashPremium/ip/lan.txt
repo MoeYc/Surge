@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - LAN
-# Last Updated: 2026-03-04T10:25:12.869Z
+# Last Updated: 2026-04-10T09:35:40.899Z
 # Size: 12
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
