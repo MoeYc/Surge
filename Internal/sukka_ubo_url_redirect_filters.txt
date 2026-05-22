@@ -1,5 +1,5 @@
 ! Title: [sukka] Sukka URL Redirect
-! Last modified: Fri, 10 Apr 2026 09:35:40 GMT
+! Last modified: Fri, 22 May 2026 14:14:29 GMT
 ! Expires: 4 hours
 ! Description: Redirect requests via uritransform network filter syntax.
 ! License: https://ruleset.skk.moe/LICENSE

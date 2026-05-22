@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (XIAOMI)
-# Last Updated: 2026-04-10T09:35:40.962Z
+# Last Updated: 2026-05-22T14:14:30.103Z
 # Size: 19
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

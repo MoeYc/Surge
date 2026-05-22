@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (lancache)
-# Last Updated: 2026-04-10T09:35:42.550Z
+# Last Updated: 2026-05-22T14:14:31.223Z
 # Size: 121
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

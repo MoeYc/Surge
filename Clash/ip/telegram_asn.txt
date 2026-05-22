@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Telegram ASN
-# Last Updated: 2026-04-10T09:35:40.900Z
+# Last Updated: 2026-05-22T14:14:29.966Z
 # Size: 6
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
