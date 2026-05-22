@@ -1,4 +1,5 @@
 export const DEBUG_DOMAIN_TO_FIND: string | null = null; // example.com | null
+// Other useful tools: https://oisd.nl/excludes/[domain] for checking if the domain is included in common block lists
 
 type HostsSource = [main: string, mirrors: string[] | null, includeAllSubDomain: boolean, allowEmptyRemote?: boolean];
 
@@ -9,11 +10,6 @@ export const HOSTS: HostsSource[] = [
   //   ['https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt'],
   //   true
   // ],
-  [
-    'https://cdn.jsdelivr.net/gh/jerryn70/GoodbyeAds@master/Extension/GoodbyeAds-Xiaomi-Extension.txt',
-    ['https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Extension/GoodbyeAds-Xiaomi-Extension.txt'],
-    false
-  ]
 ];
 
 export const HOSTS_EXTRA: HostsSource[] = [
@@ -47,20 +43,6 @@ export const HOSTS_EXTRA: HostsSource[] = [
     'https://cdn.jsdelivr.net/gh/hoshsadiq/adblock-nocoin-list@master/hosts.txt',
     ['https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt'],
     true
-  ],
-  // GoodbyeAds - Huawei AdBlock, most of its content has been covered by reject.conf, the rest should belongs to reject_extra now
-  [
-    'https://cdn.jsdelivr.net/gh/jerryn70/GoodbyeAds@master/Extension/GoodbyeAds-Huawei-AdBlock.txt',
-    ['https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Extension/GoodbyeAds-Huawei-AdBlock.txt'],
-    false
-  ],
-  // GoodbyeAds - Samsung AdBlock
-  // most of its content has covered by reject.conf. Remaining domains, some are not even owned by samsung, some are normal API/SSO/DNS
-  // blocking them doesn't make sense, yet will not breaking anything anyway, so we move it to extra
-  [
-    'https://cdn.jsdelivr.net/gh/jerryn70/GoodbyeAds@master/Extension/GoodbyeAds-Samsung-AdBlock.txt',
-    ['https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Extension/GoodbyeAds-Samsung-AdBlock.txt'],
-    false
   ]
 ];
 
@@ -68,11 +50,6 @@ export const DOMAIN_LISTS: HostsSource[] = [
   // CoinBlockerList
   // The CoinBlockerList is no longer maintained and even close-source, so we no longer trust it
   // instead we maintain a list of our own
-  // [
-  //   'https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt',
-  //   [],
-  //   true,
-  // ]
 ];
 
 export const DOMAIN_LISTS_EXTRA: HostsSource[] = [
@@ -87,8 +64,6 @@ export const DOMAIN_LISTS_EXTRA: HostsSource[] = [
   //   ['https://paulgb.github.io/BarbBlock/blacklists/domain-list.txt'],
   //   true
   // ],
-  // DigitalSide Threat-Intel - OSINT Hub -- Dead, server offline
-  // ['https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt', [], true],
   // AdGuard CNAME Filter Combined
   // Update on a 7 days basis, so we can also use jsDelivr as primary URL
   [
@@ -210,8 +185,8 @@ export const ADGUARD_FILTERS: AdGuardFilterSource[] = [
       'https://filters.adtidy.org/extension/ublock/filters/118_optimized.txt',
       'https://easylist-downloads.adblockplus.org/easyprivacy.txt',
       'https://secure.fanboy.co.nz/easyprivacy.txt',
-      'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easyprivacy.txt',
-      'https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt'
+      'https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt',
+      'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easyprivacy.txt'
     ]
     // 3p is included in AdGuardDNSFilter, which we will use that in reject_extra
   ],
@@ -253,9 +228,9 @@ export const ADGUARD_FILTERS: AdGuardFilterSource[] = [
   // ],
   // uBlock Origin Unbreak
   [
-    'https://ublockorigin.github.io/uAssetsCDN/filters/unbreak.min.txt',
+    'https://ublockorigin.pages.dev/filters/unbreak.min.txt',
     [
-      'https://ublockorigin.pages.dev/filters/unbreak.min.txt'
+      'https://ublockorigin.github.io/uAssetsCDN/filters/unbreak.min.txt'
     ]
   ]
   //
@@ -324,10 +299,8 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   ],
   // uBlock Origin Filter List
   [
-    'https://ublockorigin.github.io/uAssetsCDN/filters/filters.min.txt',
-    [
-      'https://ublockorigin.pages.dev/filters/filters.min.txt'
-    ]
+    'https://ublockorigin.pages.dev/filters/filters.min.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/filters/filters.min.txt']
   ],
   // AdGuard Popup Overlay - included in Annoyances filter
   // ['https://filters.adtidy.org/extension/ublock/filters/19_optimized.txt', null, true],
@@ -336,17 +309,13 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   // ['https://filters.adtidy.org/extension/ublock/filters/20_optimized.txt', null],
   // uBlock Origin Badware Risk List
   [
-    'https://ublockorigin.github.io/uAssetsCDN/filters/badware.min.txt',
-    [
-      'https://ublockorigin.pages.dev/filters/badware.min.txt'
-    ]
+    'https://ublockorigin.pages.dev/filters/badware.min.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/filters/badware.min.txt']
   ],
   // uBlock Origin Privacy List
   [
-    'https://ublockorigin.github.io/uAssetsCDN/filters/privacy.min.txt',
-    [
-      'https://ublockorigin.pages.dev/filters/privacy.min.txt'
-    ]
+    'https://ublockorigin.pages.dev/filters/privacy.min.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/filters/privacy.min.txt']
   ],
   // uBlock Origin Resource Abuse: merged in uBlock Origin Privacy List
   // [
@@ -355,29 +324,29 @@ export const ADGUARD_FILTERS_EXTRA: AdGuardFilterSource[] = [
   // ],
   // uBlock Origin Annoyances (the un-merged of Fanboy Annoyances List)
   [
-    'https://ublockorigin.github.io/uAssetsCDN/filters/annoyances.min.txt',
-    ['https://ublockorigin.pages.dev/filters/annoyances.min.txt']
+    'https://ublockorigin.pages.dev/filters/annoyances.min.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/filters/annoyances.min.txt']
   ],
   // EasyList Annoyances
   [
-    'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-annoyances.txt',
-    ['https://ublockorigin.pages.dev/thirdparties/easylist-annoyances.txt']
+    'https://ublockorigin.pages.dev/thirdparties/easylist-annoyances.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-annoyances.txt']
   ],
   // EasyList - Newsletters
   [
-    'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-newsletters.txt',
-    ['https://ublockorigin.pages.dev/thirdparties/easylist-newsletters.txt']
+    'https://ublockorigin.pages.dev/thirdparties/easylist-newsletters.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-newsletters.txt']
   ],
   // EasyList - Notifications
   [
-    'https://ublockorigin.github.io/uAssets/thirdparties/easylist-notifications.txt',
-    ['https://ublockorigin.pages.dev/thirdparties/easylist-notifications.txt']
+    'https://ublockorigin.pages.dev/thirdparties/easylist-notifications.txt',
+    ['https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-notifications.txt']
   ],
   // Fanboy Cookie Monster (EasyList Cookie List)
   [
-    'https://ublockorigin.github.io/uAssets/thirdparties/easylist-cookies.txt',
+    'https://ublockorigin.pages.dev/thirdparties/easylist-cookies.txt',
     [
-      'https://ublockorigin.pages.dev/thirdparties/easylist-cookies.txt',
+      'https://ublockorigin.github.io/uAssetsCDN/thirdparties/easylist-cookies.txt',
       'https://secure.fanboy.co.nz/fanboy-cookiemonster_ubo.txt'
     ]
   ],
@@ -497,8 +466,6 @@ export const PREDEFINED_WHITELIST = [
   '.sb-cd.com', // AdGuard
   '.storage.yandexcloud.net', // phishing list
   '.login.microsoftonline.com', // phishing list
-  'api.xiaomi.com', // https://github.com/jerryn70/GoodbyeAds/issues/281
-  'api.io.mi.com', // https://github.com/jerryn70/GoodbyeAds/issues/281
   '.cdn.userreport.com', // https://github.com/AdguardTeam/AdGuardSDNSFilter/issues/1158
   '.ip-api.com',
   '.fastly-analytics.com',
@@ -512,9 +479,6 @@ export const PREDEFINED_WHITELIST = [
   '.clicks.mlsend.com', // Fuck Peter Lowe Hosts
   'email.accounts.bitly.com', // Fuck Peter Lowe Hosts
   'adsense.google.com', // Fuck Peter Lowe Hosts
-  'api.vip.miui.com', // Fuck Goodbye Xiaomi Ads
-  'api.comm.miui.com', // Xiaomi MIUI phone number database update URL
-  '.ai.api.xiaomi.com', // Fuck Goodbye Xiaomi Ads
   'm.stripe.com', // EasyPrivacy only blocks m.stripe.com wwith $third-party,
   // yet stupid AdGuardDNSFilter blocks all of it. Stupid AdGuard
   '.w3s.link', // stupid phishing.army, introduce both "*.ipfs.w3s.link" and ".w3s.link" to the block list
