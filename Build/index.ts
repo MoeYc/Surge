@@ -20,6 +20,7 @@ import { createWorker } from './lib/worker';
 
 import { buildPublic } from './build-public';
 import { buildCloudMounterRules } from './build-cloudmounter-rules';
+import { buildCustom } from './custom';
 
 import { printStats, printTraceResult, whyIsNodeRunning } from './trace';
 import type { TraceResult } from './trace';
@@ -113,6 +114,7 @@ const buildFinishedLock = path.join(ROOT_DIR, '.BUILD_FINISHED');
 
     traces.push(
       await buildDeprecateFiles(),
+      await buildCustom(),
       await buildPublic()
     );
 
