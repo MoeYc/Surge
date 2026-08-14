@@ -46,9 +46,11 @@ export const WHITELIST_MAIN_DOMAINS = new Set([
   'myqcloud.com', // curben phishing-filter contains many entries
   'surge.sh', // caused by phishing-filter, also no public suffix
   'backblazeb2.com', // phishing-filter, no publicsuffix, too much abuse
+  'cloudflarestorage.com', // Cloudflare R2 S3-API endpoint, phishing-filter false-positives the entire apex
 
   'pages.dev',
-  'workers.dev'
+  'workers.dev',
+  'chat.z.ai' // Zhipu AI (Z.ai) GLM chat interface, legitimate service, false positive from phishing scoring
 ]);
 
 export const leathalKeywords = createKeywordFilter([
