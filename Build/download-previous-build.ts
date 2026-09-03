@@ -1,7 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { pipeline } from 'node:stream/promises';
-import { task } from './trace';
+import { SpanCategory, task } from './trace';
 import { extract as tarExtract } from 'tar-fs';
 import type { Headers as TarEntryHeaders } from 'tar-fs';
 import zlib from 'node:zlib';
@@ -30,9 +30,10 @@ export const downloadPreviousBuild = task(require.main === module, __filename)(a
   const tarGzUrl = await span.traceChildAsync('get tar.gz url', async () => {
     await requestWithLog(GITHUB_CODELOAD_URL, { method: 'HEAD' });
     return GITHUB_CODELOAD_URL;
-  });
+  }, SpanCategory.Network);
 
-  return span.traceChildAsync('download & extract previoud build', async () => {
+  // streaming download -> gunzip -> untar to disk, network dominates so that is the tag
+  return span.traceChildAsync('download & extract previous build', async () => {
     const respBody = undici.pipeline(
       tarGzUrl,
       {
@@ -85,5 +86,5 @@ export const downloadPreviousBuild = task(require.main === module, __filename)(a
         }
       )
     );
-  });
+  }, SpanCategory.Network);
 });
