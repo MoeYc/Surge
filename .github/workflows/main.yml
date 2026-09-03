@@ -1,5 +1,7 @@
 name: Build
 on:
+  schedule:
+    - cron: "17 5 * * 1" # Every Monday at 05:17 UTC (13:17 Singapore time)
   workflow_dispatch:
 
 concurrency:
