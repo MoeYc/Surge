@@ -1,5 +1,5 @@
 #!name=[Sukka] Local DNS Mapping
-#!desc=Last Updated: 2026-08-26T12:04:17.011Z
+#!desc=Last Updated: 2026-09-03T15:44:26.905Z
 
 [Host]
 dns.alidns.com = 223.5.5.5, 223.6.6.6, 2400:3200:baba::1, 2400:3200::1
