@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Internal Special
-# Last Updated: 2026-09-03T15:44:26.832Z
+# Last Updated: 2026-09-07T10:16:48.808Z
 # Size: 8
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
