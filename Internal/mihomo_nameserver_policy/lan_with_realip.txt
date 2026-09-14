@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (LAN_WITH_REALIP)
-# Last Updated: 2026-09-07T10:16:48.990Z
+# Last Updated: 2026-09-14T10:38:08.475Z
 # Size: 5
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

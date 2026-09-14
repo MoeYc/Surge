@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Proxy
-# Last Updated: 2026-09-07T10:16:48.810Z
+# Last Updated: 2026-09-14T10:38:08.413Z
 # Size: 17
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
