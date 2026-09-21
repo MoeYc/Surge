@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Stream Services: Hong Kong
-# Last Updated: 2026-09-14T10:38:08.236Z
+# Last Updated: 2026-09-21T10:42:56.912Z
 # Size: 35
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (LAN_WITHOUT_REAL_IP)
-# Last Updated: 2026-09-14T10:38:08.475Z
+# Last Updated: 2026-09-21T10:42:57.153Z
 # Size: 45
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

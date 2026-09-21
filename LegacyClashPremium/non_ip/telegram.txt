@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Telegram Domains
-# Last Updated: 2026-09-14T10:38:08.430Z
+# Last Updated: 2026-09-21T10:42:57.114Z
 # Size: 15
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

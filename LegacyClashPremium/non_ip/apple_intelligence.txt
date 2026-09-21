@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Apple Intelligence
-# Last Updated: 2026-09-14T10:38:08.403Z
+# Last Updated: 2026-09-21T10:42:57.061Z
 # Size: 6
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
