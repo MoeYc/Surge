@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (BYTEDANCE)
-# Last Updated: 2026-09-21T10:42:57.153Z
+# Last Updated: 2026-09-25T13:48:42.879Z
 # Size: 70
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
