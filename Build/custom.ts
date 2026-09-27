@@ -1,36 +1,23 @@
+import fsp from 'node:fs/promises';
 import path from 'node:path';
 
-import { PUBLIC_DIR } from './constants/dir';
-import { mkdirp, writeFile } from './lib/misc';
+import { PUBLIC_DIR, ROOT_DIR } from './constants/dir';
+import { mkdirp } from './lib/misc';
 import { task } from './trace';
 
+export const CUSTOM_SOURCE_DIR = path.join(ROOT_DIR, 'custom');
 export const CUSTOM_OUTPUT_DIR = path.join(PUBLIC_DIR, 'custom');
-
-export function writeCustomFile(filename: string, content: NodeJS.TypedArray | string) {
-  return writeFile(path.join(CUSTOM_OUTPUT_DIR, filename), content);
-}
 
 export const buildCustom = task(require.main === module, __filename)(async () => {
   await mkdirp(CUSTOM_OUTPUT_DIR);
 
-  await writeCustomFile('twitter_non_ip.conf', `
-# >> Twitter
-DOMAIN-SUFFIX,x.com
-DOMAIN-SUFFIX,t.co
-DOMAIN-SUFFIX,twimg.co
-DOMAIN-SUFFIX,twimg.com
-DOMAIN-SUFFIX,twitpic.com
-DOMAIN-SUFFIX,twitter.com
-DOMAIN-SUFFIX,twitter.jp
-DOMAIN-SUFFIX,vine.co
-DOMAIN-SUFFIX,periscope.tv
-DOMAIN-SUFFIX,pscp.tv
-# fucktwitter
-DOMAIN-SUFFIX,vxtwitter.com
-DOMAIN-SUFFIX,fxtwitter.com
-DOMAIN-SUFFIX,fixupx.com
-DOMAIN-SUFFIX,fixvx.com
-DOMAIN-SUFFIX,twittpr.com
-DOMAIN-SUFFIX,nitter.net
-`.trim());
+  const entries = await fsp.readdir(CUSTOM_SOURCE_DIR, { withFileTypes: true });
+  const confFiles = entries.filter((entry) => entry.isFile() && path.extname(entry.name) === '.conf');
+
+  await Promise.all(confFiles.map((entry) => (
+    fsp.copyFile(
+      path.join(CUSTOM_SOURCE_DIR, entry.name),
+      path.join(CUSTOM_OUTPUT_DIR, entry.name)
+    )
+  )));
 });
