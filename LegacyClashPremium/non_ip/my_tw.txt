@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - TW
-# Last Updated: 2026-09-27T13:30:37.027Z
+# Last Updated: 2026-09-27T13:37:14.538Z
 # Size: 9
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
