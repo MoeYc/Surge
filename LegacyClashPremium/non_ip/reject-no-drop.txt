@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Reject No Drop
-# Last Updated: 2026-09-28T11:41:06.773Z
+# Last Updated: 2026-10-09T04:02:24.574Z
 # Size: 38
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
