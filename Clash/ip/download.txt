@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Large Files Hosting IPs
-# Last Updated: 2026-10-10T07:30:27.915Z
+# Last Updated: 2026-10-10T07:34:02.718Z
 # Size: 12
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
