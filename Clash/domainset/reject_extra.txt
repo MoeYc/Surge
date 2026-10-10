@@ -1,7 +1,7 @@
 #########################################
 # Sukka's Ruleset - Reject Extra
-# Last Updated: 2026-10-10T07:13:53.054Z
-# Size: 76872
+# Last Updated: 2026-10-10T07:30:27.649Z
+# Size: 76860
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
@@ -32,7 +32,7 @@
 #   - https://ublockorigin.pages.dev/thirdparties/easylist-notifications.txt
 #   - https://urlhaus-filter.pages.dev/urlhaus-filter-domains-online.txt
 #
-# $content-hash-v1$:HYy02O4Gw5LNVz2Q47mnpOJhPkU3dzsqpHV0lE2QH5g$
+# $content-hash-v1$:3PVDCdjQC-QxphPsgkSHKor5MvxbrQQLl26h_-_kXrw$
 #########################################
 7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 +.4.fo
@@ -29553,7 +29553,6 @@ scx.ddns.net
 +.dynamics2048.net
 +.dynamictyres.com
 +.e9c1khhwn4uf.com
-+.earingskamba.cfd
 +.earlapssmalm.com
 +.earlinessone.xyz
 +.earning-surf.com
@@ -30307,7 +30306,6 @@ scx.ddns.net
 +.kalitereklam.com
 +.kantoexuziiv.com
 +.kas6mjgmxhn5.com
-+.kassuternes.qpon
 +.katcinadarky.cfd
 +.katukaposole.com
 +.kccreamation.com
@@ -30426,7 +30424,6 @@ scx.ddns.net
 +.latentpebble.com
 +.latest-songs.com
 +.lathenredded.cfd
-+.latinusagate.cfd
 +.launchbuffer.com
 +.lavoixedunord.fr
 +.laxermaille.cyou
@@ -32221,7 +32218,6 @@ scx.ddns.net
 +.thetiskikuyu.com
 +.theweblocker.net
 +.thinktherapy.com
-+.thinnerlaet.qpon
 +.thirstybunch.pro
 +.thirstyquiet.com
 +.thongaposole.cfd
@@ -34128,7 +34124,6 @@ scx.ddns.net
 +.defencelaptop.com
 +.defiantenrage.com
 +.definitelyyet.com
-+.deinkjackbox.cyou
 +.delivery.porn.com
 +.delta-static.shop
 +.deltacoincore.com
@@ -34354,7 +34349,6 @@ scx.ddns.net
 +.enginepadlock.com
 +.englishcentral.fr
 +.enjoylife2001.net
-+.enmovequinine.cfd
 +.entreatbeggar.com
 +.enumeratepane.com
 +.envestbitcoin.com
@@ -38297,7 +38291,6 @@ vietpool.vddns.vn
 +.blarestipulate.com
 +.bldkgmtnesbfp.site
 +.blekdkibtepdo.site
-+.bleymesrackets.cfd
 +.bliautpanders.qpon
 +.blindsinkaward.com
 +.blissfulisland.pro
@@ -41997,7 +41990,6 @@ oceansail.ddns.net
 +.ogzwxfqdketms.site
 +.ohaplvrbzkcee.site
 +.ohgdobrsxkwcj.site
-+.ohgeeetxjmlln.site
 +.oidgctozcfsrr.site
 +.oifeqfiurelhe.site
 +.oiotndkgyhcoc.site
@@ -42956,7 +42948,6 @@ oceansail.ddns.net
 +.rrvllvxqfobil.site
 +.rsaumsizjiugu.site
 +.rsbnhruphyuxn.site
-+.rspmxmshodwjf.site
 +.rsptkogqvascs.site
 +.rt.wisecartapp.com
 +.rtb-apac.cpmme.com
@@ -48836,7 +48827,6 @@ eu-ubqpool.ddns.net
 +.mowayazmagacp.space
 +.mowgloriousdeem.com
 +.mpcsbtbipqzfa.space
-+.mpdvtairmdxsp.space
 +.mpebncqjoepwq.space
 +.mpgldibmqlhwg.space
 +.mpglthexftdcz.space
@@ -50688,7 +50678,6 @@ eu-ubqpool.ddns.net
 +.supportnestframe.uk
 +.surfaceobedient.com
 +.surfguardaccess.com
-+.surnounknappan.cyou
 +.surveyedstrings.com
 +.suspectedknives.com
 +.suuwomhpbkddv.space
@@ -66617,7 +66606,6 @@ openburstpool.ddns.net
 +.security.schwab-5.click
 +.securitycheckonline.com
 +.securitytrackdevice.com
-+.semangpalauagnomen.qpon
 +.semiaperecoalsyoup.cyou
 +.sencogoldanddiamond.com
 +.senilesairilydrear.cyou

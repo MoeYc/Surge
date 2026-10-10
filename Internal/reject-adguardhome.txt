@@ -1,10 +1,10 @@
 ! Title: Sukka's Ruleset - AdGuardHome Blocklist
-! Last modified: Sat, 10 Oct 2026 07:13:56 GMT
+! Last modified: Sat, 10 Oct 2026 07:30:31 GMT
 ! Expires: 6 hours
 ! License: https://github.com/SukkaW/Surge/blob/master/LICENSE
 ! Homepage: https://github.com/SukkaW/Surge
 ! Description: The AdGuardHome ruleset supports AD blocking, tracking protection, privacy protection, anti-mining
-! $content-hash-v1$:vRjnG00vr7dtz5hK7gQhPEK0gPc4W5Howhr61aEY63Y$
+! $content-hash-v1$:2RCi44jM-98FpeG-2WcWWMK26rWEKsTdvPxZxcyEpss$
 !
 ||data^
 ||null^
@@ -1464,8 +1464,6 @@
 ||jspcdn.cn^
 ||jssdk.net^
 ||jubbie.de^
-||juejin.cn^
-||juejin.im^
 ||jurtym.cf^
 ||justid.io^
 ||jwalf.com^
@@ -35542,6 +35540,7 @@
 ||eacod.tienda.com^
 ||eacrp.brecks.com^
 ||eardropcurls.com^
+||earingskamba.cfd^
 ||earning-surf.com^
 ||eastcapelots.com^
 ||easysecurity.net^
@@ -37106,6 +37105,7 @@
 ||kaolinoleous.com^
 ||kapetracking.com^
 ||karma.mdpcdn.com^
+||kassuternes.qpon^
 ||kaushooptawo.net^
 ||kb.kokobay.co.uk^
 ||kborst.modivo.sk^
@@ -37227,6 +37227,7 @@
 ||larinpayment.com^
 ||larkierpassu.com^
 ||late-anxiety.com^
+||latinusagate.cfd^
 ||lauansaltire.com^
 ||launch.aella.app^
 |launch.apple.com^
@@ -41261,6 +41262,7 @@
 ||thickyedicts.com^
 ||think.phdinc.com^
 ||thinksuggest.org^
+||thinnerlaet.qpon^
 ||thirdrespect.com^
 ||thj.astrakhan.ru^
 ||thj.jagerhof.net^
@@ -44153,6 +44155,7 @@
 ||degreechariot.com^
 ||dehorsshochet.com^
 ||dehua.ixinfan.com^
+||deinkjackbox.cyou^
 ||dejavu.mlapps.com^
 ||dekingcossack.top^
 ||deliver.ifeng.com^
@@ -44503,6 +44506,7 @@
 ||engineertrick.com^
 ||enhancement44.com^
 ||enlyom.neonail.pl^
+||enmovequinine.cfd^
 ||enormousearth.com^
 ||enpiatriseme.shop^
 ||enqbhjqulihto.com^
@@ -52981,6 +52985,7 @@
 ||blava.viessmann.sk^
 ||blavity.black.news^
 ||blaworthaglin.cyou^
+||bleymesrackets.cfd^
 ||blhkzjnamvlxxg.com^
 ||blintzehouser.qpon^
 ||blissfullagoon.com^
@@ -57866,6 +57871,7 @@
 ||ogzucf.all4golf.de^
 ||ohaeh.osmotics.com^
 ||ohdbwbwxrlgsd.site^
+||ohgeeetxjmlln.site^
 ||ohrbuvljmtckt.site^
 ||ohsyat.jdsports.it^
 ||oi.consulte-se.com^
@@ -58806,6 +58812,7 @@
 ||rsfzjtdmbmxdfq.com^
 ||rslqkbwrxkwyk.site^
 ||rsmdqa.wpos.com.br^
+||rspmxmshodwjf.site^
 ||rsrldrnubehntu.com^
 ||rsst.tips2pips.com^
 ||rsst.varofoods.com^
@@ -67976,6 +67983,7 @@
 ||moundconclusive.com^
 ||mouse.seekingtv.com^
 ||mp5.multi-prets.com^
+||mpdvtairmdxsp.space^
 ||mprkxf.teebooks.com^
 ||mps.magia-perfum.pl^
 ||mpsukl.mipkorea.com^
@@ -71156,6 +71164,7 @@
 ||suqxuqcyyeyzb.space^
 ||surbc.smashtess.com^
 ||suriwl.petsmart.com^
+||surnounknappan.cyou^
 ||survey.mazda.com.au^
 |susapi.lenovomm.com^
 ||suvgo.lacedhair.com^
@@ -102526,6 +102535,7 @@
 ||sedumscodalmilters.cyou^
 ||seizequelledjanghey.cfd^
 ||selvesgimmorpocosin.cfd^
+||semangpalauagnomen.qpon^
 ||senlvg.secretsdujeu.com^
 ||sensorsdata.glowapp.vip^
 ||seo-service.domclick.ru^
