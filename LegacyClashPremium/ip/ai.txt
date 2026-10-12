@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - AI IP CIDR
-# Last Updated: 2026-10-10T07:34:03.071Z
+# Last Updated: 2026-10-12T13:09:34.077Z
 # Size: 24
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
