@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (BILIBILI)
-# Last Updated: 2026-10-30T05:32:17.035Z
+# Last Updated: 2026-10-30T05:35:10.323Z
 # Size: 17
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
