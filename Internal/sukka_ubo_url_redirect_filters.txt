@@ -1,5 +1,5 @@
 ! Title: [sukka] Sukka URL Redirect (SukkaW/Surge @ GitHub)
-! Last modified: Mon, 09 Nov 2026 13:53:11 GMT
+! Last modified: Wed, 11 Nov 2026 17:58:07 GMT
 ! Expires: 4 hours
 ! Description: Redirect requests via uritransform network filter syntax.
 ! License: https://ruleset.skk.moe/LICENSE

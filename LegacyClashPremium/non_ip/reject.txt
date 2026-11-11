@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Reject Non-IP
-# Last Updated: 2026-11-09T13:53:11.132Z
+# Last Updated: 2026-11-11T17:58:07.263Z
 # Size: 354
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

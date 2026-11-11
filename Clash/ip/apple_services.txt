@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Apple IP
-# Last Updated: 2026-11-09T13:53:11.428Z
+# Last Updated: 2026-11-11T17:58:07.425Z
 # Size: 11
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Game Download
-# Last Updated: 2026-11-09T13:53:11.397Z
+# Last Updated: 2026-11-11T17:58:07.423Z
 # Size: 53
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
