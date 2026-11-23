@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Local DNS Mapping for Mihomo NameServer Policy (BAIDU)
-# Last Updated: 2026-11-18T08:10:25.077Z
+# Last Updated: 2026-11-23T15:57:30.526Z
 # Size: 31
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
