@@ -1,8 +1,7 @@
 name: Build
 on:
-  schedule:
-    - cron: "17 5 * * 1" # Every Monday at 05:17 UTC (13:17 Singapore time)
-  workflow_dispatch:
+  # Keep upstream jobs for merges. This fork publishes through fork-publish.yml.
+  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -19,20 +18,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: pnpm/setup@v2
-        with:
-          install: false
-          cache: true
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: ".node-version"
-          package-manager-cache: false
       - name: Grab Building Folder
         id: ramdisk
         run: |
-          BUILD_DIR=$(mktemp -d -p /dev/shm/ -t sakina-surge-public.XXXXXXXXXX)
-          echo "Build dir created at $BUILD_DIR"
-          echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
+          echo "build_dir=previous-build-${{ github.run_id }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
       - name: Get current date
         id: date
         run: |
@@ -43,9 +32,24 @@ jobs:
           echo "hour=$(date +'%H')" >> $GITHUB_OUTPUT
           echo "minute=$(date +'%M')" >> $GITHUB_OUTPUT
           echo "second=$(date +'%S')" >> $GITHUB_OUTPUT
+      # Download previous build and restore cache.db in the background,
+      # while the Node.js toolchain is set up in the foreground
+      - name: Download Previous Build
+        id: download_previous_build
+        uses: actions/checkout@v7
+        background: true
+        with:
+          repository: SukkaLab/ruleset.skk.moe
+          # during a race condition the dist repo may be private, use token to clone
+          token: ${{ secrets.GIT_TOKEN }}
+          persist-credentials: false
+          filter: "tree:0" # we don't care about git history here
+          fetch-tags: false
+          path: ${{ steps.ramdisk.outputs.build_dir }}
       - name: Restore cache.db
         uses: actions/cache/restore@v6
         id: cache-db-restore
+        background: true
         with:
           path: |
             .cache
@@ -58,8 +62,40 @@ jobs:
             ${{ runner.os }}-v3-${{ steps.date.outputs.year }}-${{ steps.date.outputs.month }}-
             ${{ runner.os }}-v3-${{ steps.date.outputs.year }}-
             ${{ runner.os }}-v3-
+      # Set up pnpm and Node.js in parallel; both must finish before pnpm runs.
+      - name: Set up pnpm
+        id: setup_pnpm
+        uses: pnpm/setup@v2
+        background: true
+        with:
+          install: false
+          cache: true
+      - name: Set up Node.js
+        id: setup_node
+        uses: actions/setup-node@v6
+        background: true
+        with:
+          node-version-file: ".node-version"
+          package-manager-cache: false
+      - wait: [setup_pnpm, setup_node]
       - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
+      # Foreground pnpm + Node.js setup complete, ensure previous build and cache.db are ready
+      - wait: [download_previous_build, cache-db-restore]
+      # Double check build folder before starting build
+      - name: Setup build folder
+        run: |
+          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/.git ]; then
+            echo ".git not found"
+            exit 1
+          fi
+          rm -rf "${{ steps.ramdisk.outputs.build_dir }}/.git"
+
+          if [ ! -d ${{ steps.ramdisk.outputs.build_dir }}/List ]; then
+            echo "List not found"
+            exit 1
+          fi
+          echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
       - run: pnpm run build
         env:
           PUBLIC_DIR: ${{ steps.ramdisk.outputs.build_dir }}
@@ -80,19 +116,12 @@ jobs:
             exit 1
           fi
           echo "public directory is ready: ${{ steps.ramdisk.outputs.build_dir }}"
-      - name: Create CNAME file
-        env:
-          CNAME_DOMAIN: ${{ secrets.CNAME_DOMAIN }}
-        run: |
-          if [ -n "$CNAME_DOMAIN" ]; then
-            echo "$CNAME_DOMAIN" > "${{ steps.ramdisk.outputs.build_dir }}/CNAME"
-            echo "CNAME file created: $CNAME_DOMAIN"
-          else
-            echo "CNAME_DOMAIN secret not set, skipping CNAME file"
-          fi
+      # Upload artifact and save cache.db in parallel
       - uses: actions/upload-artifact@v7
+        id: upload_build_artifact
+        background: true
         with:
-          name: build-artifact-${{ github.ref_name }}
+          name: build-artifact-${{ github.sha }}-${{ github.run_number }}
           path: ${{ steps.ramdisk.outputs.build_dir }}
           if-no-files-found: error
           retention-days: 1
@@ -105,22 +134,110 @@ jobs:
           path: |
             .cache
           key: ${{ runner.os }}-v3-${{ steps.date.outputs.year }}-${{ steps.date.outputs.month }}-${{ steps.date.outputs.day }} ${{ steps.date.outputs.hour }}:${{ steps.date.outputs.minute }}:${{ steps.date.outputs.second }}
+      - wait: upload_build_artifact
 
-  deploy_to_github_gitlab:
+  diff_deployment_on_pr:
+    if: github.ref != 'refs/heads/master'
     needs:
       - build
-    name: Deploy to GitHub
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-24.04-arm
+    name: Diff output
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/download-artifact@v8
         with:
-          name: build-artifact-${{ github.ref_name }}
+          name: build-artifact-${{ github.sha }}-${{ github.run_number }}
           path: public
-      - name: Upload Dist to GitHub
-        uses: peaceiris/actions-gh-pages@v4
-        continue-on-error: true
+      - name: Diff
+        run: |
+          git clone --filter=tree:0 --no-tags https://${GH_USER}:${GH_TOKEN}@github.com/SukkaLab/ruleset.skk.moe.git ./deploy-git >/dev/null 2>&1
+          cd ./deploy-git
+          git fetch origin master >/dev/null 2>&1
+          rm -rf ./*
+          cp -rf ../public/* ./
+          git --no-pager diff --minimal
+        env:
+          GH_USER: ${{ secrets.GIT_USER }}
+          GH_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+  deploy:
+    needs:
+      - build
+    name: Deploy
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-slim
+    env:
+      WRANGLER_VERSION: "4.156.1"
+    steps:
+      # Download the artifact in the background while the deployment marker is prepared
+      - uses: actions/download-artifact@v8
+        id: download_build_artifact
+        background: true
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          cname: ${{ secrets.CNAME_DOMAIN }}
+          name: build-artifact-${{ github.sha }}-${{ github.run_number }}
+          path: public
+      - name: Prepare deployment marker
+        id: deploy_marker
+        run: |
+          echo "marker_content=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> $GITHUB_OUTPUT
+      # Wait for the artifact to be downloaded before deploying
+      - wait: download_build_artifact
+      - name: Write deployment marker
+        run: |
+          echo "${{ steps.deploy_marker.outputs.marker_content }}" > public/deploy-check.txt
+      # Deploy to Cloudflare, GitLab, and GitHub in parallel
+      - name: Upload Dist to GitHub
+        id: upload_dist_to_github
+        uses: $/.github/actions/upload-dist-to-github
+        background: true
+        with:
+          gh-email: ${{ secrets.GIT_EMAIL }}
+          gh-user: ${{ secrets.GIT_USER }}
+          gh-token: ${{ secrets.GIT_TOKEN }}
+          marker: ${{ steps.deploy_marker.outputs.marker_content }}
+      - name: Deploy to Cloudflare Pages
+        id: deploy_cloudflare
+        uses: $/.github/actions/deploy-cloudflare-pages
+        background: true
+        with:
+          api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wrangler-version: ${{ env.WRANGLER_VERSION }}
+          marker: ${{ steps.deploy_marker.outputs.marker_content }}
+      - name: Upload Dist to GitLab
+        id: deploy_gitlab
+        background: true
+        run: |
+          git clone --filter=tree:0 --no-tags https://${GITLAB_TOKEN_NAME}:${GITLAB_TOKEN}@gitlab.com/SukkaW/ruleset.skk.moe.git ./deploy-git-gitlab
+          cd ./deploy-git-gitlab
+          git config push.default matching
+          git config user.email "${GITLAB_EMAIL}"
+          git config user.name "${GITLAB_USER}"
+          rm -rf ./*
+          cp -rf ../public/* ./
+          git add --all .
+          git commit -m "deploy: https://github.com/SukkaW/Surge/commit/${GITHUB_SHA}"
+          git push --quiet --force origin HEAD:master
+          cd ..
+          rm -rf ./deploy-git-gitlab
+        env:
+          GITLAB_EMAIL: ${{ secrets.GITLAB_EMAIL }}
+          GITLAB_USER: ${{ secrets.GITLAB_USER }}
+          GITLAB_TOKEN_NAME: ${{ secrets.GITLAB_TOKEN_NAME }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
+      # We wait for GitHub Dist to be deployed and served before archiving it
+      - wait: upload_dist_to_github
+      - name: Archive dist repo
+        if: always() && steps.upload_dist_to_github.outcome == 'success'
+        run: |
+          gh repo archive SukkaLab/ruleset.skk.moe --yes
+        env:
+          GH_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - wait-all:
+
+      - name: Remove build artifact
+        uses: geekyeggo/delete-artifact@v6
+        with:
+          name: build-artifact-${{ github.sha }}-${{ github.run_number }}
+          failOnError: false
