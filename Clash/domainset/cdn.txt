@@ -1,14 +1,14 @@
 #########################################
 # Sukka's Ruleset - CDN Domains
-# Last Updated: 2026-11-23T15:57:31.795Z
-# Size: 4703
+# Last Updated: 2026-11-27T10:42:24.960Z
+# Size: 4707
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
 # GitHub: https://github.com/SukkaW/Surge
 #
 # This file contains object storage and static assets CDN domains.
 #
-# $content-hash-v1$:bbwALU7U2aEA_g32wZxAW524lVCr1MvZ359VpmJdwZA$
+# $content-hash-v1$:nwKAUlcNre1iWbBklId3lxwO7CQ1867ALlbXhzj2RnY$
 #########################################
 7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 0x0.st
@@ -3486,7 +3486,6 @@ cdne-pics.youjizz.com
 cdnjs.betterstack.com
 +.chargebeestaticv2.com
 chat-assets.front.app
-+.claudeusercontent.com
 cloud.typenetwork.com
 +.cloud1.influxdata.com
 +.cloud2.influxdata.com
@@ -4073,6 +4072,7 @@ axiecdn.axieinfinity.com
 brick.freetls.fastly.net
 +.buildkiteusercontent.com
 +.bundle.thimatic-apps.com
++.butterfly-effect-cdn.dev
 cache.omnicalculator.com
 cdn-image01.casetify.com
 cdn-image02.casetify.com
@@ -4179,6 +4179,7 @@ app-static.sendsafely.com
 asset-cdn.uscardforum.com
 assets.map.brightcove.com
 assets.media-platform.com
+assets.monetizationos.com
 assets.openalternative.co
 +.assets.shortbread.aws.dev
 assets.squarewebsites.org
@@ -4443,6 +4444,7 @@ account-widget-mfe.gcore.com
 +.agechecker.northern-apps.com
 +.applicationinsights.azure.cn
 assets-cdn.watchdisneyfe.com
+assets.claudeusercontent.com
 assets.positional-bucket.com
 assets4.mist-train-girls.com
 cdn-dynmedia-1.microsoft.com
@@ -4489,6 +4491,7 @@ static-oforms.onlyoffice.com
 +.static-prod-web.miniclip.com
 static-r.kamihimeproject.net
 static-secure-uploads.ui.com
+static.claudeusercontent.com
 static.community.workday.com
 static.edge.microsoftapp.net
 static2.sharepointonline.com
@@ -4497,6 +4500,7 @@ store-images.s-microsoft.com
 +.tunnels.api.visualstudio.com
 ui-statics-cf.streamable.com
 uos-support-files.svc.ui.com
+upload.claudeusercontent.com
 vsmarketplacebadge.apphb.com
 wctour-images.worldchess.com
 akamai-assets.squarespace.com

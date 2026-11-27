@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - iCloud Private Relay
-# Last Updated: 2026-11-23T15:57:30.430Z
+# Last Updated: 2026-11-27T10:42:24.521Z
 # Size: 7
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe

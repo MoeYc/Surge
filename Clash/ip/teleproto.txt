@@ -1,6 +1,6 @@
 #########################################
 # Sukka's Ruleset - Telegram IP CIDR
-# Last Updated: 2026-11-23T15:57:32.177Z
+# Last Updated: 2026-11-27T10:42:25.695Z
 # Size: 15
 # License: AGPL 3.0
 # Homepage: https://ruleset.skk.moe
